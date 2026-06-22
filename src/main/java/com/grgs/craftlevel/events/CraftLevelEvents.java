@@ -24,20 +24,21 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import java.util.function.Supplier;
-import java.util.function.Consumer;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownTrident;
+import com.grgs.craftlevel.network.DamageIndicatorPacket;
+import net.minecraft.world.entity.projectile.Projectile;
 
+import java.util.Map;
 import java.util.Random;
 
+/**
+ * Eventos centrais do mod: capabilities, progressão, spawn de mobs, combate e sincronização.
+ */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
 public class CraftLevelEvents {
 
-
     private static final Random RANDOM = new Random();
 
+    /** Anexa capabilities de level em jogadores e mobs. */
     @SubscribeEvent
     public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
@@ -55,6 +56,7 @@ public class CraftLevelEvents {
         }
     }
 
+    /** Define level do mob no spawn e aplica scaling de stats. */
     @SubscribeEvent
     public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
         Mob mob = event.getEntity();
@@ -66,6 +68,7 @@ public class CraftLevelEvents {
         });
     }
 
+    /** Jogador ganha LP ao matar mob; sobe de level e sincroniza com o cliente. */
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
@@ -93,6 +96,7 @@ public class CraftLevelEvents {
         });
     }
 
+    /** Copia level/LP do jogador original ao morrer (keep inventory / clone). */
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         Player original = event.getOriginal();
@@ -110,6 +114,7 @@ public class CraftLevelEvents {
         original.invalidateCaps();
     }
 
+    /** Reaplica stats e sincroniza HUD após respawn. */
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
@@ -127,6 +132,7 @@ public class CraftLevelEvents {
         });
     }
 
+    /** Reaplica stats e envia dados iniciais ao entrar no servidor. */
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer serverPlayer)) return;
@@ -141,6 +147,7 @@ public class CraftLevelEvents {
         });
     }
 
+    /** Level do mob = level do jogador mais próximo ± variação, clamped por mob_levels.json. */
     private static int calculateMobLevel(Mob mob) {
         Player nearest = mob.level().getNearestPlayer(mob, 128);
         int baseLevel = 1;
@@ -162,6 +169,7 @@ public class CraftLevelEvents {
         return Math.max(minLevel, Math.min(maxLevel, level));
     }
 
+    /** Recalcula bônus de dano da arma ao trocar item na mão principal. */
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
         if (event.getSlot() != EquipmentSlot.MAINHAND) return;
@@ -170,6 +178,10 @@ public class CraftLevelEvents {
         WeaponScaler.apply(player);
     }
 
+    /**
+     * Intercepta dano para aplicar scaling de combate, encantamentos condicionais
+     * e enviar indicadores visuais de dano ao cliente.
+     */
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         DamageSource source = event.getSource();
@@ -183,32 +195,108 @@ public class CraftLevelEvents {
                 || source.is(DamageTypes.EXPLOSION)
                 || source.is(DamageTypes.PLAYER_EXPLOSION);
 
+        // Dano ambiental escala com a vida máxima do alvo (level do mob/jogador)
         if (isEnvironmental) {
             double multiplier = getHealthScalingMultiplier(target);
             if (multiplier > 1.0) {
-                event.setAmount((float)(event.getAmount() * (multiplier)));
+                event.setAmount((float)(event.getAmount() * multiplier));
             }
             return;
         }
 
-        if (!(source.getEntity() instanceof Player player)) return;
-        if (source.isIndirect()) return;
+        // Identifica quem causou o dano — direto ou via projétil — player OU mob
+        LivingEntity attacker = null;
+        boolean isProjectile = false;
 
-        player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
-            double bonus = 0;
+        if (source.getDirectEntity() instanceof Projectile projectile
+                && projectile.getOwner() instanceof LivingEntity living) {
+            attacker = living;
+            isProjectile = true;
+        } else if (source.getEntity() instanceof LivingEntity living) {
+            attacker = living;
+        }
 
-            if (target.getMobType() == MobType.UNDEAD) {
-                bonus = cap.getUndeadBonus();
-            } else if (target.getMobType() == MobType.ARTHROPOD) {
-                bonus = cap.getArthropodBonus();
+        if (attacker == null) return;
+
+        final LivingEntity finalAttacker = attacker;
+
+        // Projéteis herdam o multiplicador de dano do atirador
+        if (isProjectile) {
+            double multiplier = getAttackDamageMultiplier(finalAttacker);
+            if (multiplier > 1.0) {
+                event.setAmount((float)(event.getAmount() * multiplier));
             }
+        }
 
-            if (bonus > 0) {
-                event.setAmount(event.getAmount() + (float) bonus);
+        if (finalAttacker instanceof Player player) {
+            applyConditionalEnchantDamage(player, target, event);
+        }
+
+        // Indicator de dano — só pra ataques de PLAYER (mobs atacando não precisam de indicator)
+        if (finalAttacker instanceof Player player && player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            boolean isCrit = !isProjectile
+                    && player.fallDistance > 0
+                    && !player.onGround()
+                    && !player.onClimbable();
+
+            serverLevel.players().forEach(serverPlayer -> {
+                PacketHandler.sendToPlayer(serverPlayer, new DamageIndicatorPacket(
+                        target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(),
+                        event.getAmount(), isCrit
+                ));
+            });
+        }
+    }
+
+    /** Adiciona dano de Smite/Bane quando o alvo corresponde ao tipo configurado. */
+    private static void applyConditionalEnchantDamage(Player player, LivingEntity target, LivingHurtEvent event) {
+        player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
+            for (Map.Entry<String, Double> entry : cap.getConditionalEnchantDamage().entrySet()) {
+                String entityType = entry.getKey();
+                double damage = entry.getValue();
+
+                if (matchesEntityType(target, entityType)) {
+                    event.setAmount(event.getAmount() + (float) damage);
+                }
             }
         });
     }
 
+    /** Mapeia strings de enchantments.json para MobType do Minecraft. */
+    private static boolean matchesEntityType(LivingEntity target, String entityType) {
+        return switch (entityType.toLowerCase()) {
+            case "undead" -> target.getMobType() == MobType.UNDEAD;
+            case "arthropod" -> target.getMobType() == MobType.ARTHROPOD;
+            case "illager" -> target.getMobType() == MobType.ILLAGER;
+            default -> false;
+        };
+    }
+
+    /** Multiplicador de attack_damage do atacante (jogador ou mob). */
+    private static double getAttackDamageMultiplier(LivingEntity attacker) {
+        if (attacker instanceof Player player) {
+            var cap = player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).resolve();
+            if (cap.isEmpty()) return 1.0;
+
+            ConfigParser.TierValues tiers = ConfigParser.playerStats.getOrDefault(
+                    "minecraft:generic.attack_damage",
+                    new ConfigParser.TierValues(1.0, 1.0, 1.0, 1.0, "addition")
+            );
+            return ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
+
+        } else if (attacker instanceof Mob mob) {
+            var cap = mob.getCapability(MobLevelProvider.MOB_LEVEL).resolve();
+            if (cap.isEmpty()) return 1.0;
+
+            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
+            ConfigParser.TierValues tiers = ConfigParser.getStatForMob(mobId, "minecraft:generic.attack_damage");
+            return ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
+        }
+
+        return 1.0;
+    }
+
+    /** Multiplicador de max_health do alvo — usado para dano ambiental escalar com level. */
     private static double getHealthScalingMultiplier(LivingEntity target) {
         ConfigParser.TierValues healthTiers;
         int level;
@@ -233,48 +321,5 @@ public class CraftLevelEvents {
         }
 
         return ConfigParser.getScaledMultiplier(healthTiers, level);
-    }
-
-    @SubscribeEvent
-    public static void onProjectileSpawn(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide()) return;
-
-        Entity entity = event.getEntity();
-
-        if (entity instanceof AbstractArrow arrow && arrow.getOwner() instanceof LivingEntity owner) {
-            double before = arrow.getBaseDamage();
-            applyProjectileScaling(owner, arrow::getBaseDamage, arrow::setBaseDamage);
-            CraftLevel.LOGGER.info("[CraftLevel] Projectile {} damage: {} -> {}", entity.getType(), before, arrow.getBaseDamage());
-        } else if (entity instanceof ThrownTrident trident && trident.getOwner() instanceof LivingEntity owner) {
-            applyProjectileScaling(owner, trident::getBaseDamage, trident::setBaseDamage);
-        }
-    }
-
-    private static void applyProjectileScaling(LivingEntity owner, Supplier<Double> getDamage, Consumer<Double> setDamage) {
-        double multiplier = 1.0;
-
-        if (owner instanceof Player player) {
-            var cap = player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).resolve();
-            if (cap.isEmpty()) return;
-
-            ConfigParser.TierValues tiers = ConfigParser.playerStats.getOrDefault(
-                    "minecraft:generic.attack_damage",
-                    new ConfigParser.TierValues(1.0, 1.0, 1.0, 1.0, "addition")
-            );
-            multiplier = ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
-
-        } else if (owner instanceof Mob mob) {
-            var cap = mob.getCapability(MobLevelProvider.MOB_LEVEL).resolve();
-            if (cap.isEmpty()) return;
-
-            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
-            ConfigParser.TierValues tiers = ConfigParser.getStatForMob(mobId, "minecraft:generic.attack_damage");
-            multiplier = ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
-
-        } else {
-            return; // owner não é player nem mob conhecido, ignora
-        }
-
-        setDamage.accept(getDamage.get() * multiplier);
     }
 }

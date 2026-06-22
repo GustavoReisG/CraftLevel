@@ -13,12 +13,14 @@ import org.slf4j.Logger;
 import com.grgs.craftlevel.capability.IPlayerLevel;
 import com.grgs.craftlevel.capability.IMobLevel;
 
+/** Classe principal do mod — ponto de entrada registrado pelo Forge. */
 @Mod(CraftLevel.MODID)
 public class CraftLevel {
 
     public static final String MODID = "craftlevel";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    /** Registra listeners de setup e o event bus global do Forge. */
     public CraftLevel(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
@@ -29,6 +31,7 @@ public class CraftLevel {
         LOGGER.info("Craft Level initialized!");
     }
 
+    /** Inicialização comum: registra capabilities e pacotes de rede. */
     private void commonSetup(final FMLCommonSetupEvent event) {
         CapabilityManager.get(new CapabilityToken<IPlayerLevel>() {});
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});

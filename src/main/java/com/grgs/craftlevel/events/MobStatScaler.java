@@ -9,11 +9,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import java.util.UUID;
 
+/** Aplica scaling de atributos nos mobs com base no level deles. */
 public class MobStatScaler {
 
     private static final UUID MODIFIER_UUID = UUID.fromString("b2c3d4e5-f6a7-8901-bcde-f12345678901");
     private static final String MODIFIER_NAME = "craftlevel_mob_bonus";
 
+    /** Usa mob_overrides.json se existir, senão mob_stats.json. */
     public static void apply(Mob mob, int level) {
         String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
 
@@ -70,6 +72,7 @@ public class MobStatScaler {
         }
     }
 
+    /** Retorna atributos do override específico do mob ou os padrões globais. */
     private static Iterable<String> getAttributeIds(String mobId) {
         if (ConfigParser.mobOverrides.containsKey(mobId)) {
             return ConfigParser.mobOverrides.get(mobId).keySet();

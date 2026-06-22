@@ -6,6 +6,7 @@ import com.grgs.craftlevel.CraftLevel;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Converte JSONs de configuração em estruturas usadas pelo mod em runtime. */
 public class ConfigParser {
 
     // =========================================================
@@ -13,6 +14,8 @@ public class ConfigParser {
     // =========================================================
 
     public record TierValues(double T1, double T2, double T3, double T4, String operation) {}
+    /** Config de encantamento customizado: dano base, por level, scaling e tipo de mob (null = comum). */
+    public record EnchantmentConfig(String entityType, double baseDamage, double levelDamage, String attributeScaling) {}
 
     // System
     public static boolean enableSystem = true;
@@ -35,6 +38,9 @@ public class ConfigParser {
 
     // Mob Levels: mobId -> int[]{min, max}
     public static Map<String, int[]> mobLevels = new HashMap<>();
+
+    // Enchantments: enchantId -> EnchantmentConfig
+    public static Map<String, EnchantmentConfig> enchantments = new HashMap<>();
 
     // =========================================================
     // PARSERS
@@ -174,6 +180,37 @@ public class ConfigParser {
         }
     }
 
+    public static void parseEnchantments(JsonObject json) {
+        enchantments.clear();
+
+        for (String enchantId : json.keySet()) {
+            try {
+                JsonObject entry = json.getAsJsonObject(enchantId);
+
+                String entityType = (entry.has("entity_type") && !entry.get("entity_type").isJsonNull())
+                        ? entry.get("entity_type").getAsString()
+                        : null;
+
+                double baseDamage = getEnchantDouble(entry, "base_damage", enchantId);
+                double levelDamage = getEnchantDouble(entry, "level_damage", enchantId);
+
+                String attributeScaling = "minecraft:generic.attack_damage";
+                try {
+                    if (entry.has("attribute_scaling")) {
+                        attributeScaling = entry.get("attribute_scaling").getAsString();
+                    }
+                } catch (Exception e) {
+                    CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json: error reading attribute_scaling for '{}', using generic.attack_damage", enchantId);
+                }
+
+                enchantments.put(enchantId, new EnchantmentConfig(entityType, baseDamage, levelDamage, attributeScaling));
+
+            } catch (Exception e) {
+                CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json: error reading '{}', skipping", enchantId);
+            }
+        }
+    }
+
     // =========================================================
     // HELPERS
     // =========================================================
@@ -203,10 +240,20 @@ public class ConfigParser {
         }
     }
 
+    private static double getEnchantDouble(JsonObject entry, String key, String context) {
+        try {
+            return entry.get(key).getAsDouble();
+        } catch (Exception e) {
+            CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json > {}: error reading '{}', using 0", context, key);
+            return 0;
+        }
+    }
+
     // =========================================================
     // CONSULTAS
     // =========================================================
 
+    /** Retorna tiers do mob: override específico ou padrão de mob_stats.json. */
     public static TierValues getStatForMob(String mobId, String attributeId) {
         if (mobOverrides.containsKey(mobId) && mobOverrides.get(mobId).containsKey(attributeId)) {
             return mobOverrides.get(mobId).get(attributeId);
@@ -214,6 +261,10 @@ public class ConfigParser {
         return mobStats.getOrDefault(attributeId, new TierValues(1.0, 1.0, 1.0, 1.0, "addition"));
     }
 
+    /**
+     * Multiplicador composto por level em faixas de 50 levels (T1–T4).
+     * Ex.: level 75 aplica T1×50 levels, depois T2×25 levels.
+     */
     public static double getScaledMultiplier(TierValues tiers, int level) {
         double result = 1.0;
 
@@ -249,5 +300,9 @@ public class ConfigParser {
 
     public static int getMobMaxLevel(String mobId) {
         return mobLevels.containsKey(mobId) ? mobLevels.get(mobId)[1] : 200;
+    }
+
+    public static EnchantmentConfig getEnchantmentConfig(String enchantId) {
+        return enchantments.get(enchantId);
     }
 }

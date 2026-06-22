@@ -10,12 +10,14 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
+/** Aplica scaling de atributos do jogador com base no level (vida, dano, etc.). */
 public class PlayerStatScaler {
 
     // UUID fixo por mod — garante que sempre removemos o modifier certo
     private static final UUID MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     private static final String MODIFIER_NAME = "craftlevel_player_bonus";
 
+    /** Percorre player_stats.json e aplica um modifier por atributo configurado. */
     public static void apply(Player player, int level) {
         for (String attributeId : ConfigParser.playerStats.keySet()) {
             try {
@@ -67,6 +69,7 @@ public class PlayerStatScaler {
                     instance.addPermanentModifier(modifier);
                 }
 
+                // Após alterar max health, ajusta a vida atual para o novo máximo
                 if (attr == Attributes.MAX_HEALTH) {
                     player.setHealth((float) instance.getValue());
                 }

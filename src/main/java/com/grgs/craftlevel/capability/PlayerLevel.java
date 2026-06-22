@@ -5,12 +5,10 @@ import com.grgs.craftlevel.config.ConfigParser;
 
 import static com.grgs.craftlevel.config.ConfigManager.lpConfig;
 
+/** Implementação da progressão do jogador: level, LP e cache de dano condicional de encantamentos. */
 public class PlayerLevel implements IPlayerLevel {
     private int level = 1;
     private int lp = 0;
-    private double undeadBonus = 0;
-    private double arthropodBonus = 0;
-    private double illagerBonus = 0;
 
     @Override
     public int getLevel() { return level; }
@@ -24,6 +22,7 @@ public class PlayerLevel implements IPlayerLevel {
     @Override
     public void setLp(int lp) { this.lp = lp; }
 
+    /** Calcula LP para o próximo level usando tiers T1–T4 de lp.json. */
     @Override
     public int getLpToNextLevel() {
 
@@ -50,6 +49,7 @@ public class PlayerLevel implements IPlayerLevel {
         this.lp += amount;
     }
 
+    /** Level máximo hardcoded em 200. */
     @Override
     public boolean canLevelUp() {
         return this.lp >= getLpToNextLevel() && this.level < 200;
@@ -63,13 +63,21 @@ public class PlayerLevel implements IPlayerLevel {
         }
     }
 
-    @Override
-    public double getUndeadBonus() { return undeadBonus; }
-    @Override
-    public void setUndeadBonus(double value) { this.undeadBonus = value; }
+    /** Dano de Smite/Bane calculado pelo WeaponScaler e aplicado no LivingHurtEvent. */
+    private final java.util.HashMap<String, Double> conditionalEnchantDamage = new java.util.HashMap<>();
 
     @Override
-    public double getArthropodBonus() { return arthropodBonus; }
+    public java.util.Map<String, Double> getConditionalEnchantDamage() {
+        return conditionalEnchantDamage;
+    }
+
     @Override
-    public void setArthropodBonus(double value) { this.arthropodBonus = value; }
+    public void clearConditionalEnchantDamage() {
+        conditionalEnchantDamage.clear();
+    }
+
+    @Override
+    public void addConditionalEnchantDamage(String entityType, double damage) {
+        conditionalEnchantDamage.merge(entityType, damage, Double::sum);
+    }
 }

@@ -2,7 +2,6 @@ package com.grgs.craftlevel.config;
 
 import com.google.gson.*;
 import com.grgs.craftlevel.CraftLevel;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +10,7 @@ import java.io.*;
 import java.nio.file.*;
 
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
+/** Carrega e cria os JSONs em config/craftlevel/ no servidor e no cliente. */
 public class ConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -175,6 +175,29 @@ public class ConfigManager {
     }
     """;
 
+    private static final String DEFAULT_ENCHANTMENTS = """
+    {
+        "minecraft:sharpness": {
+            "entity_type": null,
+            "base_damage": 0.5,
+            "level_damage": 0.5,
+            "attribute_scaling": "minecraft:generic.attack_damage"
+        },
+        "minecraft:smite": {
+            "entity_type": "undead",
+            "base_damage": 0,
+            "level_damage": 2.5,
+            "attribute_scaling": "minecraft:generic.attack_damage"
+        },
+        "minecraft:bane_of_arthropods": {
+            "entity_type": "arthropod",
+            "base_damage": 0,
+            "level_damage": 2.5,
+            "attribute_scaling": "minecraft:generic.attack_damage"
+        }
+    }
+    """;
+
     // =========================================================
     // VALORES CARREGADOS
     // =========================================================
@@ -185,6 +208,7 @@ public class ConfigManager {
     public static JsonObject mobStats = new JsonObject();
     public static JsonObject mobOverrides = new JsonObject();
     public static JsonObject mobLevels = new JsonObject();
+    public static JsonObject enchantmentsConfig = new JsonObject();
 
     // =========================================================
     // INIT
@@ -192,32 +216,36 @@ public class ConfigManager {
 
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        MinecraftServer server = event.getServer();
-        configDir = server.getServerDirectory().toPath().resolve("config/craftlevel");
-
         try {
-            Files.createDirectories(configDir);
-
-            // Loads
-            loadSystem();
-            loadLp();
-            loadPlayerStats();
-            loadMobStats();
-            loadMobOverrides();
-            loadMobLevels();
-
-            ConfigParser.parseSystem(systemConfig);
-            ConfigParser.parseLp(lpConfig);
-            ConfigParser.parsePlayerStats(playerStats);
-            ConfigParser.parseMobStats(mobStats);
-            ConfigParser.parseMobOverrides(mobOverrides);
-            ConfigParser.parseMobLevels(mobLevels);
-
-            if (ConfigParser.debug) {
-                CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
-            }
+            loadAllConfigs(event.getServer().getServerDirectory().toPath().resolve("config/craftlevel"));
         } catch (IOException e) {
             CraftLevel.LOGGER.error("[CraftLevel] Failed to load config!", e);
+        }
+    }
+
+    /** Carrega todos os JSONs de um diretório e popula o ConfigParser. */
+    public static void loadAllConfigs(Path dir) throws IOException {
+        configDir = dir;
+        Files.createDirectories(configDir);
+
+        loadSystem();
+        loadLp();
+        loadPlayerStats();
+        loadMobStats();
+        loadMobOverrides();
+        loadMobLevels();
+        loadEnchantments();
+
+        ConfigParser.parseSystem(systemConfig);
+        ConfigParser.parseLp(lpConfig);
+        ConfigParser.parsePlayerStats(playerStats);
+        ConfigParser.parseMobStats(mobStats);
+        ConfigParser.parseMobOverrides(mobOverrides);
+        ConfigParser.parseMobLevels(mobLevels);
+        ConfigParser.parseEnchantments(enchantmentsConfig);
+
+        if (ConfigParser.debug) {
+            CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
         }
     }
 
@@ -249,10 +277,15 @@ public class ConfigManager {
         mobLevels = loadOrCreate("mob_levels.json", DEFAULT_MOB_LEVELS);
     }
 
+    private static void loadEnchantments() throws IOException {
+        enchantmentsConfig = loadOrCreate("enchantments.json", DEFAULT_ENCHANTMENTS);
+    }
+
     // =========================================================
     // HELPERS
     // =========================================================
 
+    /** Cria o arquivo com defaults se não existir, depois lê o JSON. */
     private static JsonObject loadOrCreate(String fileName, String defaultContent) throws IOException {
         Path file = configDir.resolve(fileName);
         if (!Files.exists(file)) {

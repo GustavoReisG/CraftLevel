@@ -16,6 +16,10 @@ import net.minecraftforge.client.event.RenderNameTagEvent;
 import com.grgs.craftlevel.network.RequestMobLevelPacket;
 import com.grgs.craftlevel.network.PacketHandler;
 
+/**
+ * Renderiza barra de HP e level acima dos mobs.
+ * Cor do level indica dificuldade relativa ao jogador (verde/branco/vermelho).
+ */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public class MobHUD {
 
@@ -35,11 +39,13 @@ public class MobHUD {
             int mobLevel = mobCap.getLevel();
             int playerLevel = CraftLevelHUD.cachedLevel;
 
+            // Level ainda não sincronizado — pede ao servidor
             if (mobLevel <= 0) {
                 PacketHandler.CHANNEL.sendToServer(new RequestMobLevelPacket(mob.getId()));
                 return; // espera o próximo frame com o dado sincronizado
             }
 
+            // Verde = fácil, branco = similar, vermelho = perigoso
             int levelColor;
             int diff = mobLevel - playerLevel;
             if (diff <= -5) {
@@ -68,7 +74,7 @@ public class MobHUD {
             // Fundo cinza
             drawRect(poseStack, -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH / 2, BAR_HEIGHT / 2, 0x80000000);
 
-            // Barra de HP
+            // Barra de HP — cor muda conforme % de vida restante
             int barColor;
             if (progress > 0.5f) {
                 barColor = 0xFF70AD47;
@@ -79,7 +85,7 @@ public class MobHUD {
             }
             drawRect(poseStack, -BAR_WIDTH / 2, -BAR_HEIGHT / 2, -BAR_WIDTH / 2 + BAR_WIDTH * progress, BAR_HEIGHT / 2, barColor);
 
-            // Texto do nível
+            // Texto do nível com fonte customizada do mod
             Component levelComponent = Component.literal("Lv." + mobLevel)
                     .withStyle(s -> s.withFont(new ResourceLocation("craftlevel", "immortal")));
 
@@ -106,6 +112,7 @@ public class MobHUD {
         });
     }
 
+    /** Desenha um retângulo colorido em coordenadas locais do name tag. */
     private static void drawRect(PoseStack poseStack, float x1, float y1, float x2, float y2, int color) {
         RenderSystem.enableDepthTest();
         RenderSystem.setShader(net.minecraft.client.renderer.GameRenderer::getPositionColorShader);

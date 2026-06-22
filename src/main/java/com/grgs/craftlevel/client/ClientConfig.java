@@ -2,6 +2,7 @@ package com.grgs.craftlevel.client;
 
 import com.google.gson.*;
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -11,13 +12,16 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import java.io.*;
 import java.nio.file.*;
 
+/** Configurações visuais do cliente (posição/escala do HUD) e carga de configs de gameplay. */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public class ClientConfig {
 
+    // Posição e escala da barra de LP
     public static int hudLpBarX = 0;
     public static int hudLpBarY = 0;
     public static float hudLpBarScale = 0.08f;
 
+    // Posição e escala do círculo de level
     public static int hudLevelCircleX = 0;
     public static int hudLevelCircleY = 0;
     public static float hudLevelCircleScale = 0.1f;
@@ -45,11 +49,24 @@ public class ClientConfig {
     }
     """;
 
+    /** Ao entrar no mundo: carrega client.json e os JSONs de gameplay para tooltips funcionarem. */
     @SubscribeEvent
     public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
         load();
+        loadGameConfig();
     }
 
+    /** Carrega configs de gameplay no cliente (necessário para tooltip e scaling local). */
+    public static void loadGameConfig() {
+        try {
+            Path dir = Minecraft.getInstance().gameDirectory.toPath().resolve("config/craftlevel");
+            ConfigManager.loadAllConfigs(dir);
+        } catch (Exception e) {
+            CraftLevel.LOGGER.warn("[CraftLevel] Failed to load game config on client", e);
+        }
+    }
+
+    /** Lê config/craftlevel/client.json com posição e escala dos elementos do HUD. */
     public static void load() {
         try {
             Path file = Minecraft.getInstance().gameDirectory.toPath()

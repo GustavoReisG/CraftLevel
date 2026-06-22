@@ -1,11 +1,14 @@
 package com.grgs.craftlevel.network;
 
+import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.client.CraftLevelHUD;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/** Sincroniza level, LP atual e LP necessário do jogador para o cliente. */
 public class SyncPlayerLevelPacket {
 
     private final int level;
@@ -18,22 +21,28 @@ public class SyncPlayerLevelPacket {
         this.lpNeeded = lpNeeded;
     }
 
-    // Serializa para a rede
     public static void encode(SyncPlayerLevelPacket packet, FriendlyByteBuf buf) {
         buf.writeInt(packet.level);
         buf.writeInt(packet.lp);
         buf.writeInt(packet.lpNeeded);
     }
 
-    // Desserializa da rede
     public static SyncPlayerLevelPacket decode(FriendlyByteBuf buf) {
         return new SyncPlayerLevelPacket(buf.readInt(), buf.readInt(), buf.readInt());
     }
 
-    // Recebido no cliente
+    /** Atualiza HUD e capability local do jogador no cliente. */
     public static void handle(SyncPlayerLevelPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             CraftLevelHUD.updateCache(packet.lp, packet.lpNeeded, packet.level);
+
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
+                    cap.setLevel(packet.level);
+                    cap.setLp(packet.lp);
+                });
+            }
         });
         ctx.get().setPacketHandled(true);
     }

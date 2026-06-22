@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+/** HUD do jogador: barra de LP e círculo de level, renderizados sobre a tela. */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public class CraftLevelHUD {
 
@@ -17,6 +18,7 @@ public class CraftLevelHUD {
     private static final ResourceLocation LP_FULL  = new ResourceLocation(CraftLevel.MODID, "textures/gui/lp_full.png");
     private static final ResourceLocation LEVEL_CIRCLE = new ResourceLocation(CraftLevel.MODID, "textures/gui/lvl.png");
 
+    // Dimensões originais das texturas (antes do scale)
     private static final int TEX_CIRCLE_WIDTH  = 608;
     private static final int TEX_CIRCLE_HEIGHT = 590;
 
@@ -25,12 +27,13 @@ public class CraftLevelHUD {
     private static final int TEX_FULL_WIDTH  = 1336;
     private static final int TEX_FULL_HEIGHT = 182;
 
-    // Cache dos valores
+    // Cache sincronizado via SyncPlayerLevelPacket — usado pelo HUD e tooltips
     public static int cachedLp = 0;
     public static int cachedLpNeeded = 100;
     public static float cachedProgress = 0f;
     public static int cachedLevel = 1;
 
+    /** Atualiza cache local quando o servidor envia level/LP atualizados. */
     public static void updateCache(int lp, int lpNeeded, int level) {
         cachedLp = lp;
         cachedLpNeeded = lpNeeded;
@@ -39,6 +42,7 @@ public class CraftLevelHUD {
         cachedProgress = Math.min(1.0f, Math.max(0.0f, cachedProgress));
     }
 
+    /** Converte anchor string (ex.: bottom_left) em coordenadas centrais na tela. */
     private static int[] getAnchorPosition(String anchor, int screenWidth, int screenHeight, int elemWidth, int elemHeight) {
         int ax, ay;
         switch (anchor) {
@@ -88,7 +92,7 @@ public class CraftLevelHUD {
             TEX_WIDTH, TEX_HEIGHT
         );
 
-        // 2. Preenchimento verde
+        // 2. Preenchimento verde proporcional ao LP atual
         int cutTex    = (int)(TEX_FULL_WIDTH  * cachedProgress);
         int cutRender = (int)(renderFullWidth  * cachedProgress);
 

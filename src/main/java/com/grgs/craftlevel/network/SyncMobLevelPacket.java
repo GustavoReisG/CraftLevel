@@ -10,6 +10,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/** Envia level de um mob específico do servidor para o cliente (por entity ID). */
 public class SyncMobLevelPacket {
 
     private final int entityId;
@@ -34,6 +35,10 @@ public class SyncMobLevelPacket {
         ctx.get().setPacketHandled(true);
     }
 
+    /**
+     * Tenta aplicar o level na capability do mob no cliente.
+     * Reagenda se a entidade ainda não existir no client world (latência de spawn).
+     */
     private static void tryApply(SyncMobLevelPacket packet, int attempts) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;

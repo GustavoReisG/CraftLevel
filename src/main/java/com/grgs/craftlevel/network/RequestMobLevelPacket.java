@@ -10,6 +10,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/** Cliente pede ao servidor o level de um mob que ainda não foi sincronizado. */
 public class RequestMobLevelPacket {
 
     private final int entityId;
@@ -26,6 +27,7 @@ public class RequestMobLevelPacket {
         return new RequestMobLevelPacket(buf.readInt());
     }
 
+    /** Servidor responde com SyncMobLevelPacket contendo o level da capability do mob. */
     public static void handle(RequestMobLevelPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
