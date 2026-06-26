@@ -15,11 +15,11 @@ public class MobStatScaler {
     private static final UUID MODIFIER_UUID = UUID.fromString("b2c3d4e5-f6a7-8901-bcde-f12345678901");
     private static final String MODIFIER_NAME = "craftlevel_mob_bonus";
 
-    /** Usa mob_overrides.json se existir, senão mob_stats.json. */
+    /** Usa mob_overrides.json se existir, senão mob_stats.json > attribute. */
     public static void apply(Mob mob, int level) {
         String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
 
-        for (String attributeId : getAttributeIds(mobId)) {
+        for (String attributeId : ConfigParser.getMobAttributeIds(mobId)) {
             try {
                 Attribute attr = BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(attributeId));
                 if (attr == null) continue;
@@ -27,39 +27,20 @@ public class MobStatScaler {
                 var instance = mob.getAttribute(attr);
                 if (instance == null) continue;
 
-                // Remove modifier antigo
                 instance.removeModifier(MODIFIER_UUID);
 
-                ConfigParser.TierValues tiers = ConfigParser.getStatForMob(mobId, attributeId);
-                double multiplier = ConfigParser.getScaledMultiplier(tiers, level);
+                double scaling = ConfigParser.getMobAttributeScaling(mobId, attributeId);
+                double multiplier = ConfigParser.getScaledMultiplier(scaling, level);
                 double base = instance.getBaseValue();
-
-                double bonus;
-                AttributeModifier.Operation operation;
-
-                switch (tiers.operation().toLowerCase()) {
-                    case "multiply_total" -> {
-                        operation = AttributeModifier.Operation.MULTIPLY_TOTAL;
-                        bonus = multiplier - 1; // 2.5 - 1 = 1.5 (150% de bônus)
-                    }
-                    case "multiply_base" -> {
-                        operation = AttributeModifier.Operation.MULTIPLY_BASE;
-                        bonus = multiplier - 1;
-                    }
-                    default -> {
-                        operation = AttributeModifier.Operation.ADDITION;
-                        bonus = (base * multiplier) - base; // base * 2.5 - base = bônus fixo
-                    }
-                }
+                double bonus = (base * multiplier) - base;
 
                 if (bonus != 0) {
-                    AttributeModifier modifier = new AttributeModifier(
+                    instance.addPermanentModifier(new AttributeModifier(
                             MODIFIER_UUID,
                             MODIFIER_NAME,
                             bonus,
-                            operation
-                    );
-                    instance.addPermanentModifier(modifier);
+                            AttributeModifier.Operation.ADDITION
+                    ));
                 }
 
                 if (attr == Attributes.MAX_HEALTH) {
@@ -70,13 +51,5 @@ public class MobStatScaler {
                 // pula atributo com erro silenciosamente
             }
         }
-    }
-
-    /** Retorna atributos do override específico do mob ou os padrões globais. */
-    private static Iterable<String> getAttributeIds(String mobId) {
-        if (ConfigParser.mobOverrides.containsKey(mobId)) {
-            return ConfigParser.mobOverrides.get(mobId).keySet();
-        }
-        return ConfigParser.mobStats.keySet();
     }
 }

@@ -1,297 +1,172 @@
 package com.grgs.craftlevel.config;
 
-import com.google.gson.*;
-import com.grgs.craftlevel.CraftLevel;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /** Converte JSONs de configuração em estruturas usadas pelo mod em runtime. */
 public class ConfigParser {
 
-    // =========================================================
-    // ESTRUTURAS
-    // =========================================================
+    public static final String DEFAULT_KEY = "default";
+    public static final String MAX_HEALTH_ID = "minecraft:generic.max_health";
 
-    public record TierValues(double T1, double T2, double T3, double T4, String operation) {}
-    /** Config de encantamento customizado: dano base, por level, scaling e tipo de mob (null = comum). */
-    public record EnchantmentConfig(String entityType, double baseDamage, double levelDamage, String attributeScaling) {}
+    private static final double DEFAULT_SCALING = 1.0;
 
-    // System
-    public static boolean enableSystem = true;
-    public static boolean debug = false;
+    /** Valor direto (double) ou referência a scaling da seção attribute (string). */
+    public record ScalingRef(Double direct, String attributeId) {
+        public static ScalingRef direct(double value) {
+            return new ScalingRef(value, null);
+        }
+
+        public static ScalingRef attribute(String attributeId) {
+            return new ScalingRef(null, attributeId);
+        }
+
+        public double resolveBaseScaling(Map<String, Double> attributes) {
+            if (direct != null) {
+                return direct;
+            }
+            if (attributeId != null) {
+                return attributes.getOrDefault(attributeId, DEFAULT_SCALING);
+            }
+            return DEFAULT_SCALING;
+        }
+    }
+
+    public record StatScalingConfig(
+            Map<String, Double> attributes,
+            Map<String, ScalingRef> hurt,
+            Map<String, ScalingRef> heal
+    ) {
+        public static StatScalingConfig empty() {
+            return new StatScalingConfig(new HashMap<>(), new HashMap<>(), new HashMap<>());
+        }
+
+        public Set<String> attributeIds() {
+            return attributes.keySet();
+        }
+
+        public ScalingRef lookupHurt(String damageTypeId) {
+            ScalingRef ref = resolveHurtRef(hurt, damageTypeId, true);
+            return ref != null ? ref : ScalingRef.direct(DEFAULT_SCALING);
+        }
+
+        public ScalingRef lookupHeal(String healKey) {
+            if (healKey != null && heal.containsKey(healKey)) {
+                return heal.get(healKey);
+            }
+            return heal.getOrDefault(DEFAULT_KEY, ScalingRef.direct(DEFAULT_SCALING));
+        }
+    }
+
     public static int mobLevelVariation = 10;
+    public static boolean debug = false;
+    public static int lpBase = 100;
+    public static double lpMultiplier = 1.06;
 
-    // LP
-    public static int lpBase = 50;
-    public static TierValues lpMultiplier = new TierValues(1.0, 1.0, 1.0, 1.0, "addition");
-    public static Map<String, Double> playerBaseStats = new HashMap<>();
-
-    // Player Stats padrão: attributeId -> TierValues
-    public static Map<String, TierValues> playerStats = new HashMap<>();
-
-    // Mob Stats padrão: attributeId -> TierValues
-    public static Map<String, TierValues> mobStats = new HashMap<>();
-
-    // Mob Overrides: mobId -> (attributeId -> TierValues)
-    public static Map<String, Map<String, TierValues>> mobOverrides = new HashMap<>();
-
-    // Mob Levels: mobId -> int[]{min, max}
+    public static StatScalingConfig playerStats = StatScalingConfig.empty();
+    public static StatScalingConfig mobStats = StatScalingConfig.empty();
+    public static Map<String, StatScalingConfig> mobOverrides = new HashMap<>();
     public static Map<String, int[]> mobLevels = new HashMap<>();
 
-    // Enchantments: enchantId -> EnchantmentConfig
-    public static Map<String, EnchantmentConfig> enchantments = new HashMap<>();
-
-    // =========================================================
-    // PARSERS
-    // =========================================================
-
     public static void parseSystem(JsonObject json) {
-        try {
-            enableSystem = json.get("enableSystem").getAsBoolean();
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] system.json: error reading enableSystem, using true");
-            enableSystem = true;
-        }
-        try {
-            debug = json.get("debug").getAsBoolean();
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] system.json: error reading debug, using false");
-            debug = false;
-        }
-        try {
-            mobLevelVariation = json.get("mob_level_variation").getAsInt();
-        } catch (Exception e) {
-            mobLevelVariation = 10;
-        }
+        mobLevelVariation = readInt(json, "mob_level_variation", 10);
+        debug = readBoolean(json, "debug", false);
     }
 
     public static void parseLp(JsonObject json) {
-        try {
-            lpBase = json.get("lpBase").getAsInt();
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] lp.json: error reading lpBase, using 100");
-            lpBase = 100;
-        }
-
-        try {
-            JsonObject multiplier = json.getAsJsonObject("lpMultiplier");
-            lpMultiplier = parseTiers(multiplier, "lp.json > lpMultiplier");
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] lp.json: error reading lpMultiplier, using defaults");
-        }
-
-        try {
-            JsonObject stats = json.getAsJsonObject("playerBaseStats");
-
-            playerBaseStats.clear();
-
-            for (Map.Entry<String, JsonElement> entry : stats.entrySet()) {
-                playerBaseStats.put(
-                        entry.getKey(),
-                        entry.getValue().getAsDouble()
-                );
-            }
-
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] lp.json: error reading playerBaseStats");
-        }
+        lpBase = readInt(json, "lpBase", 100);
+        lpMultiplier = readScaling(json.get("lpMultiplier"));
     }
 
     public static void parsePlayerStats(JsonObject json) {
-        playerStats.clear();
-
-        for (String attributeId : json.keySet()) {
-            try {
-                JsonObject tiers = json.getAsJsonObject(attributeId);
-                TierValues values = parseTiers(tiers, "player_stats.json > " + attributeId);
-                playerStats.put(attributeId, values);
-            } catch (Exception e) {
-                CraftLevel.LOGGER.warn("[CraftLevel] player_stats.json: error reading attribute '{}', skipping", attributeId);
-            }
-        }
+        playerStats = parseStats(json);
     }
 
     public static void parseMobStats(JsonObject json) {
-        mobStats.clear();
-
-        for (String attributeId : json.keySet()) {
-            try {
-                JsonObject tiers = json.getAsJsonObject(attributeId);
-                TierValues values = parseTiers(tiers, "mob_stats.json > " + attributeId);
-                mobStats.put(attributeId, values);
-            } catch (Exception e) {
-                CraftLevel.LOGGER.warn("[CraftLevel] mob_stats.json: error reading attribute '{}', skipping", attributeId);
-            }
-        }
+        mobStats = parseStats(json);
     }
 
     public static void parseMobOverrides(JsonObject json) {
         mobOverrides.clear();
-
-        for (String mobId : json.keySet()) {
-            try {
-                JsonObject mobObj = json.getAsJsonObject(mobId);
-                Map<String, TierValues> attrMap = new HashMap<>();
-
-                for (String attributeId : mobObj.keySet()) {
-                    try {
-                        JsonObject tiers = mobObj.getAsJsonObject(attributeId);
-                        TierValues values = parseTiers(tiers, "mob_overrides.json > " + mobId + " > " + attributeId);
-                        attrMap.put(attributeId, values);
-                    } catch (Exception e) {
-                        CraftLevel.LOGGER.warn("[CraftLevel] mob_overrides.json: error reading attribute '{}' for mob '{}', skipping", attributeId, mobId);
-                    }
-                }
-
-                mobOverrides.put(mobId, attrMap);
-            } catch (Exception e) {
-                CraftLevel.LOGGER.warn("[CraftLevel] mob_overrides.json: error reading mob '{}', skipping", mobId);
-            }
-        }
+        json.asMap().forEach((mobId, value) -> {
+            if (!value.isJsonObject()) return;
+            mobOverrides.put(mobId, parseStats(value.getAsJsonObject()));
+        });
     }
 
     public static void parseMobLevels(JsonObject json) {
         mobLevels.clear();
-
-        for (String mobId : json.keySet()) {
-            try {
-                JsonObject entry = json.getAsJsonObject(mobId);
-
-                int min = 1;
-                int max = 200;
-
-                try {
-                    min = entry.get("lvl_min").getAsInt();
-                } catch (Exception e) {
-                    CraftLevel.LOGGER.warn("[CraftLevel] mob_levels.json: error reading lvl_min for '{}', using 1", mobId);
-                }
-
-                try {
-                    max = entry.get("lvl_max").getAsInt();
-                } catch (Exception e) {
-                    CraftLevel.LOGGER.warn("[CraftLevel] mob_levels.json: error reading lvl_max for '{}', using 200", mobId);
-                }
-
-                mobLevels.put(mobId, new int[]{min, max});
-            } catch (Exception e) {
-                CraftLevel.LOGGER.warn("[CraftLevel] mob_levels.json: error reading mob '{}', skipping", mobId);
-            }
-        }
+        json.asMap().forEach((mobId, value) -> {
+            if (!value.isJsonObject()) return;
+            JsonObject entry = value.getAsJsonObject();
+            mobLevels.put(mobId, new int[]{
+                    readInt(entry, "lvl_min", 1),
+                    readInt(entry, "lvl_max", 200)
+            });
+        });
     }
 
-    public static void parseEnchantments(JsonObject json) {
-        enchantments.clear();
-
-        for (String enchantId : json.keySet()) {
-            try {
-                JsonObject entry = json.getAsJsonObject(enchantId);
-
-                String entityType = (entry.has("entity_type") && !entry.get("entity_type").isJsonNull())
-                        ? entry.get("entity_type").getAsString()
-                        : null;
-
-                double baseDamage = getEnchantDouble(entry, "base_damage", enchantId);
-                double levelDamage = getEnchantDouble(entry, "level_damage", enchantId);
-
-                String attributeScaling = "minecraft:generic.attack_damage";
-                try {
-                    if (entry.has("attribute_scaling")) {
-                        attributeScaling = entry.get("attribute_scaling").getAsString();
-                    }
-                } catch (Exception e) {
-                    CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json: error reading attribute_scaling for '{}', using generic.attack_damage", enchantId);
-                }
-
-                enchantments.put(enchantId, new EnchantmentConfig(entityType, baseDamage, levelDamage, attributeScaling));
-
-            } catch (Exception e) {
-                CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json: error reading '{}', skipping", enchantId);
-            }
-        }
+    public static double getPlayerAttributeScaling(String attributeId) {
+        return playerStats.attributes().getOrDefault(attributeId, DEFAULT_SCALING);
     }
 
-    // =========================================================
-    // HELPERS
-    // =========================================================
-
-    private static TierValues parseTiers(JsonObject tiers, String context) {
-        double T1 = getTierValue(tiers, "T1", context);
-        double T2 = getTierValue(tiers, "T2", context);
-        double T3 = getTierValue(tiers, "T3", context);
-        double T4 = getTierValue(tiers, "T4", context);
-        String operation = "addition"; // padrão
-        try {
-            if (tiers.has("operation")) {
-                operation = tiers.get("operation").getAsString();
-            }
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] {}: error reading operation, using addition", context);
+    public static double getMobAttributeScaling(String mobId, String attributeId) {
+        StatScalingConfig override = mobOverrides.get(mobId);
+        if (override != null && override.attributes().containsKey(attributeId)) {
+            return override.attributes().get(attributeId);
         }
-        return new TierValues(T1, T2, T3, T4, operation);
+        return mobStats.attributes().getOrDefault(attributeId, DEFAULT_SCALING);
     }
 
-    private static double getTierValue(JsonObject tiers, String key, String context) {
-        try {
-            return tiers.get(key).getAsDouble();
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] {}: error reading '{}', using 1.0", context, key);
-            return 1.0;
-        }
+    public static Set<String> getPlayerAttributeIds() {
+        return playerStats.attributeIds();
     }
 
-    private static double getEnchantDouble(JsonObject entry, String key, String context) {
-        try {
-            return entry.get(key).getAsDouble();
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] enchantments.json > {}: error reading '{}', using 0", context, key);
-            return 0;
+    public static Set<String> getMobAttributeIds(String mobId) {
+        StatScalingConfig override = mobOverrides.get(mobId);
+        if (override != null && !override.attributes().isEmpty()) {
+            return override.attributeIds();
         }
+        return mobStats.attributeIds();
     }
 
-    // =========================================================
-    // CONSULTAS
-    // =========================================================
-
-    /** Retorna tiers do mob: override específico ou padrão de mob_stats.json. */
-    public static TierValues getStatForMob(String mobId, String attributeId) {
-        if (mobOverrides.containsKey(mobId) && mobOverrides.get(mobId).containsKey(attributeId)) {
-            return mobOverrides.get(mobId).get(attributeId);
-        }
-        return mobStats.getOrDefault(attributeId, new TierValues(1.0, 1.0, 1.0, 1.0, "addition"));
+    public static double getPlayerHurtMultiplier(String damageTypeId, int level) {
+        ScalingRef ref = playerStats.lookupHurt(damageTypeId);
+        double scaling = ref.resolveBaseScaling(playerStats.attributes());
+        return getScaledMultiplier(scaling, level);
     }
 
-    /**
-     * Multiplicador composto por level em faixas de 50 levels (T1–T4).
-     * Ex.: level 75 aplica T1×50 levels, depois T2×25 levels.
-     */
-    public static double getScaledMultiplier(TierValues tiers, int level) {
-        double result = 1.0;
+    public static double getPlayerHealMultiplier(String healKey, int level) {
+        return resolveHealMultiplier(playerStats, healKey, level);
+    }
 
-        int remaining = level;
+    public static double getMobHurtMultiplier(String mobId, String damageTypeId, int level) {
+        ScalingRef ref = resolveMobHurtRef(mobId, damageTypeId);
+        double scaling = ref.resolveBaseScaling(getMobAttributes(mobId));
+        return getScaledMultiplier(scaling, level);
+    }
 
-        int tier1Levels = Math.min(remaining, 50);
-        result *= Math.pow(tiers.T1(), tier1Levels);
-        remaining -= tier1Levels;
+    public static double getMobHealMultiplier(String mobId, String healKey, int level) {
+        ScalingRef ref = resolveMobHealRef(mobId, healKey);
+        double scaling = ref.resolveBaseScaling(getMobAttributes(mobId));
+        return getScaledMultiplier(scaling, level);
+    }
 
-        if (remaining > 0) {
-            int tier2Levels = Math.min(remaining, 50);
-            result *= Math.pow(tiers.T2(), tier2Levels);
-            remaining -= tier2Levels;
+    public static Map<String, Double> getMobAttributes(String mobId) {
+        Map<String, Double> merged = new HashMap<>(mobStats.attributes());
+        StatScalingConfig override = mobOverrides.get(mobId);
+        if (override != null) {
+            merged.putAll(override.attributes());
         }
+        return merged;
+    }
 
-        if (remaining > 0) {
-            int tier3Levels = Math.min(remaining, 50);
-            result *= Math.pow(tiers.T3(), tier3Levels);
-            remaining -= tier3Levels;
-        }
-
-        if (remaining > 0) {
-            int tier4Levels = Math.min(remaining, 50);
-            result *= Math.pow(tiers.T4(), tier4Levels);
-        }
-
-        return result;
+    public static double getScaledMultiplier(double scaling, int level) {
+        return Math.pow(scaling, level);
     }
 
     public static int getMobMinLevel(String mobId) {
@@ -302,7 +177,177 @@ public class ConfigParser {
         return mobLevels.containsKey(mobId) ? mobLevels.get(mobId)[1] : 200;
     }
 
-    public static EnchantmentConfig getEnchantmentConfig(String enchantId) {
-        return enchantments.get(enchantId);
+    private static ScalingRef resolveMobHurtRef(String mobId, String damageTypeId) {
+        StatScalingConfig override = mobOverrides.get(mobId);
+        if (override != null) {
+            ScalingRef ref = lookupHurtRef(override, damageTypeId);
+            if (ref != null) {
+                return ref;
+            }
+        }
+        return mobStats.lookupHurt(damageTypeId);
+    }
+
+    private static ScalingRef resolveMobHealRef(String mobId, String healKey) {
+        StatScalingConfig override = mobOverrides.get(mobId);
+        if (override != null) {
+            ScalingRef ref = lookupHealRef(override, healKey);
+            if (ref != null) {
+                return ref;
+            }
+        }
+        return mobStats.lookupHeal(healKey);
+    }
+
+    private static double resolveHealMultiplier(StatScalingConfig config, String healKey, int level) {
+        ScalingRef ref = config.lookupHeal(healKey);
+        double scaling = ref.resolveBaseScaling(config.attributes());
+        return getScaledMultiplier(scaling, level);
+    }
+
+    private static ScalingRef lookupHurtRef(StatScalingConfig config, String damageTypeId) {
+        return resolveHurtRef(config.hurt(), damageTypeId, true);
+    }
+
+    /**
+     * Resolve hurt: match exato → chave com * (keyword contida no damage type) → default.
+     * Várias chaves wildcard: vence a keyword mais longa.
+     */
+    private static ScalingRef resolveHurtRef(
+            Map<String, ScalingRef> hurt,
+            String damageTypeId,
+            boolean useDefault
+    ) {
+        if (damageTypeId != null && hurt.containsKey(damageTypeId)) {
+            return hurt.get(damageTypeId);
+        }
+
+        ScalingRef wildcardMatch = findWildcardHurtMatch(hurt, damageTypeId);
+        if (wildcardMatch != null) {
+            return wildcardMatch;
+        }
+
+        if (useDefault && hurt.containsKey(DEFAULT_KEY)) {
+            return hurt.get(DEFAULT_KEY);
+        }
+        return null;
+    }
+
+    private static ScalingRef findWildcardHurtMatch(Map<String, ScalingRef> hurt, String damageTypeId) {
+        if (damageTypeId == null) {
+            return null;
+        }
+
+        ScalingRef bestMatch = null;
+        int bestKeywordLength = -1;
+
+        for (Map.Entry<String, ScalingRef> entry : hurt.entrySet()) {
+            String key = entry.getKey();
+            if (DEFAULT_KEY.equals(key) || !key.contains("*")) {
+                continue;
+            }
+
+            String keyword = key.replace("*", "");
+            if (keyword.isEmpty() || !damageTypeId.contains(keyword)) {
+                continue;
+            }
+
+            if (keyword.length() > bestKeywordLength) {
+                bestKeywordLength = keyword.length();
+                bestMatch = entry.getValue();
+            }
+        }
+
+        return bestMatch;
+    }
+
+    private static ScalingRef lookupHealRef(StatScalingConfig config, String healKey) {
+        if (healKey != null && config.heal().containsKey(healKey)) {
+            return config.heal().get(healKey);
+        }
+        if (config.heal().containsKey(DEFAULT_KEY)) {
+            return config.heal().get(DEFAULT_KEY);
+        }
+        return null;
+    }
+
+    private static StatScalingConfig parseStats(JsonObject json) {
+        Map<String, Double> attributes = new HashMap<>();
+        Map<String, ScalingRef> hurt = new HashMap<>();
+        Map<String, ScalingRef> heal = new HashMap<>();
+
+        if (json.has("attribute") && json.get("attribute").isJsonObject()) {
+            readScalingMap(json.getAsJsonObject("attribute"), attributes);
+        }
+
+        if (json.has("hurt") && json.get("hurt").isJsonObject()) {
+            readEventScalingMap(json.getAsJsonObject("hurt"), hurt);
+        }
+
+        if (json.has("heal") && json.get("heal").isJsonObject()) {
+            readEventScalingMap(json.getAsJsonObject("heal"), heal);
+        }
+
+        // Compatibilidade com formato antigo: event.onLivingHurt
+        if (hurt.isEmpty()
+                && json.has("event")
+                && json.get("event").isJsonObject()
+                && json.getAsJsonObject("event").has("onLivingHurt")
+                && json.getAsJsonObject("event").get("onLivingHurt").isJsonObject()) {
+            readLegacyHurtMap(json.getAsJsonObject("event").getAsJsonObject("onLivingHurt"), hurt);
+        }
+
+        return new StatScalingConfig(attributes, hurt, heal);
+    }
+
+    private static void readScalingMap(JsonObject section, Map<String, Double> target) {
+        section.asMap().forEach((key, value) -> target.put(key, readScaling(value)));
+    }
+
+    private static void readEventScalingMap(JsonObject section, Map<String, ScalingRef> target) {
+        section.asMap().forEach((key, value) -> target.put(key, readScalingRef(value)));
+    }
+
+    private static void readLegacyHurtMap(JsonObject section, Map<String, ScalingRef> target) {
+        section.asMap().forEach((key, value) -> {
+            if (value.isJsonPrimitive() && value.getAsJsonPrimitive().isNumber()) {
+                target.put(ConfigParser.DEFAULT_KEY, ScalingRef.attribute(key));
+            }
+        });
+    }
+
+    private static ScalingRef readScalingRef(JsonElement element) {
+        if (element != null && element.isJsonPrimitive()) {
+            if (element.getAsJsonPrimitive().isNumber()) {
+                return ScalingRef.direct(element.getAsDouble());
+            }
+            if (element.getAsJsonPrimitive().isString()) {
+                return ScalingRef.attribute(element.getAsString());
+            }
+        }
+        return ScalingRef.direct(DEFAULT_SCALING);
+    }
+
+    private static double readScaling(JsonElement element) {
+        if (element != null && element.isJsonPrimitive() && element.getAsJsonPrimitive().isNumber()) {
+            return element.getAsDouble();
+        }
+        return DEFAULT_SCALING;
+    }
+
+    private static int readInt(JsonObject json, String key, int fallback) {
+        try {
+            return json.get(key).getAsInt();
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
+    private static boolean readBoolean(JsonObject json, String key, boolean fallback) {
+        try {
+            return json.get(key).getAsBoolean();
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 }

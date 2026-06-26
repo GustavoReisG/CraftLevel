@@ -10,16 +10,15 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
-/** Aplica scaling de atributos do jogador com base no level (vida, dano, etc.). */
+/** Aplica scaling de atributos do jogador com base no level (vida, etc.). */
 public class PlayerStatScaler {
 
-    // UUID fixo por mod — garante que sempre removemos o modifier certo
     private static final UUID MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     private static final String MODIFIER_NAME = "craftlevel_player_bonus";
 
-    /** Percorre player_stats.json e aplica um modifier por atributo configurado. */
+    /** Percorre player_stats.json > attribute e aplica um modifier por atributo configurado. */
     public static void apply(Player player, int level) {
-        for (String attributeId : ConfigParser.playerStats.keySet()) {
+        for (String attributeId : ConfigParser.getPlayerAttributeIds()) {
             try {
                 Attribute attr = BuiltInRegistries.ATTRIBUTE.get(new ResourceLocation(attributeId));
                 if (attr == null) continue;
@@ -27,49 +26,22 @@ public class PlayerStatScaler {
                 var instance = player.getAttribute(attr);
                 if (instance == null) continue;
 
-                // Remove modifier antigo do CraftLevel se existir
                 instance.removeModifier(MODIFIER_UUID);
 
-                ConfigParser.TierValues tiers = ConfigParser.playerStats.getOrDefault(
-                        attributeId,
-                        new ConfigParser.TierValues(1.0, 1.0, 1.0, 1.0, "addition")
-                );
-
-                double multiplier = ConfigParser.getScaledMultiplier(tiers, level);
-                double base = ConfigParser.playerBaseStats.getOrDefault(
-                        attributeId,
-                        instance.getBaseValue()
-                );
-
-                double bonus;
-                AttributeModifier.Operation operation;
-
-                switch (tiers.operation().toLowerCase()) {
-                    case "multiply_total" -> {
-                        operation = AttributeModifier.Operation.MULTIPLY_TOTAL;
-                        bonus = multiplier - 1; // 2.5 - 1 = 1.5 (150% de bônus)
-                    }
-                    case "multiply_base" -> {
-                        operation = AttributeModifier.Operation.MULTIPLY_BASE;
-                        bonus = multiplier - 1;
-                    }
-                    default -> {
-                        operation = AttributeModifier.Operation.ADDITION;
-                        bonus = (base * multiplier) - base;
-                    }
-                }
+                double scaling = ConfigParser.getPlayerAttributeScaling(attributeId);
+                double multiplier = ConfigParser.getScaledMultiplier(scaling, level);
+                double base = instance.getBaseValue();
+                double bonus = (base * multiplier) - base;
 
                 if (bonus != 0) {
-                    AttributeModifier modifier = new AttributeModifier(
+                    instance.addPermanentModifier(new AttributeModifier(
                             MODIFIER_UUID,
                             MODIFIER_NAME,
                             bonus,
-                            operation
-                    );
-                    instance.addPermanentModifier(modifier);
+                            AttributeModifier.Operation.ADDITION
+                    ));
                 }
 
-                // Após alterar max health, ajusta a vida atual para o novo máximo
                 if (attr == Attributes.MAX_HEALTH) {
                     player.setHealth((float) instance.getValue());
                 }

@@ -27,7 +27,7 @@ public class CraftLevelHUD {
     private static final int TEX_FULL_WIDTH  = 1336;
     private static final int TEX_FULL_HEIGHT = 182;
 
-    // Cache sincronizado via SyncPlayerLevelPacket — usado pelo HUD e tooltips
+    // Cache sincronizado via SyncPlayerLevelPacket — usado pelo HUD
     public static int cachedLp = 0;
     public static int cachedLpNeeded = 100;
     public static float cachedProgress = 0f;

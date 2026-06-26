@@ -22,93 +22,53 @@ public class ConfigManager {
 
     private static final String DEFAULT_SYSTEM = """
     {
-        "enableSystem": true,
-        "debug": false,
-        "mob_level_variation": 10
+        "mob_level_variation": 10,
+        "debug": true
     }
     """;
 
     private static final String DEFAULT_LP = """
     {
         "lpBase": 100,
-        "lpMultiplier": {
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
-        },
-        "playerBaseStats": {
-           "minecraft:generic.max_health": 20.0,
-           "minecraft:generic.attack_damage": 1.0,
-           "minecraft:generic.attack_speed": 4.0,
-           "minecraft:generic.movement_speed": 0.1,
-           "minecraft:generic.armor_toughness": 1.0
-        }
+        "lpMultiplier": 1.06
     }
     """;
 
     private static final String DEFAULT_PLAYER_STATS = """
     {
-        "minecraft:generic.max_health": {
-            "operation": "addition",
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
+        "attribute": {
+            "minecraft:generic.max_health": 1.045,
+            "irons_spellbooks:spell_power": 1.045
         },
-        "minecraft:generic.attack_damage": {
-            "operation": "addition",
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
+        "hurt": {
+            "minecraft:player_attack": "minecraft:generic.max_health",
+            "minecraft:mob_attack": "minecraft:generic.max_health",
+            "minecraft:arrow": "minecraft:generic.max_health",
+            "minecraft:trident": "minecraft:generic.max_health",
+            "minecraft:magic": "minecraft:generic.max_health",
+            "minecraft:indirect_magic": "minecraft:generic.max_health",
+            "minecraft:wither": "minecraft:generic.max_health",
+            "minecraft:poison": "minecraft:generic.max_health",
+            "attributeslib:current_hp_damage": 1.0,
+            "*irons_spellbooks*": 1.0,
+            "default": "minecraft:generic.max_health"
         },
-        "minecraft:generic.armor_toughness": {
-            "operation": "addition",
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
-        },
-        "minecraft:generic.knockback_resistance": {
-            "operation": "addition",
-            "T1": 1.02,
-            "T2": 1.01,
-            "T3": 1.01,
-            "T4": 1.01
+        "heal": {
+            "default": "minecraft:generic.max_health"
         }
     }
     """;
 
     private static final String DEFAULT_MOB_STATS = """
     {
-        "minecraft:generic.max_health": {
-            "operation": "addition",
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
+        "attribute": {
+            "minecraft:generic.max_health": 1.05
         },
-        "minecraft:generic.attack_damage": {
-            "operation": "addition",
-            "T1": 1.04,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
+        "hurt": {
+            "default": "minecraft:generic.max_health"
         },
-        "minecraft:generic.armor_toughness": {
-            "operation": "addition",
-            "T1": 1.05,
-            "T2": 1.025,
-            "T3": 1.0125,
-            "T4": 1.0125
-        },
-        "minecraft:generic.knockback_resistance": {
-            "operation": "addition",
-            "T1": 1.02,
-            "T2": 1.01,
-            "T3": 1.01,
-            "T4": 1.01
+        "heal": {
+            "default": "minecraft:generic.max_health"
         }
     }
     """;
@@ -116,40 +76,64 @@ public class ConfigManager {
     private static final String DEFAULT_MOB_OVERRIDES = """
     {
         "minecraft:cow": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:sheep": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:pig": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:chicken": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:rabbit": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:squid": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:bat": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:glow_squid": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:cod": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:salmon": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:tropical_fish": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         },
         "minecraft:pufferfish": {
-            "minecraft:generic.max_health": { "operation": "addition", "T1": 1.0, "T2": 1.0, "T3": 1.0, "T4": 1.0 }
+            "attribute": {
+                "minecraft:generic.max_health": 1.0
+            }
         }
     }
     """;
@@ -175,29 +159,6 @@ public class ConfigManager {
     }
     """;
 
-    private static final String DEFAULT_ENCHANTMENTS = """
-    {
-        "minecraft:sharpness": {
-            "entity_type": null,
-            "base_damage": 0.5,
-            "level_damage": 0.5,
-            "attribute_scaling": "minecraft:generic.attack_damage"
-        },
-        "minecraft:smite": {
-            "entity_type": "undead",
-            "base_damage": 0,
-            "level_damage": 2.5,
-            "attribute_scaling": "minecraft:generic.attack_damage"
-        },
-        "minecraft:bane_of_arthropods": {
-            "entity_type": "arthropod",
-            "base_damage": 0,
-            "level_damage": 2.5,
-            "attribute_scaling": "minecraft:generic.attack_damage"
-        }
-    }
-    """;
-
     // =========================================================
     // VALORES CARREGADOS
     // =========================================================
@@ -208,7 +169,6 @@ public class ConfigManager {
     public static JsonObject mobStats = new JsonObject();
     public static JsonObject mobOverrides = new JsonObject();
     public static JsonObject mobLevels = new JsonObject();
-    public static JsonObject enchantmentsConfig = new JsonObject();
 
     // =========================================================
     // INIT
@@ -234,7 +194,6 @@ public class ConfigManager {
         loadMobStats();
         loadMobOverrides();
         loadMobLevels();
-        loadEnchantments();
 
         ConfigParser.parseSystem(systemConfig);
         ConfigParser.parseLp(lpConfig);
@@ -242,11 +201,8 @@ public class ConfigManager {
         ConfigParser.parseMobStats(mobStats);
         ConfigParser.parseMobOverrides(mobOverrides);
         ConfigParser.parseMobLevels(mobLevels);
-        ConfigParser.parseEnchantments(enchantmentsConfig);
 
-        if (ConfigParser.debug) {
-            CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
-        }
+        CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
     }
 
     // =========================================================
@@ -275,10 +231,6 @@ public class ConfigManager {
 
     private static void loadMobLevels() throws IOException {
         mobLevels = loadOrCreate("mob_levels.json", DEFAULT_MOB_LEVELS);
-    }
-
-    private static void loadEnchantments() throws IOException {
-        enchantmentsConfig = loadOrCreate("enchantments.json", DEFAULT_ENCHANTMENTS);
     }
 
     // =========================================================

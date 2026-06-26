@@ -4,30 +4,30 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.config.ConfigParser;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import com.grgs.craftlevel.damage.DamageClassifier;
+import com.grgs.craftlevel.damage.EventScalingService;
+import com.grgs.craftlevel.network.DamageIndicatorPacket;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import com.grgs.craftlevel.network.DamageIndicatorPacket;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHealEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -37,6 +37,9 @@ import java.util.Random;
 public class CraftLevelEvents {
 
     private static final Random RANDOM = new Random();
+
+    /** Fração do caminho alvo→jogador onde o número aparece (0 = centro do mob, 1 = jogador). */
+    private static final double INDICATOR_TOWARDS_PLAYER = 0.55;
 
     /** Anexa capabilities de level em jogadores e mobs. */
     @SubscribeEvent
@@ -118,33 +121,57 @@ public class CraftLevelEvents {
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
-
-        player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
-            PlayerStatScaler.apply(player, cap.getLevel());
-
-            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
-                PacketHandler.sendToPlayer(serverPlayer, new SyncPlayerLevelPacket(
-                        cap.getLevel(),
-                        cap.getLp(),
-                        cap.getLpToNextLevel()
-                ));
-            }
-        });
+        applyPlayerState(player);
     }
 
     /** Reaplica stats e envia dados iniciais ao entrar no servidor. */
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer serverPlayer)) return;
+        applyPlayerState(serverPlayer);
+    }
 
-        serverPlayer.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
-            PlayerStatScaler.apply(serverPlayer, cap.getLevel());
-            PacketHandler.sendToPlayer(serverPlayer, new SyncPlayerLevelPacket(
-                    cap.getLevel(),
-                    cap.getLp(),
-                    cap.getLpToNextLevel()
-            ));
-        });
+    /** Aplica scaling de hurt só para dano causado por uma entidade (level do atacante). */
+    @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+
+        DamageSource source = event.getSource();
+        LivingEntity target = event.getEntity();
+        LivingEntity attacker = resolveAttacker(source);
+
+        if (attacker != null) {
+            String damageTypeId = DamageClassifier.getDamageTypeId(source);
+            double multiplier = EventScalingService.getHurtMultiplier(attacker, damageTypeId);
+            if (multiplier != 1.0) {
+                event.setAmount((float) (event.getAmount() * multiplier));
+            }
+        }
+
+        if (ConfigParser.debug) {
+            sendHurtDebugMessage(source, target, attacker, event.getAmount());
+        }
+
+        Player attackingPlayer = resolveAttackingPlayer(source);
+        if (attackingPlayer != null && event.getAmount() > 0) {
+            sendDamageIndicator(attackingPlayer, target, event.getAmount());
+        }
+    }
+
+    /** Aplica scaling de heal com base em heal.default (ou chave específica). */
+    @SubscribeEvent
+    public static void onLivingHeal(LivingHealEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+
+        LivingEntity entity = event.getEntity();
+        double multiplier = EventScalingService.getHealMultiplier(entity, ConfigParser.DEFAULT_KEY);
+        if (multiplier != 1.0) {
+            event.setAmount((float) (event.getAmount() * multiplier));
+        }
+
+        if (ConfigParser.debug) {
+            sendHealDebugMessage(entity, event.getAmount());
+        }
     }
 
     /** Level do mob = level do jogador mais próximo ± variação, clamped por mob_levels.json. */
@@ -169,157 +196,114 @@ public class CraftLevelEvents {
         return Math.max(minLevel, Math.min(maxLevel, level));
     }
 
-    /** Recalcula bônus de dano da arma ao trocar item na mão principal. */
-    @SubscribeEvent
-    public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
-        if (event.getSlot() != EquipmentSlot.MAINHAND) return;
-        if (!(event.getEntity() instanceof Player player)) return;
-
-        WeaponScaler.apply(player);
-    }
-
-    /**
-     * Intercepta dano para aplicar scaling de combate, encantamentos condicionais
-     * e enviar indicadores visuais de dano ao cliente.
-     */
-    @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
-        DamageSource source = event.getSource();
-        LivingEntity target = event.getEntity();
-
-        boolean isEnvironmental = source.is(DamageTypes.FALL)
-                || source.is(DamageTypes.DROWN)
-                || source.is(DamageTypes.IN_FIRE)
-                || source.is(DamageTypes.ON_FIRE)
-                || source.is(DamageTypes.LAVA)
-                || source.is(DamageTypes.EXPLOSION)
-                || source.is(DamageTypes.PLAYER_EXPLOSION);
-
-        // Dano ambiental escala com a vida máxima do alvo (level do mob/jogador)
-        if (isEnvironmental) {
-            double multiplier = getHealthScalingMultiplier(target);
-            if (multiplier > 1.0) {
-                event.setAmount((float)(event.getAmount() * multiplier));
-            }
-            return;
-        }
-
-        // Identifica quem causou o dano — direto ou via projétil — player OU mob
-        LivingEntity attacker = null;
-        boolean isProjectile = false;
-
-        if (source.getDirectEntity() instanceof Projectile projectile
-                && projectile.getOwner() instanceof LivingEntity living) {
-            attacker = living;
-            isProjectile = true;
-        } else if (source.getEntity() instanceof LivingEntity living) {
-            attacker = living;
-        }
-
-        if (attacker == null) return;
-
-        final LivingEntity finalAttacker = attacker;
-
-        // Projéteis herdam o multiplicador de dano do atirador
-        if (isProjectile) {
-            double multiplier = getAttackDamageMultiplier(finalAttacker);
-            if (multiplier > 1.0) {
-                event.setAmount((float)(event.getAmount() * multiplier));
-            }
-        }
-
-        if (finalAttacker instanceof Player player) {
-            applyConditionalEnchantDamage(player, target, event);
-        }
-
-        // Indicator de dano — só pra ataques de PLAYER (mobs atacando não precisam de indicator)
-        if (finalAttacker instanceof Player player && player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-            boolean isCrit = !isProjectile
-                    && player.fallDistance > 0
-                    && !player.onGround()
-                    && !player.onClimbable();
-
-            serverLevel.players().forEach(serverPlayer -> {
-                PacketHandler.sendToPlayer(serverPlayer, new DamageIndicatorPacket(
-                        target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(),
-                        event.getAmount(), isCrit
-                ));
-            });
-        }
-    }
-
-    /** Adiciona dano de Smite/Bane quando o alvo corresponde ao tipo configurado. */
-    private static void applyConditionalEnchantDamage(Player player, LivingEntity target, LivingHurtEvent event) {
+    private static void applyPlayerState(Player player) {
         player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
-            for (Map.Entry<String, Double> entry : cap.getConditionalEnchantDamage().entrySet()) {
-                String entityType = entry.getKey();
-                double damage = entry.getValue();
+            PlayerStatScaler.apply(player, cap.getLevel());
 
-                if (matchesEntityType(target, entityType)) {
-                    event.setAmount(event.getAmount() + (float) damage);
-                }
+            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                PacketHandler.sendToPlayer(serverPlayer, new SyncPlayerLevelPacket(
+                        cap.getLevel(),
+                        cap.getLp(),
+                        cap.getLpToNextLevel()
+                ));
             }
         });
     }
 
-    /** Mapeia strings de enchantments.json para MobType do Minecraft. */
-    private static boolean matchesEntityType(LivingEntity target, String entityType) {
-        return switch (entityType.toLowerCase()) {
-            case "undead" -> target.getMobType() == MobType.UNDEAD;
-            case "arthropod" -> target.getMobType() == MobType.ARTHROPOD;
-            case "illager" -> target.getMobType() == MobType.ILLAGER;
-            default -> false;
+    /** Resolve o atacante a partir da fonte de dano (melee, projétil com owner ou entidade causadora). */
+    private static LivingEntity resolveAttacker(DamageSource source) {
+        if (source.getDirectEntity() instanceof Projectile projectile
+                && projectile.getOwner() instanceof LivingEntity owner) {
+            return owner;
+        }
+        if (source.getEntity() instanceof LivingEntity living) {
+            return living;
+        }
+        return null;
+    }
+
+    /** Só jogadores — usado para indicador visual de dano. */
+    private static Player resolveAttackingPlayer(DamageSource source) {
+        if (source.getDirectEntity() instanceof Projectile projectile
+                && projectile.getOwner() instanceof Player player) {
+            return player;
+        }
+        if (source.getEntity() instanceof Player player) {
+            return player;
+        }
+        return null;
+    }
+
+    private static void sendDamageIndicator(Player player, LivingEntity target, float damage) {
+        if (!(player instanceof net.minecraft.server.level.ServerPlayer serverPlayer)) return;
+
+        double[] pos = indicatorPosition(player, target);
+        PacketHandler.sendToPlayer(serverPlayer, new DamageIndicatorPacket(
+                pos[0], pos[1], pos[2], damage
+        ));
+    }
+
+    /** Posição entre o alvo e o jogador, mais próxima do lado que encara o player. */
+    private static double[] indicatorPosition(Player player, LivingEntity target) {
+        double targetY = target.getY() + target.getBbHeight() * 0.65;
+        double playerY = player.getY() + player.getEyeHeight() * 0.75;
+
+        double dx = player.getX() - target.getX();
+        double dy = playerY - targetY;
+        double dz = player.getZ() - target.getZ();
+
+        double t = INDICATOR_TOWARDS_PLAYER;
+        return new double[]{
+                target.getX() + dx * t,
+                targetY + dy * t,
+                target.getZ() + dz * t
         };
     }
 
-    /** Multiplicador de attack_damage do atacante (jogador ou mob). */
-    private static double getAttackDamageMultiplier(LivingEntity attacker) {
-        if (attacker instanceof Player player) {
-            var cap = player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).resolve();
-            if (cap.isEmpty()) return 1.0;
+    private static void sendHealDebugMessage(LivingEntity entity, float amount) {
+        String message = String.format(
+                "[CraftLevel] Cura | Entidade: %s | Cura: %.1f",
+                describeEntity(entity),
+                amount
+        );
 
-            ConfigParser.TierValues tiers = ConfigParser.playerStats.getOrDefault(
-                    "minecraft:generic.attack_damage",
-                    new ConfigParser.TierValues(1.0, 1.0, 1.0, 1.0, "addition")
-            );
-            return ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
-
-        } else if (attacker instanceof Mob mob) {
-            var cap = mob.getCapability(MobLevelProvider.MOB_LEVEL).resolve();
-            if (cap.isEmpty()) return 1.0;
-
-            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
-            ConfigParser.TierValues tiers = ConfigParser.getStatForMob(mobId, "minecraft:generic.attack_damage");
-            return ConfigParser.getScaledMultiplier(tiers, cap.get().getLevel());
+        Component component = Component.literal(message);
+        if (entity instanceof ServerPlayer serverPlayer) {
+            serverPlayer.sendSystemMessage(component);
         }
-
-        return 1.0;
     }
 
-    /** Multiplicador de max_health do alvo — usado para dano ambiental escalar com level. */
-    private static double getHealthScalingMultiplier(LivingEntity target) {
-        ConfigParser.TierValues healthTiers;
-        int level;
+    private static void sendHurtDebugMessage(
+            DamageSource source,
+            LivingEntity target,
+            LivingEntity attacker,
+            float amount
+    ) {
+        String damageType = DamageClassifier.getDamageTypeId(source);
+        Entity causer = attacker != null ? attacker : source.getEntity();
+        String causerLabel = causer != null ? describeEntity(causer) : "nenhuma";
+        String message = String.format(
+                "[CraftLevel] Tipo: %s | Causador: %s | Alvo: %s | Dano: %.1f",
+                damageType,
+                causerLabel,
+                describeEntity(target),
+                amount
+        );
 
-        if (target instanceof Player player) {
-            var cap = player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).resolve();
-            if (cap.isEmpty()) return 1.0;
-            level = cap.get().getLevel();
-            healthTiers = ConfigParser.playerStats.getOrDefault(
-                    "minecraft:generic.max_health",
-                    new ConfigParser.TierValues(1.0, 1.0, 1.0, 1.0, "addition")
-            );
-        } else if (target instanceof Mob mob) {
-            var cap = mob.getCapability(MobLevelProvider.MOB_LEVEL).resolve();
-            if (cap.isEmpty()) return 1.0;
-            level = cap.get().getLevel();
-
-            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
-            healthTiers = ConfigParser.getStatForMob(mobId, "minecraft:generic.max_health");
-        } else {
-            return 1.0;
+        Component component = Component.literal(message);
+        if (causer instanceof ServerPlayer causerPlayer) {
+            causerPlayer.sendSystemMessage(component);
+            return;
         }
+        if (target instanceof ServerPlayer targetPlayer) {
+            targetPlayer.sendSystemMessage(component);
+        }
+    }
 
-        return ConfigParser.getScaledMultiplier(healthTiers, level);
+    private static String describeEntity(Entity entity) {
+        if (entity instanceof Player player) {
+            return player.getGameProfile().getName();
+        }
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
     }
 }

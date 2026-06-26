@@ -1,6 +1,6 @@
 package com.grgs.craftlevel.capability;
 
-/** Contrato da capability de progressão do jogador (level, LP e encantamentos condicionais). */
+/** Contrato da capability de progressão do jogador (level e LP). */
 public interface IPlayerLevel {
     int getLevel();
     void setLevel(int level);
@@ -14,9 +14,4 @@ public interface IPlayerLevel {
     void addLp(int amount);
     boolean canLevelUp();
     void levelUp();
-
-    /** Dano extra de encantamentos condicionais (Smite, Bane) indexado por tipo de mob. */
-    java.util.Map<String, Double> getConditionalEnchantDamage();
-    void clearConditionalEnchantDamage();
-    void addConditionalEnchantDamage(String entityType, double damage);
 }

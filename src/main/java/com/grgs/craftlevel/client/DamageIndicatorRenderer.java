@@ -20,7 +20,6 @@ public class DamageIndicatorRenderer {
     private static class Indicator {
         double x, y, z;
         float damage;
-        boolean isCrit;
         long startTime;
     }
 
@@ -28,13 +27,12 @@ public class DamageIndicatorRenderer {
     private static final long DURATION_MS = 800; // tempo de vida do texto
 
     /** Chamado pelo DamageIndicatorPacket ao receber dano do servidor. */
-    public static void addIndicator(double x, double y, double z, float damage, boolean isCrit) {
+    public static void addIndicator(double x, double y, double z, float damage) {
         Indicator ind = new Indicator();
         ind.x = x;
-        ind.y = y + 0.3; // sobe um pouco acima do ponto de impacto
+        ind.y = y + 0.15;
         ind.z = z;
         ind.damage = damage;
-        ind.isCrit = isCrit;
         ind.startTime = System.currentTimeMillis();
         indicators.add(ind);
     }
@@ -66,7 +64,7 @@ public class DamageIndicatorRenderer {
             poseStack.scale(-0.025f, -0.025f, 0.025f);
 
             String text = String.valueOf(Math.round(ind.damage));
-            int color = ind.isCrit ? 0xFFD700 : 0xFFFFFF; // dourado se crítico
+            int color = 0xFFFFFF;
 
             Font font = mc.font;
             int textWidth = font.width(text);

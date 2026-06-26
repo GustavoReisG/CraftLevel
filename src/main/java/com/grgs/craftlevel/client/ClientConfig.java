@@ -56,7 +56,7 @@ public class ClientConfig {
         loadGameConfig();
     }
 
-    /** Carrega configs de gameplay no cliente (necessário para tooltip e scaling local). */
+    /** Carrega configs de gameplay no cliente (necessário para scaling local). */
     public static void loadGameConfig() {
         try {
             Path dir = Minecraft.getInstance().gameDirectory.toPath().resolve("config/craftlevel");
