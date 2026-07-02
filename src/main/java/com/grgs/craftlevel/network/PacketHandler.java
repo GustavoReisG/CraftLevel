@@ -8,7 +8,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-/** Registra e envia todos os pacotes de rede do mod. */
+/** Canal Forge SimpleChannel — server → client e client → server. */
 public class PacketHandler {
 
     private static final String PROTOCOL_VERSION = "1";

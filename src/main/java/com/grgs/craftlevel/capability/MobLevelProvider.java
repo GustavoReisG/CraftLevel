@@ -10,7 +10,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/** Provider Forge que anexa e persiste a capability de level dos mobs. */
+/**
+ * Anexa {@link IMobLevel} ao mob e serializa level no NBT da entidade.
+ */
 public class MobLevelProvider implements ICapabilitySerializable<CompoundTag> {
 
     public static final Capability<IMobLevel> MOB_LEVEL =

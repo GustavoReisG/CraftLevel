@@ -12,7 +12,7 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import java.io.*;
 import java.nio.file.*;
 
-/** Configurações visuais do cliente (posição/escala do HUD) e carga de configs de gameplay. */
+/** Configurações visuais do cliente (client.json) + reload dos JSONs de gameplay no login. */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public class ClientConfig {
 

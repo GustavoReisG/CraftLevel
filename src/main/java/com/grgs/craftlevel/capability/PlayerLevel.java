@@ -1,10 +1,13 @@
 package com.grgs.craftlevel.capability;
 
 import com.grgs.craftlevel.config.ConfigParser;
+import com.grgs.craftlevel.scaling.ScalingEngine;
+import com.grgs.craftlevel.scaling.ScalingRegistry;
 
-import static com.grgs.craftlevel.config.ConfigManager.lpConfig;
-
-/** Implementação da progressão do jogador: level e LP. */
+/**
+ * Estado de progressão do player: level + LP acumulado.
+ * LP to next level usa o escalador lp_scaling (power + overwrite).
+ */
 public class PlayerLevel implements IPlayerLevel {
     private int level = 1;
     private int lp = 0;
@@ -21,11 +24,10 @@ public class PlayerLevel implements IPlayerLevel {
     @Override
     public void setLp(int lp) { this.lp = lp; }
 
-    /** Calcula LP para o próximo level usando Scaling de lp.json. */
     @Override
     public int getLpToNextLevel() {
-        ConfigParser.parseLp(lpConfig);
-        return (int) (ConfigParser.lpBase * Math.pow(ConfigParser.lpMultiplier, level - 1));
+        double scaled = ScalingEngine.computeScaledValue(ScalingRegistry.getLpScaling(), level);
+        return (int) scaled;
     }
 
     @Override
@@ -33,10 +35,9 @@ public class PlayerLevel implements IPlayerLevel {
         this.lp += amount;
     }
 
-    /** Level máximo hardcoded em 200. */
     @Override
     public boolean canLevelUp() {
-        return this.lp >= getLpToNextLevel() && this.level < 200;
+        return this.lp >= getLpToNextLevel() && this.level < ConfigParser.getMaxLevel();
     }
 
     @Override

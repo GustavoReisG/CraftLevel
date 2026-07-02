@@ -2,6 +2,7 @@ package com.grgs.craftlevel.network;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
+import com.grgs.craftlevel.util.DebugLog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -48,7 +49,7 @@ public class SyncMobLevelPacket {
         if (entity instanceof Mob mob) {
             mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(cap -> {
                 cap.setLevel(packet.level);
-                CraftLevel.LOGGER.info("[CraftLevel] Mob level synced: entityId={} level={}", packet.entityId, packet.level);
+                DebugLog.info("Mob level synced: entityId={} level={}", packet.entityId, packet.level);
             });
         } else if (attempts < 100) {
             mc.tell(() -> tryApply(packet, attempts + 1));

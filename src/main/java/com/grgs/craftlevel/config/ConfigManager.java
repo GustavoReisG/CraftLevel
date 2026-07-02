@@ -2,6 +2,8 @@ package com.grgs.craftlevel.config;
 
 import com.google.gson.*;
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.util.DebugLog;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -10,7 +12,11 @@ import java.io.*;
 import java.nio.file.*;
 
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
-/** Carrega e cria os JSONs em config/craftlevel/ no servidor e no cliente. */
+/**
+ * Carrega e persiste os JSONs em {@code config/craftlevel/}.
+ * <p>
+ * Cria arquivos default na primeira execução. Chamado no server start e em /craftlevel reload.
+ */
 public class ConfigManager {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -20,41 +26,77 @@ public class ConfigManager {
     // DEFAULTS
     // =========================================================
 
-    private static final String DEFAULT_SYSTEM = """
+    private static final String DEFAULT_CONFIG = """
     {
-        "mob_level_variation": 10,
-        "debug": true
-    }
-    """;
-
-    private static final String DEFAULT_LP = """
-    {
-        "lpBase": 100,
-        "lpMultiplier": 1.06
+        "debug": true,
+        "lp_scaling": {
+            "mob_level_variation": 10,
+            "lvl_max": 200,
+            "base_value": 100,
+            "scaling": 1.06,
+            "scaling_mode": "power",
+            "apply_mode": "overwrite"
+        },
+        "scaling": {
+            "health": {
+                "base_value": 1.0,
+                "scaling": 1.045,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            },
+            "spell": {
+                "base_value": 1.0,
+                "scaling": 1.045,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            },
+            "melee_power": {
+                "base_value": 1.0,
+                "scaling": 1.045,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            },
+            "mob_health": {
+                "base_value": 1.0,
+                "scaling": 1.05,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            },
+            "neutral_health": {
+                "base_value": 1.0,
+                "scaling": 1.0,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            },
+            "flat": {
+                "base_value": 1.0,
+                "scaling": 1.0,
+                "scaling_mode": "power",
+                "apply_mode": "multiply"
+            }
+        }
     }
     """;
 
     private static final String DEFAULT_PLAYER_STATS = """
     {
         "attribute": {
-            "minecraft:generic.max_health": 1.045,
-            "irons_spellbooks:spell_power": 1.045
+            "minecraft:generic.max_health": "health"
         },
         "hurt": {
-            "minecraft:player_attack": "minecraft:generic.max_health",
-            "minecraft:mob_attack": "minecraft:generic.max_health",
-            "minecraft:arrow": "minecraft:generic.max_health",
-            "minecraft:trident": "minecraft:generic.max_health",
-            "minecraft:magic": "minecraft:generic.max_health",
-            "minecraft:indirect_magic": "minecraft:generic.max_health",
-            "minecraft:wither": "minecraft:generic.max_health",
-            "minecraft:poison": "minecraft:generic.max_health",
-            "attributeslib:current_hp_damage": 1.0,
-            "*irons_spellbooks*": 1.0,
-            "default": "minecraft:generic.max_health"
+            "minecraft:player_attack": "melee_power",
+            "minecraft:arrow": "melee_power",
+            "minecraft:trident": "melee_power",
+            "minecraft:magic": "spell",
+            "minecraft:indirect_magic": "spell",
+            "minecraft:wither": "health",
+            "minecraft:poison": "health",
+            "attributeslib:current_hp_damage": "flat",
+            "*irons_spellbooks*": "spell",
+            "default": "health"
         },
         "heal": {
-            "default": "minecraft:generic.max_health"
+            "default": "health"
         }
     }
     """;
@@ -62,13 +104,13 @@ public class ConfigManager {
     private static final String DEFAULT_MOB_STATS = """
     {
         "attribute": {
-            "minecraft:generic.max_health": 1.05
+            "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-            "default": "minecraft:generic.max_health"
+            "default": "mob_health"
         },
         "heal": {
-            "default": "minecraft:generic.max_health"
+            "default": "mob_health"
         }
     }
     """;
@@ -77,62 +119,62 @@ public class ConfigManager {
     {
         "minecraft:cow": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:sheep": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:pig": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:chicken": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:rabbit": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:squid": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:bat": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:glow_squid": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:cod": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:salmon": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:tropical_fish": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         },
         "minecraft:pufferfish": {
             "attribute": {
-                "minecraft:generic.max_health": 1.0
+                "minecraft:generic.max_health": "flat"
             }
         }
     }
@@ -163,8 +205,7 @@ public class ConfigManager {
     // VALORES CARREGADOS
     // =========================================================
 
-    public static JsonObject systemConfig = new JsonObject();
-    public static JsonObject lpConfig = new JsonObject();
+    public static JsonObject config = new JsonObject();
     public static JsonObject playerStats = new JsonObject();
     public static JsonObject mobStats = new JsonObject();
     public static JsonObject mobOverrides = new JsonObject();
@@ -188,33 +229,41 @@ public class ConfigManager {
         configDir = dir;
         Files.createDirectories(configDir);
 
-        loadSystem();
-        loadLp();
+        loadConfig();
         loadPlayerStats();
         loadMobStats();
         loadMobOverrides();
         loadMobLevels();
 
-        ConfigParser.parseSystem(systemConfig);
-        ConfigParser.parseLp(lpConfig);
+        ConfigParser.parseConfig(config);
         ConfigParser.parsePlayerStats(playerStats);
         ConfigParser.parseMobStats(mobStats);
         ConfigParser.parseMobOverrides(mobOverrides);
         ConfigParser.parseMobLevels(mobLevels);
 
         CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
+        DebugLog.info(
+                "Configs carregados: playerStats={} attrs, mobOverrides={}, mobLevels={}",
+                ConfigParser.playerStats.attribute().size(),
+                ConfigParser.mobOverrides.size(),
+                ConfigParser.mobLevels.size()
+        );
+    }
+
+    /** Recarrega JSONs do diretório já inicializado ou do servidor informado. */
+    public static void reload(MinecraftServer server) throws IOException {
+        Path dir = configDir != null
+                ? configDir
+                : server.getServerDirectory().toPath().resolve("config/craftlevel");
+        loadAllConfigs(dir);
     }
 
     // =========================================================
     // LOADERS
     // =========================================================
 
-    private static void loadSystem() throws IOException {
-        systemConfig = loadOrCreate("system.json", DEFAULT_SYSTEM);
-    }
-
-    private static void loadLp() throws IOException {
-        lpConfig = loadOrCreate("lp.json", DEFAULT_LP);
+    private static void loadConfig() throws IOException {
+        config = loadOrCreate("config.json", DEFAULT_CONFIG);
     }
 
     private static void loadPlayerStats() throws IOException {

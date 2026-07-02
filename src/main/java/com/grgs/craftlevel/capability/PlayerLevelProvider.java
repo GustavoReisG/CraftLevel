@@ -10,7 +10,10 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/** Provider Forge que anexa e persiste a capability de level do jogador. */
+/**
+ * Anexa {@link IPlayerLevel} ao player e serializa level/LP no save.
+ * Registrado em {@link com.grgs.craftlevel.events.CraftLevelEvents#onAttachCapabilities}.
+ */
 public class PlayerLevelProvider implements ICapabilitySerializable<CompoundTag> {
 
     public static final Capability<IPlayerLevel> PLAYER_LEVEL =
@@ -28,7 +31,6 @@ public class PlayerLevelProvider implements ICapabilitySerializable<CompoundTag>
         optional.invalidate();
     }
 
-    /** Salva level e LP no NBT do jogador. */
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();

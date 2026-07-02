@@ -13,7 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Renderiza números de dano flutuantes no mundo 3D quando o jogador ataca. */
+/**
+ * Renderiza números de dano flutuantes (texto branco) quando o player acerta um alvo.
+ * Separado das partículas vanilla DAMAGE_INDICATOR (suprimidas por {@link NullDamageIndicatorParticles}).
+ */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public class DamageIndicatorRenderer {
 

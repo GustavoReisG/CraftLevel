@@ -5,7 +5,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/** Envia posição e valor de dano para renderizar indicador flutuante no cliente. */
+/** Server → client: posição e valor para {@link com.grgs.craftlevel.client.DamageIndicatorRenderer}. */
 public class DamageIndicatorPacket {
 
     private final double x, y, z;
