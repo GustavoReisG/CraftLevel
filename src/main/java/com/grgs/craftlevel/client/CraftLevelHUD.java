@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -44,23 +45,15 @@ public class CraftLevelHUD {
 
     /** Converte anchor string (ex.: bottom_left) em coordenadas centrais na tela. */
     private static int[] getAnchorPosition(String anchor, int screenWidth, int screenHeight, int elemWidth, int elemHeight) {
-        int ax, ay;
-        switch (anchor) {
-            case "top_left"      -> { ax = elemWidth / 2;                 ay = elemHeight / 2; }
-            case "top_center"    -> { ax = screenWidth / 2;               ay = elemHeight / 2; }
-            case "top_right"     -> { ax = screenWidth - elemWidth / 2;   ay = elemHeight / 2; }
-            case "center_left"   -> { ax = elemWidth / 2;                 ay = screenHeight / 2; }
-            case "center_right"  -> { ax = screenWidth - elemWidth / 2;   ay = screenHeight / 2; }
-            case "bottom_left"   -> { ax = elemWidth / 2;                 ay = screenHeight - elemHeight / 2; }
-            case "bottom_center" -> { ax = screenWidth / 2;               ay = screenHeight - elemHeight / 2; }
-            case "bottom_right"  -> { ax = screenWidth - elemWidth / 2;   ay = screenHeight - elemHeight / 2; }
-            default              -> { ax = screenWidth / 2;               ay = screenHeight / 2; }
-        }
-        return new int[]{ax, ay};
+        return ClientHudLayout.anchorCenter(anchor, screenWidth, screenHeight, elemWidth, elemHeight);
     }
 
     @SubscribeEvent
     public static void onRenderHUD(RenderGuiOverlayEvent.Post event) {
+        if (!VanillaGuiOverlay.CROSSHAIR.id().equals(event.getOverlay().id())) {
+            return;
+        }
+
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.options.renderDebug) return;

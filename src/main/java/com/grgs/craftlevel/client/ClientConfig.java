@@ -1,8 +1,10 @@
 package com.grgs.craftlevel.client;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.config.ConfigManager;
+import com.grgs.craftlevel.client.config.ClientConfigEditorState;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,25 +31,26 @@ public class ClientConfig {
     public static String hudLpBarAnchor = "bottom_left";
     public static String hudLevelCircleAnchor = "top_left";
 
-    private static final String DEFAULT = """
-    {
-        "hud": {
-            "lp_bar": {
-                "anchor": "bottom_left",
-                "x": 2,
-                "y": -5,
-                "scale": 0.07
-            },
-            "level_circle": {
-                "anchor": "top_left",
-                "x": 2,
-                "y": 2,
-                "scale": 0.07,
-                "font_scale": 2.5
-            }
-        }
-    }
-    """;
+    // Barra de HP customizada
+    public static boolean hudHealthBarEnabled = true;
+    public static int hudHealthBarX = -50;
+    public static int hudHealthBarY = -48;
+    public static float hudHealthBarScale = 0.08f;
+    public static float hudHealthBarFontScale = 0.65f;
+    public static String hudHealthBarAnchor = "bottom_center";
+
+    public static final String[] ANCHORS = {
+            "top_left",
+            "top_center",
+            "top_right",
+            "center_left",
+            "center_right",
+            "bottom_left",
+            "bottom_center",
+            "bottom_right"
+    };
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /** Ao entrar no mundo: carrega client.json e os JSONs de gameplay para tooltips funcionarem. */
     @SubscribeEvent
@@ -66,47 +69,70 @@ public class ClientConfig {
         }
     }
 
-    /** Lê config/craftlevel/client.json com posição e escala dos elementos do HUD. */
+    private static Path getConfigPath() {
+        return getConfigDirectory().resolve("client.json");
+    }
+
+    private static Path getConfigDirectory() {
+        return Minecraft.getInstance().gameDirectory.toPath().resolve("config/craftlevel");
+    }
+
+    /** Lê config/craftlevel/client.json — cria defaults na primeira execução. */
     public static void load() {
         try {
-            Path file = Minecraft.getInstance().gameDirectory.toPath()
-                    .resolve("config/craftlevel/client.json");
-
-            if (!Files.exists(file)) {
-                Files.createDirectories(file.getParent());
-                Files.writeString(file, DEFAULT);
-            }
-
-            JsonObject obj = JsonParser.parseReader(
-                    Files.newBufferedReader(file)
-            ).getAsJsonObject();
-
-            JsonObject hud = obj.getAsJsonObject("hud");
-            JsonObject lpBar = hud.getAsJsonObject("lp_bar");
-            hudLpBarX = lpBar.get("x").getAsInt();
-            hudLpBarY = lpBar.get("y").getAsInt();
-            hudLpBarScale = lpBar.get("scale").getAsFloat();
-            hudLpBarAnchor = lpBar.get("anchor").getAsString();
-
-            JsonObject levelCircle = hud.getAsJsonObject("level_circle");
-            hudLevelCircleX = levelCircle.get("x").getAsInt();
-            hudLevelCircleY = levelCircle.get("y").getAsInt();
-            hudLevelCircleScale = levelCircle.get("scale").getAsFloat();
-            hudLevelCircleFontScale = levelCircle.get("font_scale").getAsFloat();
-            hudLevelCircleAnchor = levelCircle.get("anchor").getAsString();
-
+            Path dir = getConfigDirectory();
+            ConfigManager.writeDefaultClient(dir);
+            applyEditorState(ClientConfigEditorState.loadFrom(dir.resolve("client.json")));
         } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] client.json error, using defaults");
-            hudLpBarX = 2;
-            hudLpBarY = -5;
-            hudLpBarScale = 0.07f;
-            hudLpBarAnchor = "bottom_left";
+            CraftLevel.LOGGER.warn("[CraftLevel] client.json error, using runtime defaults");
+            applyEditorState(ClientConfigEditorState.createDefault());
+        }
+    }
 
-            hudLevelCircleX = 2;
-            hudLevelCircleY = 2;
-            hudLevelCircleScale = 0.07f;
-            hudLevelCircleFontScale = 2.5f;
-            hudLevelCircleAnchor = "top_left";
+    /** Aplica valores da sessão de edição ao runtime do HUD. */
+    public static void applyEditorState(ClientConfigEditorState state) {
+        ClientConfigEditorState.HudElementValues lpBar = state.resolvedLpBar();
+        hudLpBarAnchor = lpBar.anchor();
+        hudLpBarX = lpBar.x();
+        hudLpBarY = lpBar.y();
+        hudLpBarScale = lpBar.scale();
+
+        ClientConfigEditorState.HudElementValues levelCircle = state.resolvedLevelCircle();
+        hudLevelCircleAnchor = levelCircle.anchor();
+        hudLevelCircleX = levelCircle.x();
+        hudLevelCircleY = levelCircle.y();
+        hudLevelCircleScale = levelCircle.scale();
+        hudLevelCircleFontScale = levelCircle.fontScale();
+
+        ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
+        hudHealthBarEnabled = healthBar.enabled();
+        hudHealthBarAnchor = healthBar.anchor();
+        hudHealthBarX = healthBar.x();
+        hudHealthBarY = healthBar.y();
+        hudHealthBarScale = healthBar.scale();
+        hudHealthBarFontScale = healthBar.fontScale();
+    }
+
+    /** Grava os valores atuais em config/craftlevel/client.json. */
+    public static void save() {
+        ClientConfigEditorState state = ClientConfigEditorState.createDefault();
+        state.setLpBar(new ClientConfigEditorState.HudElementValues(
+                hudLpBarAnchor, hudLpBarX, hudLpBarY, hudLpBarScale, null
+        ));
+        state.setLevelCircle(new ClientConfigEditorState.HudElementValues(
+                hudLevelCircleAnchor, hudLevelCircleX, hudLevelCircleY,
+                hudLevelCircleScale, hudLevelCircleFontScale
+        ));
+        state.setHealthBar(new ClientConfigEditorState.HealthBarValues(
+                hudHealthBarEnabled, hudHealthBarAnchor, hudHealthBarX, hudHealthBarY,
+                hudHealthBarScale, hudHealthBarFontScale
+        ));
+        try {
+            Path file = getConfigPath();
+            Files.createDirectories(file.getParent());
+            Files.writeString(file, GSON.toJson(state.toJson()));
+        } catch (Exception e) {
+            CraftLevel.LOGGER.warn("[CraftLevel] Failed to save client.json", e);
         }
     }
 }

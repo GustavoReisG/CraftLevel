@@ -19,6 +19,16 @@ import java.nio.file.*;
  */
 public class ConfigManager {
 
+    /** Nomes dos arquivos JSON (sem extensão) usados na tela de config. */
+    public static final String[] CONFIG_FILES = {
+            "config",
+            "client",
+            "player_stats",
+            "mob_stats",
+            "mob_overrides",
+            "mob_levels"
+    };
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static Path configDir;
 
@@ -32,10 +42,9 @@ public class ConfigManager {
         "lp_scaling": {
             "mob_level_variation": 10,
             "lvl_max": 200,
-            "base_value": 100,
+            "base_value": 200,
             "scaling": 1.06,
-            "scaling_mode": "power",
-            "apply_mode": "overwrite"
+            "scaling_mode": "power"
         },
         "scaling": {
             "health": {
@@ -44,7 +53,7 @@ public class ConfigManager {
                 "scaling_mode": "power",
                 "apply_mode": "multiply"
             },
-            "spell": {
+            "spell_power": {
                 "base_value": 1.0,
                 "scaling": 1.045,
                 "scaling_mode": "power",
@@ -59,12 +68,6 @@ public class ConfigManager {
             "mob_health": {
                 "base_value": 1.0,
                 "scaling": 1.05,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            },
-            "neutral_health": {
-                "base_value": 1.0,
-                "scaling": 1.0,
                 "scaling_mode": "power",
                 "apply_mode": "multiply"
             },
@@ -121,61 +124,6 @@ public class ConfigManager {
             "attribute": {
                 "minecraft:generic.max_health": "flat"
             }
-        },
-        "minecraft:sheep": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:pig": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:chicken": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:rabbit": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:squid": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:bat": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:glow_squid": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:cod": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:salmon": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:tropical_fish": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
-        },
-        "minecraft:pufferfish": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
         }
     }
     """;
@@ -186,19 +134,70 @@ public class ConfigManager {
         "minecraft:warden": { "lvl_min": 50, "lvl_max": 200 },
         "minecraft:elder_guardian": { "lvl_min": 50, "lvl_max": 200 },
         "minecraft:ender_dragon": { "lvl_min": 100, "lvl_max": 200 },
-        "minecraft:cow": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:sheep": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:pig": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:chicken": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:rabbit": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:squid": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:allay": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:axolotl": { "lvl_min": 1, "lvl_max": 1 },
         "minecraft:bat": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:glow_squid": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:bee": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:camel": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:cat": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:chicken": { "lvl_min": 1, "lvl_max": 1 },
         "minecraft:cod": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:cow": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:dolphin": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:donkey": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:fox": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:frog": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:glow_squid": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:horse": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:llama": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:mooshroom": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:mule": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:ocelot": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:panda": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:parrot": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:pig": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:pufferfish": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:rabbit": { "lvl_min": 1, "lvl_max": 1 },
         "minecraft:salmon": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:sheep": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:sniffer": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:snow_golem": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:squid": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:strider": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:tadpole": { "lvl_min": 1, "lvl_max": 1 },
+        "minecraft:trader_llama": { "lvl_min": 1, "lvl_max": 1 },
         "minecraft:tropical_fish": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:pufferfish": { "lvl_min": 1, "lvl_max": 1 }
+        "minecraft:turtle": { "lvl_min": 1, "lvl_max": 1 }
     }
+    """;
+
+    /** Default de client.json (HUD visual — só cliente). */
+    public static final String DEFAULT_CLIENT = """
+    {
+       "hud": {
+         "lp_bar": {
+           "anchor": "bottom_left",
+           "x": 2,
+           "y": -2,
+           "scale": 0.075
+         },
+         "level_circle": {
+           "anchor": "top_left",
+           "x": 2,
+           "y": 2,
+           "scale": 0.075,
+           "font_scale": 2.0
+         },
+         "health_bar": {
+           "enabled": true,
+           "anchor": "bottom_center",
+           "x": -50,
+           "y": -31,
+            "scale": 0.08,
+           "font_scale": 0.5
+         }
+       }
+     }
     """;
 
     // =========================================================
@@ -298,6 +297,19 @@ public class ConfigManager {
     private static JsonObject readJson(Path file) throws IOException {
         try (Reader reader = Files.newBufferedReader(file)) {
             return JsonParser.parseReader(reader).getAsJsonObject();
+        }
+    }
+
+    public static String toPrettyJson(JsonObject json) {
+        return GSON.toJson(json);
+    }
+
+    /** Cria config/craftlevel/client.json com defaults se não existir. */
+    public static void writeDefaultClient(Path configDirectory) throws IOException {
+        Files.createDirectories(configDirectory);
+        Path file = configDirectory.resolve("client.json");
+        if (!Files.exists(file)) {
+            Files.writeString(file, DEFAULT_CLIENT);
         }
     }
 }
