@@ -16,7 +16,8 @@ public class HudElementConfigScreen extends Screen {
     public enum Element {
         LP_BAR("LP Bar"),
         LEVEL_CIRCLE("Level Circle"),
-        HEALTH_BAR("Health Bar");
+        HEALTH_BAR("Health Bar"),
+        HUNGER_BAR("Hunger Bar");
 
         private final String title;
 
@@ -57,13 +58,16 @@ public class HudElementConfigScreen extends Screen {
         ClientConfigEditorState state = ClientConfigPersistence.session();
         int row = 0;
 
-        if (element == Element.HEALTH_BAR) {
+        if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR) {
             rowEnabled = row;
-            ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
+            boolean enabled = element == Element.HEALTH_BAR
+                    ? state.resolvedHealthBar().enabled()
+                    : state.resolvedHungerBar().enabled();
+            String label = element == Element.HEALTH_BAR ? "Enable CL Health Bar" : "Enable CL Hunger Bar";
             enabledButton = CycleButton.onOffBuilder()
-                    .withInitialValue(healthBar.enabled())
+                    .withInitialValue(enabled)
                     .displayOnlyValue()
-                    .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal("Enable CL Health Bar"));
+                    .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(label));
             ConfigScreenLayout.positionField(this, row++, enabledButton);
             addRenderableWidget(enabledButton);
         }
@@ -75,6 +79,11 @@ public class HudElementConfigScreen extends Screen {
                 ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
                 yield new ClientConfigEditorState.HudElementValues(
                         healthBar.anchor(), healthBar.x(), healthBar.y(), healthBar.scale(), healthBar.fontScale());
+            }
+            case HUNGER_BAR -> {
+                ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
+                yield new ClientConfigEditorState.HudElementValues(
+                        hungerBar.anchor(), hungerBar.x(), hungerBar.y(), hungerBar.scale(), hungerBar.fontScale());
             }
         };
 
@@ -104,7 +113,8 @@ public class HudElementConfigScreen extends Screen {
         ConfigScreenLayout.positionField(this, row++, scaleField);
         addRenderableWidget(scaleField);
 
-        if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR) {
+        if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR
+                || element == Element.LP_BAR || element == Element.HUNGER_BAR) {
             rowFontScale = row;
             fontScaleField = newFloatField(values.fontScale());
             ConfigScreenLayout.positionField(this, row++, fontScaleField);
@@ -158,8 +168,17 @@ public class HudElementConfigScreen extends Screen {
             session.setLpBar(values);
         } else if (element == Element.LEVEL_CIRCLE) {
             session.setLevelCircle(values);
-        } else {
+        } else if (element == Element.HEALTH_BAR) {
             session.setHealthBar(new ClientConfigEditorState.HealthBarValues(
+                    enabledButton.getValue(),
+                    anchorButton.getValue(),
+                    values.x(),
+                    values.y(),
+                    values.scale(),
+                    values.fontScale()
+            ));
+        } else {
+            session.setHungerBar(new ClientConfigEditorState.HungerBarValues(
                     enabledButton.getValue(),
                     anchorButton.getValue(),
                     values.x(),
@@ -193,7 +212,8 @@ public class HudElementConfigScreen extends Screen {
         renderBackground(graphics);
         graphics.drawCenteredString(font, title, width / 2, 16, 0xFFFFFF);
         if (rowEnabled >= 0) {
-            ConfigScreenLayout.renderLabel(this, graphics, rowEnabled, "Enable CL Health Bar");
+            String enabledLabel = element == Element.HEALTH_BAR ? "Enable CL Health Bar" : "Enable CL Hunger Bar";
+            ConfigScreenLayout.renderLabel(this, graphics, rowEnabled, enabledLabel);
         }
         ConfigScreenLayout.renderLabel(this, graphics, rowAnchor, "Anchor");
         ConfigScreenLayout.renderLabel(this, graphics, rowX, "Pos X");

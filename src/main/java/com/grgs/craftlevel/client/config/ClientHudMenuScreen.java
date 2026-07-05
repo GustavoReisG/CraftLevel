@@ -31,6 +31,11 @@ public class ClientHudMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 2, healthBar);
         addRenderableWidget(healthBar);
 
+        Button hungerBar = menuButton("Hunger Bar",
+                () -> new HudElementConfigScreen(this, HudElementConfigScreen.Element.HUNGER_BAR));
+        ConfigScreenLayout.positionRow(this, 3, hungerBar);
+        addRenderableWidget(hungerBar);
+
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 

@@ -14,7 +14,7 @@ import java.util.Map;
  * Parse dos JSONs em estruturas runtime.
  * <p>
  * {@code config.json} → debug, lp_scaling, escaladores<br>
- * {@code player_stats / mob_stats} → wiring (attribute, hurt, heal → nome do escalador)<br>
+ * {@code player_stats / mob_stats} → wiring (attribute, hurt, hurt_self, heal → nome do escalador)<br>
  * {@code mob_overrides} → wiring isolado por mob<br>
  * {@code mob_levels} → lvl_min / lvl_max por entity type
  */
@@ -27,15 +27,21 @@ public class ConfigParser {
             Map<String, String> attribute,
             /** damage type id (ou wildcard) → nome do escalador */
             Map<String, String> hurt,
+            /** dano ambiental / status / self → nome do escalador */
+            Map<String, String> hurtSelf,
             /** heal key → nome do escalador */
             Map<String, String> heal
     ) {
         public static StatWiringConfig empty() {
-            return new StatWiringConfig(new HashMap<>(), new HashMap<>(), new HashMap<>());
+            return new StatWiringConfig(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
         public String lookupHurt(String damageTypeId) {
             return resolveHurtRef(hurt, damageTypeId, true);
+        }
+
+        public String lookupHurtSelf(String damageTypeId) {
+            return resolveHurtRef(hurtSelf, damageTypeId, true);
         }
 
         public String lookupHeal(String healKey) {
@@ -130,6 +136,14 @@ public class ConfigParser {
         return resolveMobWiring(mobId).lookupHurt(damageTypeId);
     }
 
+    public static String resolvePlayerHurtSelfScaler(String damageTypeId) {
+        return playerStats.lookupHurtSelf(damageTypeId);
+    }
+
+    public static String resolveMobHurtSelfScaler(String mobId, String damageTypeId) {
+        return resolveMobWiring(mobId).lookupHurtSelf(damageTypeId);
+    }
+
     public static String resolvePlayerHealScaler(String healKey) {
         return playerStats.lookupHeal(healKey);
     }
@@ -153,6 +167,7 @@ public class ConfigParser {
     private static StatWiringConfig parseWiring(JsonObject json) {
         Map<String, String> attribute = new HashMap<>();
         Map<String, String> hurt = new HashMap<>();
+        Map<String, String> hurtSelf = new HashMap<>();
         Map<String, String> heal = new HashMap<>();
 
         if (json.has("attribute") && json.get("attribute").isJsonObject()) {
@@ -161,11 +176,14 @@ public class ConfigParser {
         if (json.has("hurt") && json.get("hurt").isJsonObject()) {
             readStringMap(json.getAsJsonObject("hurt"), hurt);
         }
+        if (json.has("hurt_self") && json.get("hurt_self").isJsonObject()) {
+            readStringMap(json.getAsJsonObject("hurt_self"), hurtSelf);
+        }
         if (json.has("heal") && json.get("heal").isJsonObject()) {
             readStringMap(json.getAsJsonObject("heal"), heal);
         }
 
-        return new StatWiringConfig(attribute, hurt, heal);
+        return new StatWiringConfig(attribute, hurt, hurtSelf, heal);
     }
 
     private static ScalingDefinition readScalingDefinition(

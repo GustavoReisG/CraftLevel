@@ -50,6 +50,34 @@ public final class EventScalingService {
         return applyScaler(amount, level, scalerName, context, damageTypeId);
     }
 
+    /**
+     * Escala dano auto-infligido ou ambiental na entidade alvo (sem atacante externo).
+     *
+     * @param damageTypeId id do DamageType (ex: minecraft:poison)
+     */
+    public static float applyHurtSelfScaling(LivingEntity target, String damageTypeId, float amount) {
+        int level = getLevel(target);
+        if (level <= 0) {
+            return amount;
+        }
+
+        String scalerName;
+        String context;
+
+        if (target instanceof Player) {
+            scalerName = ConfigParser.resolvePlayerHurtSelfScaler(damageTypeId);
+            context = "player hurt_self:" + damageTypeId;
+        } else if (target instanceof Mob mob) {
+            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
+            scalerName = ConfigParser.resolveMobHurtSelfScaler(mobId, damageTypeId);
+            context = "mob hurt_self:" + mobId + "/" + damageTypeId;
+        } else {
+            return amount;
+        }
+
+        return applyScaler(amount, level, scalerName, context, damageTypeId);
+    }
+
     /** Escala cura recebida pela entidade (chave heal do config, geralmente "default"). */
     public static float applyHealScaling(LivingEntity entity, String healKey, float amount) {
         int level = getLevel(entity);

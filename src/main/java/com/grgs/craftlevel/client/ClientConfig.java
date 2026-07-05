@@ -22,6 +22,7 @@ public class ClientConfig {
     public static int hudLpBarX = 0;
     public static int hudLpBarY = 0;
     public static float hudLpBarScale = 0.08f;
+    public static float hudLpBarFontScale = 0.5f;
 
     // Posição e escala do círculo de level
     public static int hudLevelCircleX = 0;
@@ -38,6 +39,14 @@ public class ClientConfig {
     public static float hudHealthBarScale = 0.08f;
     public static float hudHealthBarFontScale = 0.65f;
     public static String hudHealthBarAnchor = "bottom_center";
+
+    // Barra de fome customizada
+    public static boolean hudHungerBarEnabled = true;
+    public static int hudHungerBarX = -50;
+    public static int hudHungerBarY = -15;
+    public static float hudHungerBarScale = 0.08f;
+    public static float hudHungerBarFontScale = 0.5f;
+    public static String hudHungerBarAnchor = "bottom_center";
 
     public static final String[] ANCHORS = {
             "top_left",
@@ -96,6 +105,7 @@ public class ClientConfig {
         hudLpBarX = lpBar.x();
         hudLpBarY = lpBar.y();
         hudLpBarScale = lpBar.scale();
+        hudLpBarFontScale = lpBar.fontScale();
 
         ClientConfigEditorState.HudElementValues levelCircle = state.resolvedLevelCircle();
         hudLevelCircleAnchor = levelCircle.anchor();
@@ -111,13 +121,21 @@ public class ClientConfig {
         hudHealthBarY = healthBar.y();
         hudHealthBarScale = healthBar.scale();
         hudHealthBarFontScale = healthBar.fontScale();
+
+        ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
+        hudHungerBarEnabled = hungerBar.enabled();
+        hudHungerBarAnchor = hungerBar.anchor();
+        hudHungerBarX = hungerBar.x();
+        hudHungerBarY = hungerBar.y();
+        hudHungerBarScale = hungerBar.scale();
+        hudHungerBarFontScale = hungerBar.fontScale();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
     public static void save() {
         ClientConfigEditorState state = ClientConfigEditorState.createDefault();
         state.setLpBar(new ClientConfigEditorState.HudElementValues(
-                hudLpBarAnchor, hudLpBarX, hudLpBarY, hudLpBarScale, null
+                hudLpBarAnchor, hudLpBarX, hudLpBarY, hudLpBarScale, hudLpBarFontScale
         ));
         state.setLevelCircle(new ClientConfigEditorState.HudElementValues(
                 hudLevelCircleAnchor, hudLevelCircleX, hudLevelCircleY,
@@ -126,6 +144,10 @@ public class ClientConfig {
         state.setHealthBar(new ClientConfigEditorState.HealthBarValues(
                 hudHealthBarEnabled, hudHealthBarAnchor, hudHealthBarX, hudHealthBarY,
                 hudHealthBarScale, hudHealthBarFontScale
+        ));
+        state.setHungerBar(new ClientConfigEditorState.HungerBarValues(
+                hudHungerBarEnabled, hudHungerBarAnchor, hudHungerBarX, hudHungerBarY,
+                hudHungerBarScale, hudHungerBarFontScale
         ));
         try {
             Path file = getConfigPath();

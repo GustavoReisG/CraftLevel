@@ -193,15 +193,19 @@ public class CraftLevelEvents {
         DamageSource source = event.getSource();
         LivingEntity target = event.getEntity();
         LivingEntity attacker = resolveAttacker(source);
+        String damageTypeId = DamageClassifier.getDamageTypeId(source);
         float originalAmount = event.getAmount();
+        float scaled;
 
-        if (attacker != null) {
-            String damageTypeId = DamageClassifier.getDamageTypeId(source);
-            float scaled = EventScalingService.applyHurtScaling(attacker, damageTypeId, originalAmount);
-            event.setAmount(scaled);
-
+        if (attacker == null || attacker == target) {
+            scaled = EventScalingService.applyHurtSelfScaling(target, damageTypeId, originalAmount);
+            logHurtSelfDebug(source, target, damageTypeId, originalAmount, scaled);
+        } else {
+            scaled = EventScalingService.applyHurtScaling(attacker, damageTypeId, originalAmount);
             logHurtDebug(source, target, attacker, damageTypeId, originalAmount, scaled);
         }
+
+        event.setAmount(scaled);
 
         Player attackingPlayer = resolveAttackingPlayer(source);
         if (attackingPlayer != null && event.getAmount() > 0) {
@@ -321,6 +325,26 @@ public class CraftLevelEvents {
                 targetY + dy * t,
                 target.getZ() + dz * t
         };
+    }
+
+    private static void logHurtSelfDebug(
+            DamageSource source,
+            LivingEntity target,
+            String damageTypeId,
+            float originalAmount,
+            float finalAmount
+    ) {
+        Entity causer = source.getEntity();
+        String causerLabel = causer != null ? describeEntity(causer) : "ambiental";
+
+        DebugLog.info(
+                "Hurt self: tipo={} causador={} alvo={} dano={} -> {}",
+                damageTypeId,
+                causerLabel,
+                describeEntity(target),
+                originalAmount,
+                finalAmount
+        );
     }
 
     private static void logHurtDebug(

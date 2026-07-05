@@ -15,18 +15,12 @@ import net.minecraftforge.fml.common.Mod;
 public class CraftLevelHUD {
 
     private static final ResourceLocation LP_BAR   = new ResourceLocation(CraftLevel.MODID, "textures/gui/lp_bar.png");
-    private static final ResourceLocation LP_EMPTY = new ResourceLocation(CraftLevel.MODID, "textures/gui/lp_empty.png");
+    private static final ResourceLocation LP_EMPTY = new ResourceLocation(CraftLevel.MODID, "textures/gui/empty.png");
     private static final ResourceLocation LP_FULL  = new ResourceLocation(CraftLevel.MODID, "textures/gui/lp_full.png");
     private static final ResourceLocation LEVEL_CIRCLE = new ResourceLocation(CraftLevel.MODID, "textures/gui/lvl.png");
 
-    // Dimensões originais das texturas (antes do scale)
-    private static final int TEX_CIRCLE_WIDTH  = 608;
-    private static final int TEX_CIRCLE_HEIGHT = 590;
-
-    private static final int TEX_WIDTH       = 1568;
-    private static final int TEX_HEIGHT      = 182;
-    private static final int TEX_FULL_WIDTH  = 1336;
-    private static final int TEX_FULL_HEIGHT = 182;
+    private static final int TEX_CIRCLE_WIDTH  = 292;
+    private static final int TEX_CIRCLE_HEIGHT = 292;
 
     // Cache sincronizado via SyncPlayerLevelPacket — usado pelo HUD
     public static int cachedLp = 0;
@@ -43,11 +37,6 @@ public class CraftLevelHUD {
         cachedProgress = Math.min(1.0f, Math.max(0.0f, cachedProgress));
     }
 
-    /** Converte anchor string (ex.: bottom_left) em coordenadas centrais na tela. */
-    private static int[] getAnchorPosition(String anchor, int screenWidth, int screenHeight, int elemWidth, int elemHeight) {
-        return ClientHudLayout.anchorCenter(anchor, screenWidth, screenHeight, elemWidth, elemHeight);
-    }
-
     @SubscribeEvent
     public static void onRenderHUD(RenderGuiOverlayEvent.Post event) {
         if (!VanillaGuiOverlay.CROSSHAIR.id().equals(event.getOverlay().id())) {
@@ -62,52 +51,26 @@ public class CraftLevelHUD {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
         float scale = ClientConfig.hudLpBarScale;
+        int[] barSize = HudBarRenderer.barDimensions(scale);
+        int renderWidth = barSize[0];
+        int renderHeight = barSize[1];
 
-        int renderWidth      = (int)(TEX_WIDTH      * scale);
-        int renderHeight     = (int)(TEX_HEIGHT      * scale);
-        int renderFullWidth  = (int)(TEX_FULL_WIDTH  * scale);
+        int[] lpAnchor = ClientHudLayout.anchorCenter(
+                ClientConfig.hudLpBarAnchor, screenWidth, screenHeight, renderWidth, renderHeight);
+        int x = lpAnchor[0] - (renderWidth / 2) + ClientConfig.hudLpBarX;
+        int y = lpAnchor[1] - (renderHeight / 2) + ClientConfig.hudLpBarY;
 
-        int[] lpAnchor = getAnchorPosition(ClientConfig.hudLpBarAnchor, screenWidth, screenHeight, renderWidth, renderHeight);
-        int x     = lpAnchor[0] - (renderWidth    / 2) + ClientConfig.hudLpBarX;
-        int y     = lpAnchor[1] - (renderHeight   / 2) + ClientConfig.hudLpBarY;
-        int xFull = lpAnchor[0] - (renderFullWidth / 2) + ClientConfig.hudLpBarX;
+        HudBarRenderer.draw(event.getGuiGraphics(), LP_EMPTY, LP_FULL, LP_BAR, x, y, scale, cachedProgress);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-
-        // 1. Fundo vazio
-        event.getGuiGraphics().blit(
-            LP_EMPTY,
-            x, y,
-            renderWidth, renderHeight,
-            0, 0,
-            TEX_WIDTH, TEX_HEIGHT,
-            TEX_WIDTH, TEX_HEIGHT
-        );
-
-        // 2. Preenchimento verde proporcional ao LP atual
-        int cutTex    = (int)(TEX_FULL_WIDTH  * cachedProgress);
-        int cutRender = (int)(renderFullWidth  * cachedProgress);
-
-        if (cutRender > 0) {
-            event.getGuiGraphics().blit(
-                LP_FULL,
-                xFull, y,
-                cutRender, renderHeight,
-                0, 0,
-                cutTex, TEX_FULL_HEIGHT,
-                TEX_FULL_WIDTH, TEX_FULL_HEIGHT
-            );
-        }
-
-        // 3. Decoração por cima
-        event.getGuiGraphics().blit(
-            LP_BAR,
-            x, y,
-            renderWidth, renderHeight,
-            0, 0,
-            TEX_WIDTH, TEX_HEIGHT,
-            TEX_WIDTH, TEX_HEIGHT
+        String lpText = cachedLp + " / " + cachedLpNeeded;
+        HudTextHelper.drawCenteredInBar(
+                event.getGuiGraphics(),
+                mc.font,
+                HudTextHelper.immortalText(lpText),
+                x, y, renderWidth, renderHeight,
+                ClientConfig.hudLpBarFontScale,
+                0xFFFFFF,
+                true
         );
 
         float circleScale = ClientConfig.hudLevelCircleScale;
@@ -115,7 +78,8 @@ public class CraftLevelHUD {
         int circleWidth  = (int)(TEX_CIRCLE_WIDTH  * circleScale);
         int circleHeight = (int)(TEX_CIRCLE_HEIGHT * circleScale);
 
-        int[] circleAnchor = getAnchorPosition(ClientConfig.hudLevelCircleAnchor, screenWidth, screenHeight, circleWidth, circleHeight);
+        int[] circleAnchor = ClientHudLayout.anchorCenter(
+                ClientConfig.hudLevelCircleAnchor, screenWidth, screenHeight, circleWidth, circleHeight);
         int cx = circleAnchor[0] - (circleWidth  / 2) + ClientConfig.hudLevelCircleX;
         int cy = circleAnchor[1] - (circleHeight / 2) + ClientConfig.hudLevelCircleY;
 
@@ -133,31 +97,15 @@ public class CraftLevelHUD {
 
         RenderSystem.disableBlend();
 
-        String levelText = String.valueOf(cachedLevel);
-
-        net.minecraft.network.chat.Component levelComponent = net.minecraft.network.chat.Component.literal(levelText)
-                .withStyle(s -> s.withFont(new ResourceLocation("craftlevel", "immortal")));
-
         float fontScale = ClientConfig.hudLevelCircleFontScale * circleScale / 0.1f;
-
-        int textWidth  = (int)(mc.font.width(levelComponent) * fontScale);
-        int textHeight = (int)(4.0f * fontScale);
-
-        int textX = cx + (circleWidth  / 2) - (textWidth  / 2);
-        int textY = cy + (circleHeight / 2) - (textHeight / 2);
-
-        event.getGuiGraphics().pose().pushPose();
-        event.getGuiGraphics().pose().translate(textX, textY, 0);
-        event.getGuiGraphics().pose().scale(fontScale, fontScale, 1.0f);
-
-        event.getGuiGraphics().drawString(
+        HudTextHelper.drawCenteredInBox(
+                event.getGuiGraphics(),
                 mc.font,
-                levelComponent,
-                0, 0,
+                HudTextHelper.immortalText(String.valueOf(cachedLevel)),
+                cx, cy, circleWidth, circleHeight,
+                fontScale,
                 0xFFFFFF,
                 false
         );
-
-        event.getGuiGraphics().pose().popPose();
     }
 }

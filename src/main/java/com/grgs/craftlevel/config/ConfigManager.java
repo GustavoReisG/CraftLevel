@@ -92,10 +92,23 @@ public class ConfigManager {
             "minecraft:trident": "melee_power",
             "minecraft:magic": "spell",
             "minecraft:indirect_magic": "spell",
-            "minecraft:wither": "health",
-            "minecraft:poison": "health",
             "attributeslib:current_hp_damage": "flat",
             "*irons_spellbooks*": "spell",
+            "default": "health"
+        },
+        "hurt_self": {
+            "minecraft:wither": "health",
+            "minecraft:poison": "health",
+            "minecraft:in_fire": "health",
+            "minecraft:on_fire": "health",
+            "minecraft:lava": "health",
+            "minecraft:hot_floor": "health",
+            "minecraft:drown": "health",
+            "minecraft:starve": "health",
+            "minecraft:cactus": "health",
+            "minecraft:fall": "health",
+            "minecraft:fly_into_wall": "health",
+            "minecraft:generic": "health",
             "default": "health"
         },
         "heal": {
@@ -110,6 +123,9 @@ public class ConfigManager {
             "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
+            "default": "mob_health"
+        },
+        "hurt_self": {
             "default": "mob_health"
         },
         "heal": {
@@ -174,30 +190,39 @@ public class ConfigManager {
     /** Default de client.json (HUD visual — só cliente). */
     public static final String DEFAULT_CLIENT = """
     {
-       "hud": {
-         "lp_bar": {
-           "anchor": "bottom_left",
-           "x": 2,
-           "y": -2,
-           "scale": 0.075
-         },
-         "level_circle": {
-           "anchor": "top_left",
-           "x": 2,
-           "y": 2,
-           "scale": 0.075,
-           "font_scale": 2.0
-         },
-         "health_bar": {
-           "enabled": true,
-           "anchor": "bottom_center",
-           "x": -50,
-           "y": -31,
-            "scale": 0.08,
-           "font_scale": 0.5
-         }
-       }
-     }
+        "hud": {
+          "lp_bar": {
+            "anchor": "bottom_left",
+            "x": 2,
+            "y": -2,
+            "scale": 0.11,
+            "font_scale": 0.5
+          },
+          "level_circle": {
+            "anchor": "top_left",
+            "x": 2,
+            "y": 2,
+            "scale": 0.15,
+            "font_scale": 1.0
+          },
+          "health_bar": {
+            "enabled": true,
+            "anchor": "bottom_center",
+            "x": -62,
+            "y": -31,
+            "scale": 0.1,
+            "font_scale": 0.5
+          },
+          "hunger_bar": {
+            "enabled": true,
+            "anchor": "bottom_center",
+            "x": 60,
+            "y": -31,
+            "scale": 0.1,
+            "font_scale": 0.5
+          }
+        }
+      }
     """;
 
     // =========================================================

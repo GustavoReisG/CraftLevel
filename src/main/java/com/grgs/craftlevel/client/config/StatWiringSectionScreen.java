@@ -110,6 +110,7 @@ public class StatWiringSectionScreen extends Screen {
         return switch (section) {
             case ATTRIBUTE -> "Attribute";
             case HURT -> "Hurt";
+            case HURT_SELF -> "Hurt Self";
             case HEAL -> "Heal";
         };
     }
@@ -117,7 +118,7 @@ public class StatWiringSectionScreen extends Screen {
     private static String keyColumnLabel(StatWiringEditorState.Section section) {
         return switch (section) {
             case ATTRIBUTE -> "Attribute";
-            case HURT -> "Damage Type";
+            case HURT, HURT_SELF -> "Damage Type";
             case HEAL -> "Key";
         };
     }

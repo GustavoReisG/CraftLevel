@@ -43,7 +43,10 @@ public class StatWiringMenuScreen extends Screen {
         Button hurtButton = sectionButton("Hurt", StatWiringEditorState.Section.HURT, 1);
         addRenderableWidget(hurtButton);
 
-        Button healButton = sectionButton("Heal", StatWiringEditorState.Section.HEAL, 2);
+        Button hurtSelfButton = sectionButton("Hurt Self", StatWiringEditorState.Section.HURT_SELF, 2);
+        addRenderableWidget(hurtSelfButton);
+
+        Button healButton = sectionButton("Heal", StatWiringEditorState.Section.HEAL, 3);
         addRenderableWidget(healButton);
 
         addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::save));

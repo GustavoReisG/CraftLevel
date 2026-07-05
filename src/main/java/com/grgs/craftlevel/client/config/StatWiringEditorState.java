@@ -12,22 +12,24 @@ import java.util.Map;
 
 /**
  * Estado editável de player_stats.json / mob_stats.json / mob override na UI.
- * Estrutura fixa: seções attribute, hurt e heal (hurt/heal exigem entrada default).
+ * Estrutura fixa: seções attribute, hurt, hurt_self e heal (hurt/hurt_self/heal exigem default).
  */
 final class StatWiringEditorState {
 
     enum Section {
         ATTRIBUTE,
         HURT,
+        HURT_SELF,
         HEAL;
 
         boolean requiresDefault() {
-            return this == HURT || this == HEAL;
+            return this == HURT || this == HURT_SELF || this == HEAL;
         }
     }
 
     private final LinkedHashMap<String, String> attribute = new LinkedHashMap<>();
     private final LinkedHashMap<String, String> hurt = new LinkedHashMap<>();
+    private final LinkedHashMap<String, String> hurtSelf = new LinkedHashMap<>();
     private final LinkedHashMap<String, String> heal = new LinkedHashMap<>();
 
     static StatWiringEditorState loadFrom(Path file) {
@@ -59,6 +61,9 @@ final class StatWiringEditorState {
         if (json.has("hurt") && json.get("hurt").isJsonObject()) {
             readSection(json.getAsJsonObject("hurt"), hurt);
         }
+        if (json.has("hurt_self") && json.get("hurt_self").isJsonObject()) {
+            readSection(json.getAsJsonObject("hurt_self"), hurtSelf);
+        }
         if (json.has("heal") && json.get("heal").isJsonObject()) {
             readSection(json.getAsJsonObject("heal"), heal);
         }
@@ -72,6 +77,9 @@ final class StatWiringEditorState {
         if (hurt.size() > 0) {
             root.add("hurt", writeSection(hurt));
         }
+        if (hurtSelf.size() > 0) {
+            root.add("hurt_self", writeSection(hurtSelf));
+        }
         if (heal.size() > 0) {
             root.add("heal", writeSection(heal));
         }
@@ -82,6 +90,7 @@ final class StatWiringEditorState {
         return switch (section) {
             case ATTRIBUTE -> attribute;
             case HURT -> hurt;
+            case HURT_SELF -> hurtSelf;
             case HEAL -> heal;
         };
     }
@@ -97,6 +106,7 @@ final class StatWiringEditorState {
 
     private void ensureRequiredDefaults() {
         ensureDefaultEntry(hurt);
+        ensureDefaultEntry(hurtSelf);
         ensureDefaultEntry(heal);
     }
 
