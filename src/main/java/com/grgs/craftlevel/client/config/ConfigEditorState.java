@@ -22,10 +22,11 @@ final class ConfigEditorState {
             Double baseValue,
             Double scaling,
             ScalingMode scalingMode,
-            ApplyMode applyMode
+            ApplyMode applyMode,
+            Boolean includeModifiers
     ) {
         static ScalerEntry empty() {
-            return new ScalerEntry(null, null, null, null);
+            return new ScalerEntry(null, null, null, null, false);
         }
     }
 
@@ -184,7 +185,8 @@ final class ConfigEditorState {
                 readOptionalDouble(json, "base_value"),
                 readOptionalDouble(json, "scaling"),
                 readOptionalEnum(json, "scaling_mode", ScalingMode.class),
-                readOptionalEnum(json, "apply_mode", ApplyMode.class)
+                readOptionalEnum(json, "apply_mode", ApplyMode.class),
+                readOptionalBoolean(json, "include_modifiers", false)
         );
     }
 
@@ -202,7 +204,20 @@ final class ConfigEditorState {
         if (entry.applyMode() != null) {
             json.addProperty("apply_mode", entry.applyMode().name().toLowerCase());
         }
+        json.addProperty("include_modifiers", entry.includeModifiers() != null && entry.includeModifiers());
         return json;
+    }
+
+    private static Boolean readOptionalBoolean(JsonObject json, String key, boolean fallback) {
+        try {
+            var element = json.get(key);
+            if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean()) {
+                return fallback;
+            }
+            return element.getAsBoolean();
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     private static Integer readOptionalInt(JsonObject json, String key) {

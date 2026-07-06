@@ -17,11 +17,13 @@ final class ConfigScalingForm {
     private static final String LABEL_SCALING = "Scaling";
     private static final String LABEL_SCALING_MODE = "Scaling Mode";
     private static final String LABEL_APPLY_MODE = "Apply Mode";
+    private static final String LABEL_INCLUDE_MODIFIERS = "Include Modifiers";
 
     private final EditBox baseValueField;
     private final EditBox scalingField;
     private final CycleButton<ScalingMode> scalingModeButton;
     private final CycleButton<ApplyMode> applyModeButton;
+    private final CycleButton<Boolean> includeModifiersButton;
 
     /** LP scaling: apply mode is always overwrite, so it is not editable. */
     ConfigScalingForm(Font font, Double baseValue, Double scaling, ScalingMode scalingMode) {
@@ -30,6 +32,24 @@ final class ConfigScalingForm {
         scalingModeButton = enumButton(ScalingMode.values(),
                 scalingMode != null ? scalingMode : ScalingMode.POWER);
         applyModeButton = null;
+        includeModifiersButton = null;
+    }
+
+    ConfigScalingForm(
+            Font font,
+            Double baseValue,
+            Double scaling,
+            ScalingMode scalingMode,
+            ApplyMode applyMode,
+            Boolean includeModifiers
+    ) {
+        baseValueField = newNumericField(font, baseValue);
+        scalingField = newNumericField(font, scaling);
+        scalingModeButton = enumButton(ScalingMode.values(),
+                scalingMode != null ? scalingMode : ScalingMode.POWER);
+        applyModeButton = enumButton(ApplyMode.values(),
+                applyMode != null ? applyMode : ApplyMode.MULTIPLY);
+        includeModifiersButton = booleanButton(includeModifiers != null ? includeModifiers : false);
     }
 
     ConfigScalingForm(
@@ -39,20 +59,17 @@ final class ConfigScalingForm {
             ScalingMode scalingMode,
             ApplyMode applyMode
     ) {
-        baseValueField = newNumericField(font, baseValue);
-        scalingField = newNumericField(font, scaling);
-        scalingModeButton = enumButton(ScalingMode.values(),
-                scalingMode != null ? scalingMode : ScalingMode.POWER);
-        applyModeButton = enumButton(ApplyMode.values(),
-                applyMode != null ? applyMode : ApplyMode.MULTIPLY);
+        this(font, baseValue, scaling, scalingMode, applyMode, false);
     }
 
     ConfigScalingForm(Font font, ScalingDefinition definition) {
-        this(font, definition.baseValue(), definition.scaling(), definition.scalingMode(), definition.applyMode());
+        this(font, definition.baseValue(), definition.scaling(), definition.scalingMode(),
+                definition.applyMode(), definition.includeModifiers());
     }
 
     ConfigScalingForm(Font font, ConfigEditorState.ScalerEntry entry) {
-        this(font, entry.baseValue(), entry.scaling(), entry.scalingMode(), entry.applyMode());
+        this(font, entry.baseValue(), entry.scaling(), entry.scalingMode(), entry.applyMode(),
+                entry.includeModifiers());
     }
 
     void positionRows(Screen screen, int startRow) {
@@ -62,6 +79,9 @@ final class ConfigScalingForm {
         if (applyModeButton != null) {
             ConfigScreenLayout.positionField(screen, startRow + 3, applyModeButton);
         }
+        if (includeModifiersButton != null) {
+            ConfigScreenLayout.positionField(screen, startRow + 4, includeModifiersButton);
+        }
     }
 
     void renderLabels(Screen screen, GuiGraphics graphics, int startRow) {
@@ -70,6 +90,9 @@ final class ConfigScalingForm {
         ConfigScreenLayout.renderLabel(screen, graphics, startRow + 2, LABEL_SCALING_MODE);
         if (applyModeButton != null) {
             ConfigScreenLayout.renderLabel(screen, graphics, startRow + 3, LABEL_APPLY_MODE);
+        }
+        if (includeModifiersButton != null) {
+            ConfigScreenLayout.renderLabel(screen, graphics, startRow + 4, LABEL_INCLUDE_MODIFIERS);
         }
     }
 
@@ -89,12 +112,17 @@ final class ConfigScalingForm {
         return applyModeButton;
     }
 
+    CycleButton<Boolean> includeModifiersButton() {
+        return includeModifiersButton;
+    }
+
     ConfigEditorState.ScalerEntry readScalerEntry() {
         return new ConfigEditorState.ScalerEntry(
                 parseOptionalDouble(baseValueField),
                 parseOptionalDouble(scalingField),
                 scalingModeButton.getValue(),
-                applyModeButton != null ? applyModeButton.getValue() : null
+                applyModeButton != null ? applyModeButton.getValue() : null,
+                includeModifiersButton != null && includeModifiersButton.getValue()
         );
     }
 
@@ -135,6 +163,14 @@ final class ConfigScalingForm {
     private static <T extends Enum<T>> CycleButton<T> enumButton(T[] values, T initial) {
         return CycleButton.<T>builder(ConfigScalingForm::formatEnum)
                 .withValues(values)
+                .withInitialValue(initial)
+                .displayOnlyValue()
+                .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
+    }
+
+    private static CycleButton<Boolean> booleanButton(boolean initial) {
+        return CycleButton.<Boolean>builder(value -> Component.literal(value ? "True" : "False"))
+                .withValues(false, true)
                 .withInitialValue(initial)
                 .displayOnlyValue()
                 .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());

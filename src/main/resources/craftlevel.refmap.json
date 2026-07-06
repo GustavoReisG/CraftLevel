@@ -1,0 +1,22 @@
+{
+  "mappings": {
+    "com/grgs/craftlevel/mixin/LivingEntityMixin": {
+      "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F)V": "Lnet/minecraft/world/entity/LivingEntity;m_6472_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
+    },
+    "com/grgs/craftlevel/mixin/InventoryMixin": {
+      "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F[I)V": "Lnet/minecraft/world/entity/player/Inventory;m_150072_(Lnet/minecraft/world/damagesource/DamageSource;F[I)V",
+      "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/world/item/ItemStack;m_41622_(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/grgs/craftlevel/mixin/LivingEntityMixin": {
+        "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F)V": "Lnet/minecraft/world/entity/LivingEntity;m_6472_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
+      },
+      "com/grgs/craftlevel/mixin/InventoryMixin": {
+        "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F[I)V": "Lnet/minecraft/world/entity/player/Inventory;m_150072_(Lnet/minecraft/world/damagesource/DamageSource;F[I)V",
+        "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/world/item/ItemStack;m_41622_(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V"
+      }
+    }
+  }
+}

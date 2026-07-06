@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * Estado editável de player_stats.json / mob_stats.json / mob override na UI.
  * Estrutura fixa: seções attribute, hurt, hurt_self e heal (hurt/hurt_self/heal exigem default).
+ * Em hurt_self, entradas explícitas aplicam ao alvo; default só para dano sem atacante.
  */
 final class StatWiringEditorState {
 

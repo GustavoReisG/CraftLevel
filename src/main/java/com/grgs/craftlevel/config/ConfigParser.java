@@ -44,6 +44,19 @@ public class ConfigParser {
             return resolveHurtRef(hurtSelf, damageTypeId, true);
         }
 
+        /** Resolve entrada explícita ou wildcard — nunca cai no {@code default}. */
+        public String lookupHurtSelfExplicit(String damageTypeId) {
+            return resolveHurtRef(hurtSelf, damageTypeId, false);
+        }
+
+        public boolean hasExplicitHurtSelfMatch(String damageTypeId) {
+            return hasExplicitHurtRef(hurtSelf, damageTypeId);
+        }
+
+        public String lookupHurtSelfDefault() {
+            return hurtSelf.get(DEFAULT_KEY);
+        }
+
         public String lookupHeal(String healKey) {
             if (healKey != null && heal.containsKey(healKey)) {
                 return heal.get(healKey);
@@ -62,7 +75,7 @@ public class ConfigParser {
     public static Map<String, int[]> mobLevels = new HashMap<>();
 
     public static void parseConfig(JsonObject json) {
-        debug = readBoolean(json, "debug", false);
+        debug = readBoolean(json, "debug", false, "debug");
 
         JsonObject lpScaling = json.has("lp_scaling") && json.get("lp_scaling").isJsonObject()
                 ? json.getAsJsonObject("lp_scaling")
@@ -140,8 +153,32 @@ public class ConfigParser {
         return playerStats.lookupHurtSelf(damageTypeId);
     }
 
+    public static String resolvePlayerHurtSelfScalerExplicit(String damageTypeId) {
+        return playerStats.lookupHurtSelfExplicit(damageTypeId);
+    }
+
+    public static boolean hasPlayerExplicitHurtSelfMatch(String damageTypeId) {
+        return playerStats.hasExplicitHurtSelfMatch(damageTypeId);
+    }
+
+    public static String resolvePlayerHurtSelfDefaultScaler() {
+        return playerStats.lookupHurtSelfDefault();
+    }
+
     public static String resolveMobHurtSelfScaler(String mobId, String damageTypeId) {
         return resolveMobWiring(mobId).lookupHurtSelf(damageTypeId);
+    }
+
+    public static String resolveMobHurtSelfScalerExplicit(String mobId, String damageTypeId) {
+        return resolveMobWiring(mobId).lookupHurtSelfExplicit(damageTypeId);
+    }
+
+    public static boolean hasMobExplicitHurtSelfMatch(String mobId, String damageTypeId) {
+        return resolveMobWiring(mobId).hasExplicitHurtSelfMatch(damageTypeId);
+    }
+
+    public static String resolveMobHurtSelfDefaultScaler(String mobId) {
+        return resolveMobWiring(mobId).lookupHurtSelfDefault();
     }
 
     public static String resolvePlayerHealScaler(String healKey) {
@@ -197,7 +234,8 @@ public class ConfigParser {
         double scaling = readDouble(json, "scaling", defaultScaling);
         ScalingMode scalingMode = ScalingMode.fromString(readString(json, "scaling_mode"), defaultMode);
         ApplyMode applyMode = ApplyMode.fromString(readString(json, "apply_mode"), defaultApply);
-        return new ScalingDefinition(baseValue, scaling, scalingMode, applyMode);
+        boolean includeModifiers = readBoolean(json, "include_modifiers", false, "include_modifiers");
+        return new ScalingDefinition(baseValue, scaling, scalingMode, applyMode, includeModifiers);
     }
 
     private static String resolveHurtRef(Map<String, String> hurt, String damageTypeId, boolean useDefault) {
@@ -214,6 +252,13 @@ public class ConfigParser {
             return hurt.get(DEFAULT_KEY);
         }
         return null;
+    }
+
+    private static boolean hasExplicitHurtRef(Map<String, String> hurt, String damageTypeId) {
+        if (damageTypeId != null && hurt.containsKey(damageTypeId)) {
+            return true;
+        }
+        return findWildcardHurtMatch(hurt, damageTypeId) != null;
     }
 
     private static String findWildcardHurtMatch(Map<String, String> hurt, String damageTypeId) {
@@ -269,9 +314,30 @@ public class ConfigParser {
     }
 
     private static boolean readBoolean(JsonObject json, String key, boolean fallback) {
+        return readBoolean(json, key, fallback, key);
+    }
+
+    private static boolean readBoolean(JsonObject json, String key, boolean fallback, String label) {
+        if (!json.has(key)) {
+            return fallback;
+        }
         try {
-            return json.get(key).getAsBoolean();
+            var element = json.get(key);
+            if (!element.isJsonPrimitive() || !element.getAsJsonPrimitive().isBoolean()) {
+                CraftLevel.LOGGER.warn(
+                        "[CraftLevel] '{}' must be true or false, using default {}",
+                        label,
+                        fallback
+                );
+                return fallback;
+            }
+            return element.getAsBoolean();
         } catch (Exception e) {
+            CraftLevel.LOGGER.warn(
+                    "[CraftLevel] '{}' must be true or false, using default {}",
+                    label,
+                    fallback
+            );
             return fallback;
         }
     }

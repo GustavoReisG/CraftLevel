@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
@@ -41,7 +43,7 @@ import java.util.Random;
  *   <li>Calcular level de mobs no spawn</li>
  *   <li>Progressão de LP ao matar mobs</li>
  *   <li>Scaling de dano/cura nos eventos de combate</li>
- *   <li>Reaplicar stats em login, respawn, clone e reload</li>
+ *   <li>Reaplicar stats em login, respawn, clone, troca de equipamento e reload</li>
  *   <li>Enviar indicador visual de dano ao cliente</li>
  * </ul>
  */
@@ -74,40 +76,50 @@ public class CraftLevelEvents {
     /**
      * No spawn natural: calcula level do mob com base no player mais próximo,
      * aplica variação e limites de mob_levels.json, depois reaplica attributes.
+     * Summons e spawns de mods que não passam por aqui são cobertos em {@link #onEntityJoinLevel}.
      */
     @SubscribeEvent
     public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
         if (event.getEntity().level().isClientSide()) return;
-
-        Mob mob = event.getEntity();
-        mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(cap -> {
-            int level = calculateMobLevel(mob);
-            cap.setLevel(level);
-            StatRefreshService.refreshMob(mob, level);
-            DebugLog.info(
-                    "Mob spawn: {} level {} em {}",
-                    BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
-                    level,
-                    mob.blockPosition()
-            );
-        });
+        ensureMobLevel(event.getEntity(), "spawn");
     }
 
-    /** Mobs carregados de chunk recebem refresh de stats se já tiverem level definido. */
+    /**
+     * Dispara uma vez por entrada no mundo (spawn, summon, chunk load) — não roda por tick.
+     * Inicializa level se a capability ainda for 0 (summon, boss de mod, etc.)
+     * ou reaplica stats se o mob já tinha level (chunk reload).
+     */
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) return;
         if (!(event.getEntity() instanceof Mob mob)) return;
+        ensureMobLevel(mob, event.loadedFromDisk() ? "chunk" : "join");
+    }
 
+    /** Calcula level na primeira vez; depois só reaplica stats. */
+    private static void ensureMobLevel(Mob mob, String reason) {
         mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(cap -> {
-            if (cap.getLevel() > 0) {
-                StatRefreshService.refreshMob(mob, cap.getLevel());
+            if (cap.getLevel() <= 0) {
+                int level = calculateMobLevel(mob);
+                cap.setLevel(level);
+                StatRefreshService.refreshMob(mob, level);
                 DebugLog.info(
-                        "Mob join: {} level {} reaplicado",
+                        "Mob {}: {} level {} em {}",
+                        reason,
                         BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
-                        cap.getLevel()
+                        level,
+                        mob.blockPosition()
                 );
+                return;
             }
+
+            StatRefreshService.refreshMob(mob, cap.getLevel());
+            DebugLog.info(
+                    "Mob {}: {} level {} reaplicado",
+                    reason,
+                    BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
+                    cap.getLevel()
+            );
         });
     }
 
@@ -183,8 +195,41 @@ public class CraftLevelEvents {
     }
 
     /**
-     * Intercepta dano causado por entidades vivas: resolve damage type,
-     * aplica escalador configurado em hurt e envia indicador numérico ao atacante.
+     * Reaplica attributes quando mão ou armadura mudam, se algum escalador wired usa
+     * {@code include_modifiers}.
+     */
+    @SubscribeEvent
+    public static void onLivingEquipmentChange(LivingEquipmentChangeEvent event) {
+        if (event.getEntity().level().isClientSide()) return;
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+        if (!isEquipmentRefreshSlot(event.getSlot())) return;
+        if (!StatRefreshService.wiringUsesIncludeModifiers(player)) return;
+
+        player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(cap -> {
+            if (cap.getLevel() <= 0) {
+                return;
+            }
+            StatRefreshService.refreshPlayerFromEquipment(player, cap.getLevel());
+            DebugLog.info(
+                    "Equipment change: {} slot {} - attributes refreshed",
+                    player.getName().getString(),
+                    event.getSlot().getName()
+            );
+        });
+    }
+
+    private static boolean isEquipmentRefreshSlot(EquipmentSlot slot) {
+        return slot.getType() == EquipmentSlot.Type.HAND
+                || slot.getType() == EquipmentSlot.Type.ARMOR;
+    }
+
+    /**
+     * Intercepta dano causado por entidades vivas: resolve damage type e aplica scaling.
+     * <ul>
+     *   <li>{@code hurt_self} explícito (tipo ou wildcard) → level do alvo</li>
+     *   <li>{@code hurt_self.default} → apenas sem atacante (ambiental)</li>
+     *   <li>{@code hurt} → atacante externo, level do atacante</li>
+     * </ul>
      */
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
@@ -197,12 +242,18 @@ public class CraftLevelEvents {
         float originalAmount = event.getAmount();
         float scaled;
 
-        if (attacker == null || attacker == target) {
-            scaled = EventScalingService.applyHurtSelfScaling(target, damageTypeId, originalAmount);
+        if (hasExplicitHurtSelfMatch(target, damageTypeId)) {
+            scaled = EventScalingService.applyHurtSelfExplicitScaling(target, damageTypeId, originalAmount);
             logHurtSelfDebug(source, target, damageTypeId, originalAmount, scaled);
-        } else {
+        } else if (attacker == null) {
+            scaled = EventScalingService.applyHurtSelfDefaultScaling(target, originalAmount);
+            logHurtSelfDebug(source, target, damageTypeId, originalAmount, scaled);
+        } else if (attacker != target) {
             scaled = EventScalingService.applyHurtScaling(attacker, damageTypeId, originalAmount);
             logHurtDebug(source, target, attacker, damageTypeId, originalAmount, scaled);
+        } else {
+            scaled = originalAmount;
+            logHurtSelfDebug(source, target, damageTypeId, originalAmount, scaled);
         }
 
         event.setAmount(scaled);
@@ -277,6 +328,17 @@ public class CraftLevelEvents {
                     cap.getLpToNextLevel()
             );
         });
+    }
+
+    private static boolean hasExplicitHurtSelfMatch(LivingEntity target, String damageTypeId) {
+        if (target instanceof Player) {
+            return ConfigParser.hasPlayerExplicitHurtSelfMatch(damageTypeId);
+        }
+        if (target instanceof Mob mob) {
+            String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
+            return ConfigParser.hasMobExplicitHurtSelfMatch(mobId, damageTypeId);
+        }
+        return false;
     }
 
     /** Projétil usa o owner; melee usa a entidade causadora. */

@@ -25,7 +25,7 @@ import java.util.UUID;
 /**
  * Reaplica modifiers de attributes vanilla com base nos escaladores do config.
  * <p>
- * Chamado em login, respawn, level up, spawn de mob, reload e comandos admin.
+ * Chamado em login, respawn, level up, troca de equipamento, spawn de mob, reload e comandos admin.
  * Hurt/heal não passam por aqui — são calculados on-demand em {@link com.grgs.craftlevel.damage.EventScalingService}.
  */
 public final class StatRefreshService {
@@ -87,17 +87,39 @@ public final class StatRefreshService {
 
     /** Aplica todos os attributes do wiring da entidade. */
     public static void refresh(LivingEntity entity, int level) {
+        refresh(entity, level, true);
+    }
+
+    /** Aplica attributes; {@code fullHealOnMaxHealth=false} preserva HP ao mudar o máximo (ex.: equipamento). */
+    public static void refresh(LivingEntity entity, int level, boolean fullHealOnMaxHealth) {
         if (level <= 0) {
             return;
         }
 
         StatWiringConfig wiring = resolveWiring(entity);
         wiring.attribute().forEach((attributeId, scalerName) ->
-                applyAttribute(entity, attributeId, scalerName, level));
+                applyAttribute(entity, attributeId, scalerName, level, fullHealOnMaxHealth));
+    }
+
+    /** True se algum attribute wired usa escalador com {@code include_modifiers}. */
+    public static boolean wiringUsesIncludeModifiers(LivingEntity entity) {
+        StatWiringConfig wiring = resolveWiring(entity);
+        for (String scalerName : wiring.attribute().values()) {
+            ScalingDefinition def = ScalingRegistry.get(scalerName);
+            if (def != null && def.includeModifiers()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void refreshPlayer(Player player, int level) {
-        refresh(player, level);
+        refresh(player, level, true);
+    }
+
+    /** Reaplica stats após troca de equipamento (não cura ao mudar max health). */
+    public static void refreshPlayerFromEquipment(Player player, int level) {
+        refresh(player, level, false);
     }
 
     public static void refreshMob(Mob mob, int level) {
@@ -120,7 +142,13 @@ public final class StatRefreshService {
      * Remove modifier anterior, calcula valor escalado e aplica ADDITIVE no attribute.
      * Max health: ajusta HP atual para o novo máximo após o modifier.
      */
-    private static void applyAttribute(LivingEntity entity, String attributeId, String scalerName, int level) {
+    private static void applyAttribute(
+            LivingEntity entity,
+            String attributeId,
+            String scalerName,
+            int level,
+            boolean fullHealOnMaxHealth
+    ) {
         ScalingDefinition def = ScalingRegistry.require(scalerName, "attribute:" + attributeId);
         if (def == null) {
             return;
@@ -141,29 +169,43 @@ public final class StatRefreshService {
 
             double scaledValue = ScalingEngine.computeScaledValue(def, level);
             double currentBase = instance.getBaseValue();
-            double modifierAmount = ScalingEngine.toAttributeModifierAmount(currentBase, scaledValue, def.applyMode());
+            double currentTotal = instance.getValue();
+            ScalingEngine.AttributeModifierSpec modifierSpec = ScalingEngine.toAttributeModifier(
+                    currentBase,
+                    currentTotal,
+                    scaledValue,
+                    def.applyMode(),
+                    def.includeModifiers()
+            );
 
-            if (modifierAmount != 0) {
+            if (modifierSpec.amount() != 0) {
                 instance.addPermanentModifier(new AttributeModifier(
                         MODIFIER_UUID,
                         MODIFIER_NAME,
-                        modifierAmount,
-                        AttributeModifier.Operation.ADDITION
+                        modifierSpec.amount(),
+                        modifierSpec.operation()
                 ));
             }
 
             DebugLog.info(
-                    "Attribute {} em {}: escalador={} base={} modifier={} final={}",
+                    "Attribute {} em {}: escalador={} base={} total={} modifier={} op={} final={}",
                     attributeId,
                     describeEntity(entity),
                     scalerName,
                     currentBase,
-                    modifierAmount,
+                    currentTotal,
+                    modifierSpec.amount(),
+                    modifierSpec.operation(),
                     instance.getValue()
             );
 
             if (attr == Attributes.MAX_HEALTH) {
-                entity.setHealth((float) instance.getValue());
+                float newMax = (float) instance.getValue();
+                if (fullHealOnMaxHealth) {
+                    entity.setHealth(newMax);
+                } else {
+                    entity.setHealth(Math.min(entity.getHealth(), newMax));
+                }
             }
         } catch (Exception ignored) {
         }

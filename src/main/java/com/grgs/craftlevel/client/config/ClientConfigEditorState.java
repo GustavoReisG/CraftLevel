@@ -25,12 +25,18 @@ public final class ClientConfigEditorState {
     static final String KEY_Y = "y";
     static final String KEY_SCALE = "scale";
     static final String KEY_FONT_SCALE = "font_scale";
+    static final String KEY_ARMOR_MARGIN = "armor_margin";
+    static final String KEY_BREATH_MARGIN = "breath_margin";
 
     public record HudElementValues(String anchor, Integer x, Integer y, Float scale, Float fontScale) {}
 
-    public record HealthBarValues(Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale) {}
+    public record HealthBarValues(
+            Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, Integer armorMargin
+    ) {}
 
-    public record HungerBarValues(Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale) {}
+    public record HungerBarValues(
+            Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, Integer breathMargin
+    ) {}
 
     private static ClientConfigEditorState defaultTemplate;
 
@@ -146,8 +152,8 @@ public final class ClientConfigEditorState {
         } catch (Exception ignored) {
             state.lpBar = new HudElementValues("bottom_left", 0, 0, 0.08f, 0.5f);
             state.levelCircle = new HudElementValues("top_left", 0, 0, 0.1f, 2.0f);
-            state.healthBar = new HealthBarValues(true, "bottom_center", -50, -48, 0.08f, 0.65f);
-            state.hungerBar = new HungerBarValues(true, "bottom_center", -50, -15, 0.08f, 0.5f);
+            state.healthBar = new HealthBarValues(true, "bottom_center", -50, -48, 0.08f, 0.65f, 10);
+            state.hungerBar = new HungerBarValues(true, "bottom_center", -50, -15, 0.08f, 0.5f, 10);
         }
         return state;
     }
@@ -190,7 +196,8 @@ public final class ClientConfigEditorState {
                 loaded.x() != null ? loaded.x() : defaults.x(),
                 loaded.y() != null ? loaded.y() : defaults.y(),
                 loaded.scale() != null ? loaded.scale() : defaults.scale(),
-                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale()
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.armorMargin() != null ? loaded.armorMargin() : defaults.armorMargin()
         );
     }
 
@@ -201,7 +208,8 @@ public final class ClientConfigEditorState {
                 loaded.x() != null ? loaded.x() : defaults.x(),
                 loaded.y() != null ? loaded.y() : defaults.y(),
                 loaded.scale() != null ? loaded.scale() : defaults.scale(),
-                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale()
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.breathMargin() != null ? loaded.breathMargin() : defaults.breathMargin()
         );
     }
 
@@ -221,7 +229,7 @@ public final class ClientConfigEditorState {
 
     private static HealthBarValues readHealthBar(JsonObject hud) {
         if (!hud.has(KEY_HEALTH_BAR) || !hud.get(KEY_HEALTH_BAR).isJsonObject()) {
-            return new HealthBarValues(null, null, null, null, null, null);
+            return new HealthBarValues(null, null, null, null, null, null, null);
         }
         JsonObject element = hud.getAsJsonObject(KEY_HEALTH_BAR);
         return new HealthBarValues(
@@ -230,13 +238,14 @@ public final class ClientConfigEditorState {
                 readOptionalInt(element, KEY_X),
                 readOptionalInt(element, KEY_Y),
                 readOptionalFloat(element, KEY_SCALE),
-                readOptionalFloat(element, KEY_FONT_SCALE)
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalInt(element, KEY_ARMOR_MARGIN)
         );
     }
 
     private static HungerBarValues readHungerBar(JsonObject hud) {
         if (!hud.has(KEY_HUNGER_BAR) || !hud.get(KEY_HUNGER_BAR).isJsonObject()) {
-            return new HungerBarValues(null, null, null, null, null, null);
+            return new HungerBarValues(null, null, null, null, null, null, null);
         }
         JsonObject element = hud.getAsJsonObject(KEY_HUNGER_BAR);
         return new HungerBarValues(
@@ -245,7 +254,8 @@ public final class ClientConfigEditorState {
                 readOptionalInt(element, KEY_X),
                 readOptionalInt(element, KEY_Y),
                 readOptionalFloat(element, KEY_SCALE),
-                readOptionalFloat(element, KEY_FONT_SCALE)
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalInt(element, KEY_BREATH_MARGIN)
         );
     }
 
@@ -269,6 +279,7 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_Y, values.y());
         element.addProperty(KEY_SCALE, values.scale());
         element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_ARMOR_MARGIN, values.armorMargin());
         return element;
     }
 
@@ -280,6 +291,7 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_Y, values.y());
         element.addProperty(KEY_SCALE, values.scale());
         element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_BREATH_MARGIN, values.breathMargin());
         return element;
     }
 

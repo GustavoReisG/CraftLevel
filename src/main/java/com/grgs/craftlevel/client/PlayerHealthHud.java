@@ -7,6 +7,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,7 +34,25 @@ public final class PlayerHealthHud {
             return;
         }
         if (VanillaGuiOverlay.PLAYER_HEALTH.id().equals(event.getOverlay().id())) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.gui instanceof ForgeGui forgeGui) {
+                VanillaHudSpacing.pushLeft(forgeGui, ClientConfig.hudHealthBarArmorMargin);
+            }
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onAdjustMountHealth(RenderGuiOverlayEvent.Pre event) {
+        if (!ClientConfig.hudHealthBarEnabled) {
+            return;
+        }
+        if (!VanillaGuiOverlay.MOUNT_HEALTH.id().equals(event.getOverlay().id())) {
+            return;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.gui instanceof ForgeGui forgeGui) {
+            VanillaHudSpacing.pushRight(forgeGui, ClientConfig.hudHealthBarArmorMargin);
         }
     }
 

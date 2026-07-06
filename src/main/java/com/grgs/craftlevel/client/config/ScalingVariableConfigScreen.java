@@ -46,6 +46,7 @@ public class ScalingVariableConfigScreen extends Screen {
         addRenderableWidget(scalingForm.scalingField());
         addRenderableWidget(scalingForm.scalingModeButton());
         addRenderableWidget(scalingForm.applyModeButton());
+        addRenderableWidget(scalingForm.includeModifiersButton());
 
         addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::save));
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));

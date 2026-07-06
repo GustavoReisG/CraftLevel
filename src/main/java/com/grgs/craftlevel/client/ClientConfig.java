@@ -39,6 +39,7 @@ public class ClientConfig {
     public static float hudHealthBarScale = 0.08f;
     public static float hudHealthBarFontScale = 0.65f;
     public static String hudHealthBarAnchor = "bottom_center";
+    public static int hudHealthBarArmorMargin = 10;
 
     // Barra de fome customizada
     public static boolean hudHungerBarEnabled = true;
@@ -47,6 +48,7 @@ public class ClientConfig {
     public static float hudHungerBarScale = 0.08f;
     public static float hudHungerBarFontScale = 0.5f;
     public static String hudHungerBarAnchor = "bottom_center";
+    public static int hudHungerBarBreathMargin = 10;
 
     public static final String[] ANCHORS = {
             "top_left",
@@ -121,6 +123,7 @@ public class ClientConfig {
         hudHealthBarY = healthBar.y();
         hudHealthBarScale = healthBar.scale();
         hudHealthBarFontScale = healthBar.fontScale();
+        hudHealthBarArmorMargin = healthBar.armorMargin();
 
         ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
         hudHungerBarEnabled = hungerBar.enabled();
@@ -129,6 +132,7 @@ public class ClientConfig {
         hudHungerBarY = hungerBar.y();
         hudHungerBarScale = hungerBar.scale();
         hudHungerBarFontScale = hungerBar.fontScale();
+        hudHungerBarBreathMargin = hungerBar.breathMargin();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
@@ -143,11 +147,11 @@ public class ClientConfig {
         ));
         state.setHealthBar(new ClientConfigEditorState.HealthBarValues(
                 hudHealthBarEnabled, hudHealthBarAnchor, hudHealthBarX, hudHealthBarY,
-                hudHealthBarScale, hudHealthBarFontScale
+                hudHealthBarScale, hudHealthBarFontScale, hudHealthBarArmorMargin
         ));
         state.setHungerBar(new ClientConfigEditorState.HungerBarValues(
                 hudHungerBarEnabled, hudHungerBarAnchor, hudHungerBarX, hudHungerBarY,
-                hudHungerBarScale, hudHungerBarFontScale
+                hudHungerBarScale, hudHungerBarFontScale, hudHungerBarBreathMargin
         ));
         try {
             Path file = getConfigPath();

@@ -51,11 +51,27 @@ public final class EventScalingService {
     }
 
     /**
-     * Escala dano auto-infligido ou ambiental na entidade alvo (sem atacante externo).
-     *
-     * @param damageTypeId id do DamageType (ex: minecraft:poison)
+     * Escala dano recebido pela entidade quando há entrada explícita em hurt_self
+     * (damage type ou wildcard), usando o level do alvo.
      */
-    public static float applyHurtSelfScaling(LivingEntity target, String damageTypeId, float amount) {
+    public static float applyHurtSelfExplicitScaling(LivingEntity target, String damageTypeId, float amount) {
+        return applyHurtSelfScalingInternal(target, damageTypeId, amount, false);
+    }
+
+    /**
+     * Escala dano ambiental/sem atacante usando apenas {@code hurt_self.default},
+     * com o level do alvo.
+     */
+    public static float applyHurtSelfDefaultScaling(LivingEntity target, float amount) {
+        return applyHurtSelfScalingInternal(target, null, amount, true);
+    }
+
+    private static float applyHurtSelfScalingInternal(
+            LivingEntity target,
+            String damageTypeId,
+            float amount,
+            boolean defaultOnly
+    ) {
         int level = getLevel(target);
         if (level <= 0) {
             return amount;
@@ -63,19 +79,34 @@ public final class EventScalingService {
 
         String scalerName;
         String context;
+        String eventKey;
 
         if (target instanceof Player) {
-            scalerName = ConfigParser.resolvePlayerHurtSelfScaler(damageTypeId);
-            context = "player hurt_self:" + damageTypeId;
+            if (defaultOnly) {
+                scalerName = ConfigParser.resolvePlayerHurtSelfDefaultScaler();
+                context = "player hurt_self:default";
+                eventKey = ConfigParser.DEFAULT_KEY;
+            } else {
+                scalerName = ConfigParser.resolvePlayerHurtSelfScalerExplicit(damageTypeId);
+                context = "player hurt_self:" + damageTypeId;
+                eventKey = damageTypeId;
+            }
         } else if (target instanceof Mob mob) {
             String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
-            scalerName = ConfigParser.resolveMobHurtSelfScaler(mobId, damageTypeId);
-            context = "mob hurt_self:" + mobId + "/" + damageTypeId;
+            if (defaultOnly) {
+                scalerName = ConfigParser.resolveMobHurtSelfDefaultScaler(mobId);
+                context = "mob hurt_self:default:" + mobId;
+                eventKey = ConfigParser.DEFAULT_KEY;
+            } else {
+                scalerName = ConfigParser.resolveMobHurtSelfScalerExplicit(mobId, damageTypeId);
+                context = "mob hurt_self:" + mobId + "/" + damageTypeId;
+                eventKey = damageTypeId;
+            }
         } else {
             return amount;
         }
 
-        return applyScaler(amount, level, scalerName, context, damageTypeId);
+        return applyScaler(amount, level, scalerName, context, eventKey);
     }
 
     /** Escala cura recebida pela entidade (chave heal do config, geralmente "default"). */

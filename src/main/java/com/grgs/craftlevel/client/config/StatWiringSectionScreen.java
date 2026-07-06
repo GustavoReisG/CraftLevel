@@ -110,7 +110,7 @@ public class StatWiringSectionScreen extends Screen {
         return switch (section) {
             case ATTRIBUTE -> "Attribute";
             case HURT -> "Hurt";
-            case HURT_SELF -> "Hurt Self";
+            case HURT_SELF -> "Hurt Self (alvo; default só sem atacante)";
             case HEAL -> "Heal";
         };
     }

@@ -7,6 +7,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,6 +35,10 @@ public final class PlayerHungerHud {
             return;
         }
         if (VanillaGuiOverlay.FOOD_LEVEL.id().equals(event.getOverlay().id())) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.gui instanceof ForgeGui forgeGui) {
+                VanillaHudSpacing.pushRight(forgeGui, ClientConfig.hudHungerBarBreathMargin);
+            }
             event.setCanceled(true);
         }
     }

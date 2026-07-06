@@ -38,191 +38,473 @@ public class ConfigManager {
 
     private static final String DEFAULT_CONFIG = """
     {
-        "debug": true,
-        "lp_scaling": {
-            "mob_level_variation": 10,
-            "lvl_max": 200,
-            "base_value": 200,
-            "scaling": 1.06,
-            "scaling_mode": "power"
+      "debug": true,
+      "lp_scaling": {
+        "mob_level_variation": 10,
+        "lvl_max": 200,
+        "base_value": 200.0,
+        "scaling": 1.06,
+        "scaling_mode": "power"
+      },
+      "scaling": {
+        "spell_power": {
+          "base_value": 1.0,
+          "scaling": 1.045,
+          "scaling_mode": "power",
+          "apply_mode": "multiply",
+          "include_modifiers": false
         },
-        "scaling": {
-            "health": {
-                "base_value": 1.0,
-                "scaling": 1.045,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            },
-            "spell_power": {
-                "base_value": 1.0,
-                "scaling": 1.045,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            },
-            "melee_power": {
-                "base_value": 1.0,
-                "scaling": 1.045,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            },
-            "mob_health": {
-                "base_value": 1.0,
-                "scaling": 1.05,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            },
-            "flat": {
-                "base_value": 1.0,
-                "scaling": 1.0,
-                "scaling_mode": "power",
-                "apply_mode": "multiply"
-            }
+        "mob_health": {
+          "base_value": 1.0,
+          "scaling": 1.05,
+          "scaling_mode": "power",
+          "apply_mode": "multiply",
+          "include_modifiers": false
+        },
+        "flat": {
+          "base_value": 1.0,
+          "scaling": 1.0,
+          "scaling_mode": "power",
+          "apply_mode": "multiply",
+          "include_modifiers": false
+        },
+        "health": {
+          "base_value": 1.0,
+          "scaling": 1.045,
+          "scaling_mode": "power",
+          "apply_mode": "multiply",
+          "include_modifiers": true
+        },
+        "melee_power": {
+          "base_value": 1.0,
+          "scaling": 1.045,
+          "scaling_mode": "power",
+          "apply_mode": "multiply",
+          "include_modifiers": false
+        },
+        "none": {
+          "base_value": 0.0,
+          "scaling": 0.0,
+          "scaling_mode": "linear",
+          "apply_mode": "overwrite",
+          "include_modifiers": false
         }
+      }
     }
     """;
 
     private static final String DEFAULT_PLAYER_STATS = """
     {
-        "attribute": {
-            "minecraft:generic.max_health": "health"
-        },
-        "hurt": {
-            "minecraft:player_attack": "melee_power",
-            "minecraft:arrow": "melee_power",
-            "minecraft:trident": "melee_power",
-            "minecraft:magic": "spell",
-            "minecraft:indirect_magic": "spell",
-            "attributeslib:current_hp_damage": "flat",
-            "*irons_spellbooks*": "spell",
-            "default": "health"
-        },
-        "hurt_self": {
-            "minecraft:wither": "health",
-            "minecraft:poison": "health",
-            "minecraft:in_fire": "health",
-            "minecraft:on_fire": "health",
-            "minecraft:lava": "health",
-            "minecraft:hot_floor": "health",
-            "minecraft:drown": "health",
-            "minecraft:starve": "health",
-            "minecraft:cactus": "health",
-            "minecraft:fall": "health",
-            "minecraft:fly_into_wall": "health",
-            "minecraft:generic": "health",
-            "default": "health"
-        },
-        "heal": {
-            "default": "health"
-        }
-    }
+         "attribute": {
+             "minecraft:generic.max_health": "health"
+         },
+         "hurt": {
+             "minecraft:player_attack": "melee_power",
+             "minecraft:arrow": "melee_power",
+             "minecraft:trident": "melee_power",
+             "minecraft:magic": "spell",
+             "minecraft:indirect_magic": "spell",
+             "attributeslib:current_hp_damage": "flat",
+             "*irons_spellbooks*": "spell",
+             "default": "health"
+         },
+         "hurt_self": {
+             "default": "health"
+         },
+         "heal": {
+             "default": "health"
+         }
+     }
     """;
 
     private static final String DEFAULT_MOB_STATS = """
     {
-        "attribute": {
-            "minecraft:generic.max_health": "mob_health"
-        },
-        "hurt": {
-            "default": "mob_health"
-        },
-        "hurt_self": {
-            "default": "mob_health"
-        },
-        "heal": {
-            "default": "mob_health"
-        }
+      "attribute": {
+        "minecraft:generic.max_health": "mob_health"
+      },
+      "hurt": {
+        "default": "health"
+      },
+      "hurt_self": {
+        "default": "mob_health"
+      },
+      "heal": {
+        "default": "mob_health"
+      }
     }
     """;
 
     private static final String DEFAULT_MOB_OVERRIDES = """
     {
-        "minecraft:cow": {
-            "attribute": {
-                "minecraft:generic.max_health": "flat"
-            }
+      "cataclysm:ancient_remnant": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
         }
+      },
+      "cataclysm:maledictus": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:ender_guardian": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:ignis": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:scylla": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:netherite_monstrosity": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:the_harbinger": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "cataclysm:the_leviathan": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      },
+      "irons_spellbooks:dead_king": {
+        "attribute": {
+          "minecraft:generic.max_health": "mob_health"
+        },
+        "hurt": {
+          "default": "mob_health"
+        },
+        "hurt_self": {
+          "default": "mob_health",
+          "attributeslib:current_hp_damage": "none"
+        },
+        "heal": {
+          "default": "mob_health"
+        }
+      }
     }
     """;
 
     private static final String DEFAULT_MOB_LEVELS = """
     {
-        "minecraft:wither": { "lvl_min": 50, "lvl_max": 200 },
-        "minecraft:warden": { "lvl_min": 50, "lvl_max": 200 },
-        "minecraft:elder_guardian": { "lvl_min": 50, "lvl_max": 200 },
-        "minecraft:ender_dragon": { "lvl_min": 100, "lvl_max": 200 },
-        "minecraft:allay": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:axolotl": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:bat": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:bee": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:camel": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:cat": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:chicken": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:cod": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:cow": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:dolphin": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:donkey": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:fox": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:frog": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:glow_squid": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:horse": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:llama": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:mooshroom": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:mule": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:ocelot": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:panda": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:parrot": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:pig": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:pufferfish": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:rabbit": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:salmon": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:sheep": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:sniffer": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:snow_golem": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:squid": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:strider": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:tadpole": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:trader_llama": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:tropical_fish": { "lvl_min": 1, "lvl_max": 1 },
-        "minecraft:turtle": { "lvl_min": 1, "lvl_max": 1 }
-    }
+       "minecraft:wither": {
+         "lvl_min": 50,
+         "lvl_max": 200
+       },
+       "minecraft:warden": {
+         "lvl_min": 50,
+         "lvl_max": 200
+       },
+       "minecraft:elder_guardian": {
+         "lvl_min": 50,
+         "lvl_max": 200
+       },
+       "minecraft:ender_dragon": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "minecraft:allay": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:axolotl": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:bat": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:bee": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:camel": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:cat": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:chicken": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:cod": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:cow": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:dolphin": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:donkey": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:fox": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:frog": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:glow_squid": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:horse": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:llama": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:mooshroom": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:mule": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:ocelot": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:panda": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:parrot": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:pig": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:pufferfish": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:rabbit": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:salmon": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:sheep": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:sniffer": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:snow_golem": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:squid": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:strider": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:tadpole": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:trader_llama": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:tropical_fish": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "minecraft:turtle": {
+         "lvl_min": 1,
+         "lvl_max": 1
+       },
+       "cataclysm:the_leviathan": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:the_harbinger": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:netherite_monstrosity": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:scylla": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:ignis": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:ender_guardian": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:maledictus": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "cataclysm:ancient_remnant": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       },
+       "irons_spellbooks:dead_king": {
+         "lvl_min": 100,
+         "lvl_max": 200
+       }
+     }
     """;
 
     /** Default de client.json (HUD visual — só cliente). */
     public static final String DEFAULT_CLIENT = """
     {
-        "hud": {
-          "lp_bar": {
-            "anchor": "bottom_left",
-            "x": 2,
-            "y": -2,
-            "scale": 0.11,
-            "font_scale": 0.5
-          },
-          "level_circle": {
-            "anchor": "top_left",
-            "x": 2,
-            "y": 2,
-            "scale": 0.15,
-            "font_scale": 1.0
-          },
-          "health_bar": {
-            "enabled": true,
-            "anchor": "bottom_center",
-            "x": -62,
-            "y": -31,
-            "scale": 0.1,
-            "font_scale": 0.5
-          },
-          "hunger_bar": {
-            "enabled": true,
-            "anchor": "bottom_center",
-            "x": 60,
-            "y": -31,
-            "scale": 0.1,
-            "font_scale": 0.5
-          }
-        }
-      }
+         "hud": {
+           "lp_bar": {
+             "anchor": "bottom_left",
+             "x": 2,
+             "y": -2,
+             "scale": 0.135,
+             "font_scale": 0.7
+           },
+           "level_circle": {
+             "anchor": "top_left",
+             "x": 2,
+             "y": 2,
+             "scale": 0.15,
+             "font_scale": 1.0
+           },
+           "health_bar": {
+             "enabled": true,
+             "anchor": "bottom_center",
+             "x": -62,
+             "y": -31,
+             "scale": 0.1,
+             "font_scale": 0.6,
+             "armor_margin": 10
+           },
+           "hunger_bar": {
+             "enabled": true,
+             "anchor": "bottom_center",
+             "x": 60,
+             "y": -31,
+             "scale": 0.1,
+             "font_scale": 0.6,
+             "breath_margin": 10
+           }
+         }
+       }
     """;
 
     // =========================================================
