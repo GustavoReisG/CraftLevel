@@ -40,6 +40,7 @@ public class HudElementConfigScreen extends Screen {
     private EditBox scaleField;
     private EditBox fontScaleField;
     private EditBox marginField;
+    private EditBox mountHealthMarginField;
 
     private int rowEnabled = -1;
     private int rowAnchor;
@@ -48,6 +49,7 @@ public class HudElementConfigScreen extends Screen {
     private int rowScale;
     private int rowFontScale = -1;
     private int rowMargin = -1;
+    private int rowMountHealthMargin = -1;
 
     protected HudElementConfigScreen(Screen parent, Element element) {
         super(Component.literal("CraftLevel - " + element.title()));
@@ -133,6 +135,17 @@ public class HudElementConfigScreen extends Screen {
             addRenderableWidget(marginField);
         }
 
+        if (element == Element.HUNGER_BAR) {
+            rowMountHealthMargin = row;
+            Integer mountMargin = state.resolvedHungerBar().mountHealthMargin();
+            if (mountMargin == null) {
+                mountMargin = state.resolvedHungerBar().breathMargin();
+            }
+            mountHealthMarginField = newIntField(mountMargin);
+            ConfigScreenLayout.positionField(this, row++, mountHealthMarginField);
+            addRenderableWidget(mountHealthMarginField);
+        }
+
         addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::save));
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
@@ -198,7 +211,10 @@ public class HudElementConfigScreen extends Screen {
                     values.y(),
                     values.scale(),
                     values.fontScale(),
-                    ConfigScalingForm.parseOptionalInt(marginField)
+                    ConfigScalingForm.parseOptionalInt(marginField),
+                    mountHealthMarginField != null
+                            ? ConfigScalingForm.parseOptionalInt(mountHealthMarginField)
+                            : null
             ));
         }
         ClientConfigPersistence.save(minecraft);
@@ -239,6 +255,9 @@ public class HudElementConfigScreen extends Screen {
         if (rowMargin >= 0) {
             String marginLabel = element == Element.HEALTH_BAR ? "Armor Margin" : "Breath Margin";
             ConfigScreenLayout.renderLabel(this, graphics, rowMargin, marginLabel);
+        }
+        if (rowMountHealthMargin >= 0) {
+            ConfigScreenLayout.renderLabel(this, graphics, rowMountHealthMargin, "Mount Health Margin");
         }
         super.render(graphics, mouseX, mouseY, partialTick);
     }

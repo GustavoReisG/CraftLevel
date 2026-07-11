@@ -49,6 +49,7 @@ public class ClientConfig {
     public static float hudHungerBarFontScale = 0.5f;
     public static String hudHungerBarAnchor = "bottom_center";
     public static int hudHungerBarBreathMargin = 10;
+    public static int hudHungerBarMountHealthMargin = 10;
 
     public static final String[] ANCHORS = {
             "top_left",
@@ -117,6 +118,7 @@ public class ClientConfig {
         hudLevelCircleFontScale = levelCircle.fontScale();
 
         ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
+        ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
         hudHealthBarEnabled = healthBar.enabled();
         hudHealthBarAnchor = healthBar.anchor();
         hudHealthBarX = healthBar.x();
@@ -125,7 +127,6 @@ public class ClientConfig {
         hudHealthBarFontScale = healthBar.fontScale();
         hudHealthBarArmorMargin = healthBar.armorMargin();
 
-        ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
         hudHungerBarEnabled = hungerBar.enabled();
         hudHungerBarAnchor = hungerBar.anchor();
         hudHungerBarX = hungerBar.x();
@@ -133,6 +134,9 @@ public class ClientConfig {
         hudHungerBarScale = hungerBar.scale();
         hudHungerBarFontScale = hungerBar.fontScale();
         hudHungerBarBreathMargin = hungerBar.breathMargin();
+        hudHungerBarMountHealthMargin = hungerBar.mountHealthMargin() != null
+                ? hungerBar.mountHealthMargin()
+                : hungerBar.breathMargin();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
@@ -151,7 +155,8 @@ public class ClientConfig {
         ));
         state.setHungerBar(new ClientConfigEditorState.HungerBarValues(
                 hudHungerBarEnabled, hudHungerBarAnchor, hudHungerBarX, hudHungerBarY,
-                hudHungerBarScale, hudHungerBarFontScale, hudHungerBarBreathMargin
+                hudHungerBarScale, hudHungerBarFontScale, hudHungerBarBreathMargin,
+                hudHungerBarMountHealthMargin
         ));
         try {
             Path file = getConfigPath();

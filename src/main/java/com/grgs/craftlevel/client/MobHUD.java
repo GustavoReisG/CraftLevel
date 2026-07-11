@@ -35,6 +35,10 @@ public class MobHUD {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
+        if (!mob.getPassengers().isEmpty()) {
+            return;
+        }
+
         mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(mobCap -> {
             int mobLevel = mobCap.getLevel();
             int playerLevel = CraftLevelHUD.cachedLevel;

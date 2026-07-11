@@ -501,7 +501,8 @@ public class ConfigManager {
              "y": -31,
              "scale": 0.1,
              "font_scale": 0.6,
-             "breath_margin": 10
+             "breath_margin": 10,
+             "mount_health_margin": 0
            }
          }
        }

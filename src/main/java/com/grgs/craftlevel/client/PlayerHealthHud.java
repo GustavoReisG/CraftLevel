@@ -52,7 +52,7 @@ public final class PlayerHealthHud {
         }
         Minecraft mc = Minecraft.getInstance();
         if (mc.gui instanceof ForgeGui forgeGui) {
-            VanillaHudSpacing.pushRight(forgeGui, ClientConfig.hudHealthBarArmorMargin);
+            VanillaHudSpacing.pushRight(forgeGui, ClientConfig.hudHungerBarMountHealthMargin);
         }
     }
 
