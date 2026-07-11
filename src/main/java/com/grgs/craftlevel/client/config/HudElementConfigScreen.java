@@ -17,7 +17,8 @@ public class HudElementConfigScreen extends Screen {
         LP_BAR("LP Bar"),
         LEVEL_CIRCLE("Level Circle"),
         HEALTH_BAR("Health Bar"),
-        HUNGER_BAR("Hunger Bar");
+        HUNGER_BAR("Hunger Bar"),
+        EMERALDS("Emeralds");
 
         private final String title;
 
@@ -35,6 +36,7 @@ public class HudElementConfigScreen extends Screen {
 
     private CycleButton<String> anchorButton;
     private CycleButton<Boolean> enabledButton;
+    private CycleButton<String> iconSideButton;
     private EditBox xField;
     private EditBox yField;
     private EditBox scaleField;
@@ -48,6 +50,7 @@ public class HudElementConfigScreen extends Screen {
     private int rowY;
     private int rowScale;
     private int rowFontScale = -1;
+    private int rowIconSide = -1;
     private int rowMargin = -1;
     private int rowMountHealthMargin = -1;
 
@@ -62,12 +65,20 @@ public class HudElementConfigScreen extends Screen {
         ClientConfigEditorState state = ClientConfigPersistence.session();
         int row = 0;
 
-        if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR) {
+        if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS) {
             rowEnabled = row;
-            boolean enabled = element == Element.HEALTH_BAR
-                    ? state.resolvedHealthBar().enabled()
-                    : state.resolvedHungerBar().enabled();
-            String label = element == Element.HEALTH_BAR ? "Enable CL Health Bar" : "Enable CL Hunger Bar";
+            boolean enabled = switch (element) {
+                case HEALTH_BAR -> state.resolvedHealthBar().enabled();
+                case HUNGER_BAR -> state.resolvedHungerBar().enabled();
+                case EMERALDS -> state.resolvedEmeralds().enabled();
+                default -> true;
+            };
+            String label = switch (element) {
+                case HEALTH_BAR -> "Enable CL Health Bar";
+                case HUNGER_BAR -> "Enable CL Hunger Bar";
+                case EMERALDS -> "Enable Emerald HUD";
+                default -> "Enable";
+            };
             enabledButton = CycleButton.onOffBuilder()
                     .withInitialValue(enabled)
                     .displayOnlyValue()
@@ -88,6 +99,11 @@ public class HudElementConfigScreen extends Screen {
                 ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
                 yield new ClientConfigEditorState.HudElementValues(
                         hungerBar.anchor(), hungerBar.x(), hungerBar.y(), hungerBar.scale(), hungerBar.fontScale());
+            }
+            case EMERALDS -> {
+                ClientConfigEditorState.EmeraldHudValues emeralds = state.resolvedEmeralds();
+                yield new ClientConfigEditorState.HudElementValues(
+                        emeralds.anchor(), emeralds.x(), emeralds.y(), emeralds.scale(), emeralds.fontScale());
             }
         };
 
@@ -118,11 +134,25 @@ public class HudElementConfigScreen extends Screen {
         addRenderableWidget(scaleField);
 
         if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR
-                || element == Element.LP_BAR || element == Element.HUNGER_BAR) {
+                || element == Element.LP_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS) {
             rowFontScale = row;
             fontScaleField = newFloatField(values.fontScale());
             ConfigScreenLayout.positionField(this, row++, fontScaleField);
             addRenderableWidget(fontScaleField);
+        }
+
+        if (element == Element.EMERALDS) {
+            rowIconSide = row;
+            String iconSide = state.resolvedEmeralds().iconSide() != null
+                    ? state.resolvedEmeralds().iconSide()
+                    : ClientConfigEditorState.ICON_SIDES[1];
+            iconSideButton = CycleButton.<String>builder(Component::literal)
+                    .withValues(ClientConfigEditorState.ICON_SIDES)
+                    .withInitialValue(findIconSide(iconSide))
+                    .displayOnlyValue()
+                    .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
+            ConfigScreenLayout.positionField(this, row++, iconSideButton);
+            addRenderableWidget(iconSideButton);
         }
 
         if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR) {
@@ -179,6 +209,15 @@ public class HudElementConfigScreen extends Screen {
         return ClientConfig.ANCHORS[0];
     }
 
+    private static String findIconSide(String iconSide) {
+        for (String option : ClientConfigEditorState.ICON_SIDES) {
+            if (option.equals(iconSide)) {
+                return option;
+            }
+        }
+        return ClientConfigEditorState.ICON_SIDES[1];
+    }
+
     private void save() {
         ClientConfigEditorState.HudElementValues values = new ClientConfigEditorState.HudElementValues(
                 anchorButton.getValue(),
@@ -203,7 +242,7 @@ public class HudElementConfigScreen extends Screen {
                     values.fontScale(),
                     ConfigScalingForm.parseOptionalInt(marginField)
             ));
-        } else {
+        } else if (element == Element.HUNGER_BAR) {
             session.setHungerBar(new ClientConfigEditorState.HungerBarValues(
                     enabledButton.getValue(),
                     anchorButton.getValue(),
@@ -215,6 +254,16 @@ public class HudElementConfigScreen extends Screen {
                     mountHealthMarginField != null
                             ? ConfigScalingForm.parseOptionalInt(mountHealthMarginField)
                             : null
+            ));
+        } else {
+            session.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
+                    enabledButton.getValue(),
+                    anchorButton.getValue(),
+                    values.x(),
+                    values.y(),
+                    values.scale(),
+                    values.fontScale(),
+                    iconSideButton != null ? iconSideButton.getValue() : "right"
             ));
         }
         ClientConfigPersistence.save(minecraft);
@@ -242,7 +291,12 @@ public class HudElementConfigScreen extends Screen {
         renderBackground(graphics);
         graphics.drawCenteredString(font, title, width / 2, 16, 0xFFFFFF);
         if (rowEnabled >= 0) {
-            String enabledLabel = element == Element.HEALTH_BAR ? "Enable CL Health Bar" : "Enable CL Hunger Bar";
+            String enabledLabel = switch (element) {
+                case HEALTH_BAR -> "Enable CL Health Bar";
+                case HUNGER_BAR -> "Enable CL Hunger Bar";
+                case EMERALDS -> "Enable Emerald HUD";
+                default -> "Enable";
+            };
             ConfigScreenLayout.renderLabel(this, graphics, rowEnabled, enabledLabel);
         }
         ConfigScreenLayout.renderLabel(this, graphics, rowAnchor, "Anchor");
@@ -251,6 +305,9 @@ public class HudElementConfigScreen extends Screen {
         ConfigScreenLayout.renderLabel(this, graphics, rowScale, "Scale");
         if (rowFontScale >= 0) {
             ConfigScreenLayout.renderLabel(this, graphics, rowFontScale, "Font Scale");
+        }
+        if (rowIconSide >= 0) {
+            ConfigScreenLayout.renderLabel(this, graphics, rowIconSide, "Icon Side");
         }
         if (rowMargin >= 0) {
             String marginLabel = element == Element.HEALTH_BAR ? "Armor Margin" : "Breath Margin";

@@ -2,7 +2,11 @@ package com.grgs.craftlevel;
 
 import com.mojang.logging.LogUtils;
 import com.grgs.craftlevel.capability.IMobLevel;
+import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
+import com.grgs.craftlevel.capability.IPlayerVillagerBalance;
+import com.grgs.craftlevel.item.ModItems;
+import com.grgs.craftlevel.menu.ModMenus;
 import com.grgs.craftlevel.network.PacketHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -26,6 +30,8 @@ public class CraftLevel {
 
     public CraftLevel(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+        ModItems.ITEMS.register(modEventBus);
+        ModMenus.MENUS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         LOGGER.info("Craft Level initialized!");
@@ -35,6 +41,8 @@ public class CraftLevel {
     private void commonSetup(final FMLCommonSetupEvent event) {
         CapabilityManager.get(new CapabilityToken<IPlayerLevel>() {});
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});
+        CapabilityManager.get(new CapabilityToken<IPlayerEmeraldWallet>() {});
+        CapabilityManager.get(new CapabilityToken<IPlayerVillagerBalance>() {});
         PacketHandler.register();
         LOGGER.info("Craft Level common setup complete!");
     }

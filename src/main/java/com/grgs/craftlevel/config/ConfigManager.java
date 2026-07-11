@@ -470,42 +470,69 @@ public class ConfigManager {
     /** Default de client.json (HUD visual — só cliente). */
     public static final String DEFAULT_CLIENT = """
     {
-         "hud": {
-           "lp_bar": {
-             "anchor": "bottom_left",
-             "x": 2,
-             "y": -2,
-             "scale": 0.135,
-             "font_scale": 0.7
-           },
-           "level_circle": {
-             "anchor": "top_left",
-             "x": 2,
-             "y": 2,
-             "scale": 0.15,
-             "font_scale": 1.0
-           },
-           "health_bar": {
-             "enabled": true,
-             "anchor": "bottom_center",
-             "x": -62,
-             "y": -31,
-             "scale": 0.1,
-             "font_scale": 0.6,
-             "armor_margin": 10
-           },
-           "hunger_bar": {
-             "enabled": true,
-             "anchor": "bottom_center",
-             "x": 60,
-             "y": -31,
-             "scale": 0.1,
-             "font_scale": 0.6,
-             "breath_margin": 10,
-             "mount_health_margin": 0
-           }
-         }
-       }
+      "hud": {
+        "lp_bar": {
+          "anchor": "bottom_left",
+          "x": 2,
+          "y": -2,
+          "scale": 0.135,
+          "font_scale": 0.7
+        },
+        "level_circle": {
+          "anchor": "top_left",
+          "x": 2,
+          "y": 2,
+          "scale": 0.15,
+          "font_scale": 1.0
+        },
+        "health_bar": {
+          "enabled": true,
+          "anchor": "bottom_center",
+          "x": -62,
+          "y": -31,
+          "scale": 0.1,
+          "font_scale": 0.6,
+          "armor_margin": 10
+        },
+        "hunger_bar": {
+          "enabled": true,
+          "anchor": "bottom_center",
+          "x": 60,
+          "y": -31,
+          "scale": 0.1,
+          "font_scale": 0.6,
+          "breath_margin": 10,
+          "mount_health_margin": 0
+        },
+        "emeralds": {
+          "enabled": true,
+          "anchor": "bottom_left",
+          "x": 2,
+          "y": -20,
+          "scale": 0.7,
+          "font_scale": 1.0,
+          "icon_side": "left"
+        }
+      }
+    }
+    """;
+
+    private static final String DEFAULT_ECONOMY = """
+    {
+      "player": {
+        "starting_balance": 0
+      },
+      "villager_balance": {
+        "refresh_ticks": 24000,
+        "default_starting": 1000,
+        "per_profession": {
+          "minecraft:librarian": {
+            "balance": 1000,
+            "refresh_ticks": 24000
+          }
+        }
+      }
+    }
     """;
 
     // =========================================================
@@ -517,6 +544,7 @@ public class ConfigManager {
     public static JsonObject mobStats = new JsonObject();
     public static JsonObject mobOverrides = new JsonObject();
     public static JsonObject mobLevels = new JsonObject();
+    public static JsonObject economy = new JsonObject();
 
     // =========================================================
     // INIT
@@ -541,12 +569,14 @@ public class ConfigManager {
         loadMobStats();
         loadMobOverrides();
         loadMobLevels();
+        loadEconomy();
 
         ConfigParser.parseConfig(config);
         ConfigParser.parsePlayerStats(playerStats);
         ConfigParser.parseMobStats(mobStats);
         ConfigParser.parseMobOverrides(mobOverrides);
         ConfigParser.parseMobLevels(mobLevels);
+        EconomyParser.parseEconomy(economy);
 
         CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
         DebugLog.info(
@@ -587,6 +617,10 @@ public class ConfigManager {
 
     private static void loadMobLevels() throws IOException {
         mobLevels = loadOrCreate("mob_levels.json", DEFAULT_MOB_LEVELS);
+    }
+
+    private static void loadEconomy() throws IOException {
+        economy = loadOrCreate("economy.json", DEFAULT_ECONOMY);
     }
 
     // =========================================================

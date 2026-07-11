@@ -6,6 +6,7 @@ import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.config.ConfigManager;
 import com.grgs.craftlevel.config.ConfigParser;
+import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
 import com.grgs.craftlevel.scaling.StatRefreshService;
@@ -70,6 +71,7 @@ public class CraftLevelCommands {
 
         try {
             ConfigManager.reload(server);
+            EconomyService.onEconomyConfigReload(server);
         } catch (IOException e) {
             CraftLevel.LOGGER.error("[CraftLevel] Failed to reload config", e);
             source.sendFailure(Component.literal("[CraftLevel] Erro ao recarregar configs. Veja o log do servidor."));

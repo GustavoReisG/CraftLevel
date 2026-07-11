@@ -19,6 +19,7 @@ public final class ClientConfigEditorState {
     static final String KEY_LEVEL_CIRCLE = "level_circle";
     static final String KEY_HEALTH_BAR = "health_bar";
     static final String KEY_HUNGER_BAR = "hunger_bar";
+    static final String KEY_EMERALDS = "emeralds";
     static final String KEY_ENABLED = "enabled";
     static final String KEY_ANCHOR = "anchor";
     static final String KEY_X = "x";
@@ -28,6 +29,9 @@ public final class ClientConfigEditorState {
     static final String KEY_ARMOR_MARGIN = "armor_margin";
     static final String KEY_MOUNT_HEALTH_MARGIN = "mount_health_margin";
     static final String KEY_BREATH_MARGIN = "breath_margin";
+    static final String KEY_ICON_SIDE = "icon_side";
+
+    public static final String[] ICON_SIDES = {"left", "right"};
 
     public record HudElementValues(String anchor, Integer x, Integer y, Float scale, Float fontScale) {}
 
@@ -41,12 +45,17 @@ public final class ClientConfigEditorState {
             Integer breathMargin, Integer mountHealthMargin
     ) {}
 
+    public record EmeraldHudValues(
+            Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
+    ) {}
+
     private static ClientConfigEditorState defaultTemplate;
 
     private HudElementValues lpBar;
     private HudElementValues levelCircle;
     private HealthBarValues healthBar;
     private HungerBarValues hungerBar;
+    private EmeraldHudValues emeralds;
 
     public ClientConfigEditorState() {
         copyFrom(defaultsTemplate());
@@ -79,6 +88,7 @@ public final class ClientConfigEditorState {
         levelCircle = mergeElement(readElement(hud, KEY_LEVEL_CIRCLE, true), levelCircle, true);
         healthBar = mergeHealthBar(readHealthBar(hud), healthBar);
         hungerBar = mergeHungerBar(readHungerBar(hud), hungerBar);
+        emeralds = mergeEmeralds(readEmeralds(hud), emeralds);
     }
 
     public JsonObject toJson() {
@@ -88,6 +98,7 @@ public final class ClientConfigEditorState {
         hud.add(KEY_LEVEL_CIRCLE, writeElement(resolvedLevelCircle(), true));
         hud.add(KEY_HEALTH_BAR, writeHealthBar(resolvedHealthBar()));
         hud.add(KEY_HUNGER_BAR, writeHungerBar(resolvedHungerBar()));
+        hud.add(KEY_EMERALDS, writeEmeralds(resolvedEmeralds()));
         root.add(KEY_HUD, hud);
         return root;
     }
@@ -124,6 +135,14 @@ public final class ClientConfigEditorState {
         hungerBar = values;
     }
 
+    public EmeraldHudValues emeralds() {
+        return emeralds;
+    }
+
+    public void setEmeralds(EmeraldHudValues values) {
+        emeralds = values;
+    }
+
     public HudElementValues resolvedLpBar() {
         return mergeElement(lpBar, defaultsTemplate().lpBar, true);
     }
@@ -138,6 +157,10 @@ public final class ClientConfigEditorState {
 
     public HungerBarValues resolvedHungerBar() {
         return mergeHungerBar(hungerBar, defaultsTemplate().hungerBar);
+    }
+
+    public EmeraldHudValues resolvedEmeralds() {
+        return mergeEmeralds(emeralds, defaultsTemplate().emeralds);
     }
 
     private static ClientConfigEditorState defaultsTemplate() {
@@ -157,6 +180,7 @@ public final class ClientConfigEditorState {
             state.levelCircle = new HudElementValues("top_left", 0, 0, 0.1f, 2.0f);
             state.healthBar = new HealthBarValues(true, "bottom_center", -50, -48, 0.08f, 0.65f, 10);
             state.hungerBar = new HungerBarValues(true, "bottom_center", -50, -15, 0.08f, 0.5f, 10, 10);
+            state.emeralds = new EmeraldHudValues(true, "top_right", -8, 8, 1.0f, 1.0f, "right");
         }
         return state;
     }
@@ -178,6 +202,7 @@ public final class ClientConfigEditorState {
         levelCircle = source.levelCircle;
         healthBar = source.healthBar;
         hungerBar = source.hungerBar;
+        emeralds = source.emeralds;
     }
 
     private static HudElementValues mergeElement(HudElementValues loaded, HudElementValues defaults, boolean withFontScale) {
@@ -214,6 +239,18 @@ public final class ClientConfigEditorState {
                 loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
                 loaded.breathMargin() != null ? loaded.breathMargin() : defaults.breathMargin(),
                 loaded.mountHealthMargin() != null ? loaded.mountHealthMargin() : defaults.mountHealthMargin()
+        );
+    }
+
+    private static EmeraldHudValues mergeEmeralds(EmeraldHudValues loaded, EmeraldHudValues defaults) {
+        return new EmeraldHudValues(
+                loaded.enabled() != null ? loaded.enabled() : defaults.enabled(),
+                loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
+                loaded.x() != null ? loaded.x() : defaults.x(),
+                loaded.y() != null ? loaded.y() : defaults.y(),
+                loaded.scale() != null ? loaded.scale() : defaults.scale(),
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.iconSide() != null ? loaded.iconSide() : defaults.iconSide()
         );
     }
 
@@ -268,6 +305,22 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static EmeraldHudValues readEmeralds(JsonObject hud) {
+        if (!hud.has(KEY_EMERALDS) || !hud.get(KEY_EMERALDS).isJsonObject()) {
+            return new EmeraldHudValues(null, null, null, null, null, null, null);
+        }
+        JsonObject element = hud.getAsJsonObject(KEY_EMERALDS);
+        return new EmeraldHudValues(
+                readOptionalBoolean(element, KEY_ENABLED),
+                readOptionalString(element, KEY_ANCHOR),
+                readOptionalInt(element, KEY_X),
+                readOptionalInt(element, KEY_Y),
+                readOptionalFloat(element, KEY_SCALE),
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalString(element, KEY_ICON_SIDE)
+        );
+    }
+
     private static JsonObject writeElement(HudElementValues values, boolean withFontScale) {
         JsonObject element = new JsonObject();
         element.addProperty(KEY_ANCHOR, values.anchor());
@@ -302,6 +355,18 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_FONT_SCALE, values.fontScale());
         element.addProperty(KEY_BREATH_MARGIN, values.breathMargin());
         element.addProperty(KEY_MOUNT_HEALTH_MARGIN, values.mountHealthMargin());
+        return element;
+    }
+
+    private static JsonObject writeEmeralds(EmeraldHudValues values) {
+        JsonObject element = new JsonObject();
+        element.addProperty(KEY_ENABLED, values.enabled());
+        element.addProperty(KEY_ANCHOR, values.anchor());
+        element.addProperty(KEY_X, values.x());
+        element.addProperty(KEY_Y, values.y());
+        element.addProperty(KEY_SCALE, values.scale());
+        element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_ICON_SIDE, values.iconSide());
         return element;
     }
 

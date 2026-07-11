@@ -51,6 +51,15 @@ public class ClientConfig {
     public static int hudHungerBarBreathMargin = 10;
     public static int hudHungerBarMountHealthMargin = 10;
 
+    // HUD de esmeraldas da wallet
+    public static boolean hudEmeraldsEnabled = true;
+    public static int hudEmeraldsX = -8;
+    public static int hudEmeraldsY = 8;
+    public static float hudEmeraldsScale = 1.0f;
+    public static float hudEmeraldsFontScale = 1.0f;
+    public static String hudEmeraldsAnchor = "top_right";
+    public static String hudEmeraldsIconSide = "right";
+
     public static final String[] ANCHORS = {
             "top_left",
             "top_center",
@@ -137,6 +146,15 @@ public class ClientConfig {
         hudHungerBarMountHealthMargin = hungerBar.mountHealthMargin() != null
                 ? hungerBar.mountHealthMargin()
                 : hungerBar.breathMargin();
+
+        ClientConfigEditorState.EmeraldHudValues emeralds = state.resolvedEmeralds();
+        hudEmeraldsEnabled = emeralds.enabled();
+        hudEmeraldsAnchor = emeralds.anchor();
+        hudEmeraldsX = emeralds.x();
+        hudEmeraldsY = emeralds.y();
+        hudEmeraldsScale = emeralds.scale();
+        hudEmeraldsFontScale = emeralds.fontScale();
+        hudEmeraldsIconSide = emeralds.iconSide();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
@@ -157,6 +175,10 @@ public class ClientConfig {
                 hudHungerBarEnabled, hudHungerBarAnchor, hudHungerBarX, hudHungerBarY,
                 hudHungerBarScale, hudHungerBarFontScale, hudHungerBarBreathMargin,
                 hudHungerBarMountHealthMargin
+        ));
+        state.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
+                hudEmeraldsEnabled, hudEmeraldsAnchor, hudEmeraldsX, hudEmeraldsY,
+                hudEmeraldsScale, hudEmeraldsFontScale, hudEmeraldsIconSide
         ));
         try {
             Path file = getConfigPath();

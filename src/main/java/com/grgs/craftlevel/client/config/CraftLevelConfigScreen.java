@@ -17,7 +17,14 @@ public class CraftLevelConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        int row = 0;
+        Button economy = Button.builder(Component.literal("Economy"), btn ->
+                        minecraft.setScreen(new EconomyConfigMenuScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 0, economy);
+        addRenderableWidget(economy);
+
+        int row = 1;
         for (String fileName : ConfigManager.CONFIG_FILES) {
             int currentRow = row++;
             Button button = createFileButton(fileName);

@@ -2,12 +2,16 @@ package com.grgs.craftlevel.events;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
+import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
+import com.grgs.craftlevel.capability.PlayerVillagerBalanceProvider;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.damage.EventScalingService;
+import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.network.DamageIndicatorPacket;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
 import com.grgs.craftlevel.scaling.StatRefreshService;
 import com.grgs.craftlevel.util.DebugLog;
@@ -62,6 +66,14 @@ public class CraftLevelEvents {
             event.addCapability(
                     new ResourceLocation(CraftLevel.MODID, "player_level"),
                     new PlayerLevelProvider()
+            );
+            event.addCapability(
+                    new ResourceLocation(CraftLevel.MODID, "emerald_wallet"),
+                    new PlayerEmeraldWalletProvider()
+            );
+            event.addCapability(
+                    new ResourceLocation(CraftLevel.MODID, "villager_balance"),
+                    new PlayerVillagerBalanceProvider()
             );
         }
 
@@ -176,6 +188,17 @@ public class CraftLevelEvents {
             });
         });
 
+        original.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(oldCap -> {
+            clone.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(newCap -> {
+                newCap.setBalance(oldCap.getBalance());
+                newCap.setInitialized(oldCap.isInitialized());
+            });
+        });
+
+        original.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(oldCap -> {
+            clone.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(newCap -> newCap.copyFrom(oldCap));
+        });
+
         original.invalidateCaps();
         applyPlayerState(clone);
         DebugLog.info("Player clone: level {} LP {}", clone.getName().getString(), clone.getCapability(PlayerLevelProvider.PLAYER_LEVEL).map(c -> c.getLp()).orElse(-1));
@@ -190,7 +213,9 @@ public class CraftLevelEvents {
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
+        EconomyService.ensurePlayerEconomy(serverPlayer);
         applyPlayerState(serverPlayer);
+        PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(serverPlayer)));
         DebugLog.info("Player login: {}", serverPlayer.getName().getString());
     }
 

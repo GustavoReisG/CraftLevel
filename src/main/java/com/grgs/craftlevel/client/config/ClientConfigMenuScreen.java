@@ -25,6 +25,13 @@ public class ClientConfigMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 0, hud);
         addRenderableWidget(hud);
 
+        Button emeralds = Button.builder(Component.literal("Emeralds"), btn ->
+                minecraft.setScreen(new HudElementConfigScreen(this, HudElementConfigScreen.Element.EMERALDS)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 1, emeralds);
+        addRenderableWidget(emeralds);
+
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 

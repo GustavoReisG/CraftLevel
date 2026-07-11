@@ -8,6 +8,8 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import java.util.Optional;
+
 /** Canal Forge SimpleChannel — server → client e client → server. */
 public class PacketHandler {
 
@@ -52,6 +54,31 @@ public class PacketHandler {
                 DamageIndicatorPacket::encode,
                 DamageIndicatorPacket::decode,
                 DamageIndicatorPacket::handle
+        );
+
+        CHANNEL.registerMessage(
+                4,
+                SyncEmeraldWalletPacket.class,
+                SyncEmeraldWalletPacket::encode,
+                SyncEmeraldWalletPacket::decode,
+                SyncEmeraldWalletPacket::handle
+        );
+
+        CHANNEL.registerMessage(
+                5,
+                WalletWithdrawPacket.class,
+                WalletWithdrawPacket::encode,
+                WalletWithdrawPacket::decode,
+                WalletWithdrawPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        CHANNEL.registerMessage(
+                6,
+                SyncVillagerBalancePacket.class,
+                SyncVillagerBalancePacket::encode,
+                SyncVillagerBalancePacket::decode,
+                SyncVillagerBalancePacket::handle
         );
     }
 

@@ -4,9 +4,11 @@
   "package": "com.grgs.craftlevel.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "craftlevel.refmap.json",
-  "mixins": [
+    "mixins": [
     "InventoryMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "MerchantMenuMixin",
+    "MerchantTradeSlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1
