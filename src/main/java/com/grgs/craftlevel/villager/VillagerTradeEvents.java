@@ -8,6 +8,7 @@ import com.grgs.craftlevel.economy.EmeraldPaymentService;
 import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.economy.MerchantMenuHelper;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.network.SyncMerchantOffersPacket;
 import com.grgs.craftlevel.network.SyncVillagerBalancePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.AbstractVillager;
@@ -124,6 +125,7 @@ public final class VillagerTradeEvents {
 
         if (player.getServer() != null) {
             player.getServer().execute(() -> {
+                VillagerTradeService.refreshEconomyLocks(villager);
                 if (!(player.containerMenu instanceof MerchantMenu openMenu)) {
                     return;
                 }
@@ -131,6 +133,10 @@ public final class VillagerTradeEvents {
                 if (selected != null) {
                     EmeraldPaymentService.refillPaymentBuffer(player, openMenu, selected);
                 }
+                PacketHandler.sendToPlayer(
+                        player,
+                        new SyncMerchantOffersPacket(openMenu.containerId, villager.getOffers())
+                );
             });
         }
 
@@ -152,6 +158,7 @@ public final class VillagerTradeEvents {
             return;
         }
         EconomyService.refreshVillagerIfDue(villager);
+        VillagerTradeService.ensureMasterLevel(villager);
     }
 
     public static void syncAfterTrade(ServerPlayer player, AbstractVillager villager) {
