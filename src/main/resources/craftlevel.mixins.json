@@ -7,7 +7,9 @@
     "mixins": [
     "InventoryMixin",
     "LivingEntityMixin",
+    "MerchantContainerMixin",
     "MerchantMenuMixin",
+    "MerchantResultSlotMixin",
     "MerchantTradeSlotMixin"
   ],
   "injectors": {

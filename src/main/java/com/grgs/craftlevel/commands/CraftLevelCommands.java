@@ -11,6 +11,7 @@ import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
 import com.grgs.craftlevel.scaling.StatRefreshService;
 import com.grgs.craftlevel.util.DebugLog;
+import com.grgs.craftlevel.villager.VillagerTradeService;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -72,6 +73,7 @@ public class CraftLevelCommands {
         try {
             ConfigManager.reload(server);
             EconomyService.onEconomyConfigReload(server);
+            VillagerTradeService.onReload();
         } catch (IOException e) {
             CraftLevel.LOGGER.error("[CraftLevel] Failed to reload config", e);
             source.sendFailure(Component.literal("[CraftLevel] Erro ao recarregar configs. Veja o log do servidor."));

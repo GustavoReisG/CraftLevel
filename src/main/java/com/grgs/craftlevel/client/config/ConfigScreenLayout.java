@@ -104,4 +104,14 @@ final class ConfigScreenLayout {
         positionBack(screen, button);
         return button;
     }
+
+    static net.minecraft.client.gui.components.Button bottomExit(Screen screen, Runnable action) {
+        net.minecraft.client.gui.components.Button button =
+                net.minecraft.client.gui.components.Button.builder(
+                                net.minecraft.network.chat.Component.literal("Exit"), btn -> action.run())
+                        .width(ACTION_BUTTON_WIDTH)
+                        .build();
+        positionBack(screen, button);
+        return button;
+    }
 }

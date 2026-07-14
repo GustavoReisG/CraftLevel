@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.grgs.craftlevel.capability.IMobLevel;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
-import com.grgs.craftlevel.capability.IPlayerVillagerBalance;
+import com.grgs.craftlevel.capability.IVillagerEconomy;
 import com.grgs.craftlevel.item.ModItems;
 import com.grgs.craftlevel.menu.ModMenus;
 import com.grgs.craftlevel.network.PacketHandler;
@@ -42,7 +42,7 @@ public class CraftLevel {
         CapabilityManager.get(new CapabilityToken<IPlayerLevel>() {});
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerEmeraldWallet>() {});
-        CapabilityManager.get(new CapabilityToken<IPlayerVillagerBalance>() {});
+        CapabilityManager.get(new CapabilityToken<IVillagerEconomy>() {});
         PacketHandler.register();
         LOGGER.info("Craft Level common setup complete!");
     }

@@ -4,7 +4,7 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
-import com.grgs.craftlevel.capability.PlayerVillagerBalanceProvider;
+import com.grgs.craftlevel.capability.VillagerEconomyProvider;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.damage.EventScalingService;
@@ -24,8 +24,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -33,10 +35,13 @@ import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Hub de eventos Forge do mod.
@@ -56,6 +61,11 @@ public class CraftLevelEvents {
 
     private static final Random RANDOM = new Random();
 
+    /** Mobs carregados do disco entram na fila para não travar o loading (0%). */
+    private static final Queue<Mob> MOB_REFRESH_QUEUE = new ConcurrentLinkedQueue<>();
+    private static final int MOB_REFRESH_PER_TICK = 40;
+    private static volatile boolean worldReady = false;
+
     /** Posição do número flutuante entre mob e jogador (0 = no mob, 1 = no player). */
     private static final double INDICATOR_TOWARDS_PLAYER = 0.55;
 
@@ -71,9 +81,12 @@ public class CraftLevelEvents {
                     new ResourceLocation(CraftLevel.MODID, "emerald_wallet"),
                     new PlayerEmeraldWalletProvider()
             );
+        }
+
+        if (event.getObject() instanceof AbstractVillager) {
             event.addCapability(
-                    new ResourceLocation(CraftLevel.MODID, "villager_balance"),
-                    new PlayerVillagerBalanceProvider()
+                    new ResourceLocation(CraftLevel.MODID, "villager_economy"),
+                    new VillagerEconomyProvider()
             );
         }
 
@@ -105,33 +118,92 @@ public class CraftLevelEvents {
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) return;
         if (!(event.getEntity() instanceof Mob mob)) return;
-        ensureMobLevel(mob, event.loadedFromDisk() ? "chunk" : "join");
+
+        if (!worldReady || event.loadedFromDisk()) {
+            enqueueMobRefresh(mob);
+            return;
+        }
+
+        ensureMobLevel(mob, "join");
+    }
+
+    private static void enqueueMobRefresh(Mob mob) {
+        if (mob instanceof AbstractVillager) {
+            return;
+        }
+        String mobId = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
+        if (ConfigParser.getMobMinLevel(mobId) == ConfigParser.getMobMaxLevel(mobId)) {
+            return;
+        }
+        MOB_REFRESH_QUEUE.offer(mob);
+    }
+
+    /** Reaplica level/stats de mob — usado na interação com villager. */
+    public static void refreshMobLevel(Mob mob) {
+        ensureMobLevel(mob, "interact");
+    }
+
+    public static void markWorldReady() {
+        worldReady = true;
+    }
+
+    public static boolean isWorldReady() {
+        return worldReady;
+    }
+
+    public static void markWorldNotReady() {
+        worldReady = false;
+        MOB_REFRESH_QUEUE.clear();
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || !worldReady) {
+            return;
+        }
+
+        int budget = MOB_REFRESH_PER_TICK;
+        while (budget-- > 0) {
+            Mob mob = MOB_REFRESH_QUEUE.poll();
+            if (mob == null) {
+                break;
+            }
+            if (mob.isRemoved() || !mob.isAlive()) {
+                continue;
+            }
+            ensureMobLevel(mob, "chunk");
+        }
     }
 
     /** Calcula level na primeira vez; depois só reaplica stats. */
     private static void ensureMobLevel(Mob mob, String reason) {
+        boolean silent = "chunk".equals(reason);
         mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(cap -> {
             if (cap.getLevel() <= 0) {
                 int level = calculateMobLevel(mob);
                 cap.setLevel(level);
-                StatRefreshService.refreshMob(mob, level);
-                DebugLog.info(
-                        "Mob {}: {} level {} em {}",
-                        reason,
-                        BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
-                        level,
-                        mob.blockPosition()
-                );
+                StatRefreshService.refreshMob(mob, level, silent);
+                if (!"chunk".equals(reason)) {
+                    DebugLog.info(
+                            "Mob {}: {} level {} em {}",
+                            reason,
+                            BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
+                            level,
+                            mob.blockPosition()
+                    );
+                }
                 return;
             }
 
-            StatRefreshService.refreshMob(mob, cap.getLevel());
-            DebugLog.info(
-                    "Mob {}: {} level {} reaplicado",
-                    reason,
-                    BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
-                    cap.getLevel()
-            );
+            StatRefreshService.refreshMob(mob, cap.getLevel(), silent);
+            if (!"chunk".equals(reason)) {
+                DebugLog.info(
+                        "Mob {}: {} level {} reaplicado",
+                        reason,
+                        BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()),
+                        cap.getLevel()
+                );
+            }
         });
     }
 
@@ -195,10 +267,6 @@ public class CraftLevelEvents {
             });
         });
 
-        original.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(oldCap -> {
-            clone.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(newCap -> newCap.copyFrom(oldCap));
-        });
-
         original.invalidateCaps();
         applyPlayerState(clone);
         DebugLog.info("Player clone: level {} LP {}", clone.getName().getString(), clone.getCapability(PlayerLevelProvider.PLAYER_LEVEL).map(c -> c.getLp()).orElse(-1));
@@ -211,12 +279,22 @@ public class CraftLevelEvents {
     }
 
     @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event) {
+        markWorldReady();
+    }
+
+    @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer serverPlayer)) return;
         EconomyService.ensurePlayerEconomy(serverPlayer);
         applyPlayerState(serverPlayer);
         PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(serverPlayer)));
         DebugLog.info("Player login: {}", serverPlayer.getName().getString());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        markWorldNotReady();
     }
 
     /**

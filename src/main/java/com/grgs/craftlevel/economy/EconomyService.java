@@ -1,26 +1,22 @@
 package com.grgs.craftlevel.economy;
 
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
-import com.grgs.craftlevel.capability.IPlayerVillagerBalance;
+import com.grgs.craftlevel.capability.IVillagerEconomy;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
-import com.grgs.craftlevel.capability.PlayerVillagerBalanceProvider;
+import com.grgs.craftlevel.capability.VillagerEconomyProvider;
 import com.grgs.craftlevel.config.EconomyParser;
+import com.grgs.craftlevel.villager.VillagerTradeRollCache;
+import com.grgs.craftlevel.villager.VillagerTradeService;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-/** Inicializa e consulta saldos de economia no player. */
+/** Inicializa e consulta saldos de economia (wallet no player, villager no villager). */
 public final class EconomyService {
-
-    private static final int REFRESH_CHECK_INTERVAL = 20;
-    private static final int CLEANUP_INTERVAL = 6000;
 
     private EconomyService() {}
 
@@ -31,70 +27,76 @@ public final class EconomyService {
                 wallet.setInitialized(true);
             }
         });
+    }
 
-        player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(balance -> {
-            if (!balance.isInitialized()) {
-                balance.setInitialized(true);
+    public static void ensureVillagerEconomy(AbstractVillager villager) {
+        String professionId = professionId(villager);
+        int starting = EconomyParser.startingBalanceForProfession(professionId);
+        long gameTime = villager.level().getGameTime();
+
+        villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY).ifPresent(economy -> {
+            String storedProfession = economy.getProfessionId();
+            boolean wasInitialized = economy.isInitialized();
+            economy.ensureInitialized(professionId, starting, gameTime);
+            if (wasInitialized && !storedProfession.equals(professionId)) {
+                VillagerTradeService.clearApplied(villager.getUUID());
             }
         });
     }
 
-    public static void trackVillagerEntity(Player player, Villager villager, long gameTime) {
-        UUID entityId = villager.getUUID();
-        String professionId = professionId(villager);
-        int starting = EconomyParser.startingBalanceForProfession(professionId);
-
-        player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(balance -> {
-            balance.ensureEntity(entityId, professionId, starting, gameTime);
-        });
-    }
-
-    public static void refreshDueEntities(ServerPlayer player, MinecraftServer server, long gameTime) {
-        if (gameTime % REFRESH_CHECK_INTERVAL != 0) {
-            return;
-        }
-
-        player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE).ifPresent(balance -> {
-            List<UUID> tracked = new ArrayList<>();
-            balance.trackedEntities().forEach(tracked::add);
-
-            for (UUID entityId : tracked) {
-                if (gameTime % CLEANUP_INTERVAL == 0 && findEntity(server, entityId) == null) {
-                    balance.pruneEntity(entityId);
-                    continue;
-                }
-
-                String professionId = balance.getProfession(entityId);
-                long lastRefresh = balance.getLastRefreshTick(entityId);
-                int refreshTicks = EconomyParser.refreshTicksForProfession(professionId);
-                if (gameTime - lastRefresh >= refreshTicks) {
-                    balance.resetEntity(entityId, EconomyParser.startingBalanceForProfession(professionId));
-                    balance.setLastRefreshTick(entityId, gameTime);
-                }
+    public static void refreshVillagerIfDue(AbstractVillager villager) {
+        villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY).ifPresent(economy -> {
+            if (!economy.isInitialized()) {
+                return;
             }
+
+            String professionId = professionId(villager);
+            long gameTime = villager.level().getGameTime();
+            int refreshTicks = EconomyParser.refreshTicksForProfession(professionId);
+            if (gameTime - economy.getLastRefreshTick() < refreshTicks) {
+                return;
+            }
+
+            economy.resetBalance(EconomyParser.startingBalanceForProfession(professionId));
+            economy.clearTradeUses();
+            VillagerTradeRollCache.clear(villager.getUUID());
+            economy.setLastRefreshTick(gameTime);
+            VillagerTradeService.clearApplied(villager.getUUID());
+            VillagerTradeService.applyTrades(villager);
         });
     }
 
-    public static int getVillagerBalance(Player player, Villager villager) {
-        UUID entityId = villager.getUUID();
-        String professionId = professionId(villager);
-        int starting = EconomyParser.startingBalanceForProfession(professionId);
+    public static int getVillagerBalance(AbstractVillager villager) {
+        ensureVillagerEconomy(villager);
+        return villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY)
+                .map(IVillagerEconomy::getBalance)
+                .orElse(EconomyParser.startingBalanceForProfession(professionId(villager)));
+    }
 
-        return player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE)
-                .map(cap -> {
-                    cap.ensureEntity(entityId, professionId, starting, player.level().getGameTime());
-                    return cap.getBalance(entityId);
-                })
-                .orElse(starting);
+    public static IVillagerEconomy getVillagerEconomy(AbstractVillager villager) {
+        ensureVillagerEconomy(villager);
+        return villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY).orElse(null);
     }
 
     public static void onEconomyConfigReload(MinecraftServer server) {
         if (server == null) {
             return;
         }
-        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE)
-                    .ifPresent(IPlayerVillagerBalance::applyEconomyConfig);
+        for (ServerLevel level : server.getAllLevels()) {
+            AABB bounds = new AABB(
+                    -3.0E7, level.getMinBuildHeight(), -3.0E7,
+                    3.0E7, level.getMaxBuildHeight(), 3.0E7
+            );
+            for (AbstractVillager villager : level.getEntitiesOfClass(AbstractVillager.class, bounds)) {
+                String professionId = professionId(villager);
+                villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY)
+                        .ifPresent(economy -> {
+                            if (economy.isInitialized()) {
+                                economy.applyEconomyConfig(professionId);
+                                VillagerTradeService.applyTrades(villager);
+                            }
+                        });
+            }
         }
     }
 
@@ -104,20 +106,20 @@ public final class EconomyService {
                 .orElse(0L);
     }
 
-    public static String professionId(Villager villager) {
-        return villager.level().registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.VILLAGER_PROFESSION)
-                .getKey(villager.getVillagerData().getProfession())
-                .toString();
+    public static String professionId(AbstractVillager villager) {
+        if (villager instanceof WanderingTrader) {
+            return "minecraft:wandering_trader";
+        }
+        if (villager instanceof Villager typed) {
+            return typed.level().registryAccess()
+                    .registryOrThrow(net.minecraft.core.registries.Registries.VILLAGER_PROFESSION)
+                    .getKey(typed.getVillagerData().getProfession())
+                    .toString();
+        }
+        return "minecraft:none";
     }
 
-    private static Entity findEntity(MinecraftServer server, UUID entityId) {
-        for (ServerLevel level : server.getAllLevels()) {
-            Entity entity = level.getEntity(entityId);
-            if (entity != null) {
-                return entity;
-            }
-        }
-        return null;
+    public static String professionId(Villager villager) {
+        return professionId((AbstractVillager) villager);
     }
 }

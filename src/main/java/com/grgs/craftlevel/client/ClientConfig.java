@@ -78,6 +78,7 @@ public class ClientConfig {
     public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
         load();
         loadGameConfig();
+        CraftLevelTexturesPack.ensurePackSelected(Minecraft.getInstance());
     }
 
     /** Carrega configs de gameplay no cliente (necessário para scaling local). */

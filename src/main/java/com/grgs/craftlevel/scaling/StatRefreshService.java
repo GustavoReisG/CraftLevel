@@ -87,18 +87,22 @@ public final class StatRefreshService {
 
     /** Aplica todos os attributes do wiring da entidade. */
     public static void refresh(LivingEntity entity, int level) {
-        refresh(entity, level, true);
+        refresh(entity, level, true, false);
     }
 
     /** Aplica attributes; {@code fullHealOnMaxHealth=false} preserva HP ao mudar o máximo (ex.: equipamento). */
     public static void refresh(LivingEntity entity, int level, boolean fullHealOnMaxHealth) {
+        refresh(entity, level, fullHealOnMaxHealth, false);
+    }
+
+    private static void refresh(LivingEntity entity, int level, boolean fullHealOnMaxHealth, boolean silent) {
         if (level <= 0) {
             return;
         }
 
         StatWiringConfig wiring = resolveWiring(entity);
         wiring.attribute().forEach((attributeId, scalerName) ->
-                applyAttribute(entity, attributeId, scalerName, level, fullHealOnMaxHealth));
+                applyAttribute(entity, attributeId, scalerName, level, fullHealOnMaxHealth, silent));
     }
 
     /** True se algum attribute wired usa escalador com {@code include_modifiers}. */
@@ -126,6 +130,10 @@ public final class StatRefreshService {
         refresh(mob, level);
     }
 
+    public static void refreshMob(Mob mob, int level, boolean silent) {
+        refresh(mob, level, true, silent);
+    }
+
     /** Player usa player_stats; mob usa override isolado ou mob_stats default. */
     private static StatWiringConfig resolveWiring(LivingEntity entity) {
         if (entity instanceof Player) {
@@ -147,7 +155,8 @@ public final class StatRefreshService {
             String attributeId,
             String scalerName,
             int level,
-            boolean fullHealOnMaxHealth
+            boolean fullHealOnMaxHealth,
+            boolean silent
     ) {
         ScalingDefinition def = ScalingRegistry.require(scalerName, "attribute:" + attributeId);
         if (def == null) {
@@ -187,17 +196,19 @@ public final class StatRefreshService {
                 ));
             }
 
-            DebugLog.info(
-                    "Attribute {} em {}: escalador={} base={} total={} modifier={} op={} final={}",
-                    attributeId,
-                    describeEntity(entity),
-                    scalerName,
-                    currentBase,
-                    currentTotal,
-                    modifierSpec.amount(),
-                    modifierSpec.operation(),
-                    instance.getValue()
-            );
+            if (!silent) {
+                DebugLog.info(
+                        "Attribute {} em {}: escalador={} base={} total={} modifier={} op={} final={}",
+                        attributeId,
+                        describeEntity(entity),
+                        scalerName,
+                        currentBase,
+                        currentTotal,
+                        modifierSpec.amount(),
+                        modifierSpec.operation(),
+                        instance.getValue()
+                );
+            }
 
             if (attr == Attributes.MAX_HEALTH) {
                 float newMax = (float) instance.getValue();

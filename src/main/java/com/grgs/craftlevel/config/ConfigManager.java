@@ -3,6 +3,9 @@ package com.grgs.craftlevel.config;
 import com.google.gson.*;
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.util.DebugLog;
+import com.grgs.craftlevel.villager.ProfessionLanguages;
+import com.grgs.craftlevel.villager.VillagerTradeCatalog;
+import com.grgs.craftlevel.villager.VillagerTradeService;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -475,8 +478,8 @@ public class ConfigManager {
           "anchor": "bottom_left",
           "x": 2,
           "y": -2,
-          "scale": 0.135,
-          "font_scale": 0.7
+          "scale": 0.11,
+          "font_scale": 0.6
         },
         "level_circle": {
           "anchor": "top_left",
@@ -545,6 +548,7 @@ public class ConfigManager {
     public static JsonObject mobOverrides = new JsonObject();
     public static JsonObject mobLevels = new JsonObject();
     public static JsonObject economy = new JsonObject();
+    public static JsonObject villager = new JsonObject();
 
     // =========================================================
     // INIT
@@ -554,7 +558,7 @@ public class ConfigManager {
     public static void onServerStarting(ServerStartingEvent event) {
         try {
             loadAllConfigs(event.getServer().getServerDirectory().toPath().resolve("config/craftlevel"));
-        } catch (IOException e) {
+        } catch (Exception e) {
             CraftLevel.LOGGER.error("[CraftLevel] Failed to load config!", e);
         }
     }
@@ -570,6 +574,7 @@ public class ConfigManager {
         loadMobOverrides();
         loadMobLevels();
         loadEconomy();
+        loadVillager();
 
         ConfigParser.parseConfig(config);
         ConfigParser.parsePlayerStats(playerStats);
@@ -577,6 +582,9 @@ public class ConfigManager {
         ConfigParser.parseMobOverrides(mobOverrides);
         ConfigParser.parseMobLevels(mobLevels);
         EconomyParser.parseEconomy(economy);
+        VillagerTradeCatalog.load(villager);
+        VillagerTradeService.onReload();
+        ProfessionLanguages.refresh();
 
         CraftLevel.LOGGER.info("[CraftLevel] Config loaded from {}", configDir);
         DebugLog.info(
@@ -623,9 +631,35 @@ public class ConfigManager {
         economy = loadOrCreate("economy.json", DEFAULT_ECONOMY);
     }
 
+    private static void loadVillager() {
+        try {
+            Path file = configDir.resolve("villager.json");
+            if (!Files.exists(file)) {
+                copyDefaultVillager(file);
+            }
+            villager = readJson(file);
+        } catch (Exception e) {
+            CraftLevel.LOGGER.error("[CraftLevel] Failed to load villager.json, using empty defaults", e);
+            villager = new JsonObject();
+            villager.add("professions", new JsonObject());
+            villager.add("trades", new JsonObject());
+        }
+    }
+
     // =========================================================
     // HELPERS
     // =========================================================
+
+    private static void copyDefaultVillager(Path target) throws IOException {
+        try (InputStream stream = ConfigManager.class.getClassLoader()
+                .getResourceAsStream("assets/craftlevel/defaults/villager.json")) {
+            if (stream == null) {
+                Files.writeString(target, "{\"professions\":{},\"trades\":{}}");
+                return;
+            }
+            Files.copy(stream, target, StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
 
     /** Cria o arquivo com defaults se não existir, depois lê o JSON. */
     private static JsonObject loadOrCreate(String fileName, String defaultContent) throws IOException {

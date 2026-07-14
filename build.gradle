@@ -77,6 +77,8 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${project.buildDir}/createSrgToMcp/output.srg"
 
+            jvmArgs '-Xmx6G', '-Xms2G'
+
             mods {
                 "${mod_id}" {
                     source sourceSets.main

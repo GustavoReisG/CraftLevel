@@ -1,36 +1,36 @@
 package com.grgs.craftlevel.villager;
 
-import com.grgs.craftlevel.capability.PlayerVillagerBalanceProvider;
+import com.grgs.craftlevel.capability.VillagerEconomyProvider;
 import com.grgs.craftlevel.economy.EconomyService;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-
-import java.util.UUID;
 
 /** Valida se o villager tem saldo suficiente antes da troca completar. */
 public final class VillagerTradeValidator {
 
     private VillagerTradeValidator() {}
 
-    public static boolean canCompleteTrade(ServerPlayer player, Villager villager, MerchantOffer offer) {
+    public static boolean canCompleteTrade(AbstractVillager villager, MerchantOffer offer) {
         if (offer == null) {
             return true;
         }
 
-        EconomyService.ensurePlayerEconomy(player);
-        EconomyService.trackVillagerEntity(player, villager, player.level().getGameTime());
+        EconomyService.ensureVillagerEconomy(villager);
 
         int emeraldAmount = emeraldValue(offer);
         if (emeraldAmount <= 0 || !playerSellsToVillager(offer)) {
             return true;
         }
 
-        UUID entityId = villager.getUUID();
-        return player.getCapability(PlayerVillagerBalanceProvider.VILLAGER_BALANCE)
-                .map(cap -> cap.getBalance(entityId) >= emeraldAmount)
+        return villager.getCapability(VillagerEconomyProvider.VILLAGER_ECONOMY)
+                .map(cap -> cap.getBalance() >= emeraldAmount)
                 .orElse(false);
+    }
+
+    public static boolean canCompleteTrade(ServerPlayer player, AbstractVillager villager, MerchantOffer offer) {
+        return canCompleteTrade(villager, offer);
     }
 
     static boolean playerBuysFromVillager(MerchantOffer offer) {

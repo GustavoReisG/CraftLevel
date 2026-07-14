@@ -80,6 +80,23 @@ public class PacketHandler {
                 SyncVillagerBalancePacket::decode,
                 SyncVillagerBalancePacket::handle
         );
+
+        CHANNEL.registerMessage(
+                7,
+                VillagerResortTradesPacket.class,
+                VillagerResortTradesPacket::encode,
+                VillagerResortTradesPacket::decode,
+                VillagerResortTradesPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        CHANNEL.registerMessage(
+                8,
+                SyncMerchantOffersPacket.class,
+                SyncMerchantOffersPacket::encode,
+                SyncMerchantOffersPacket::decode,
+                SyncMerchantOffersPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

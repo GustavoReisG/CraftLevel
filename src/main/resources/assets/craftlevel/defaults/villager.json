@@ -1,0 +1,6927 @@
+{
+  "professions": {
+    "craftlevel:reforger": {
+      "texture": "reforger",
+      "station": "apotheosis:reforge_table"
+    }
+  },
+  "trades": {
+    "minecraft:farmer": [
+      {
+        "input1": {
+          "item": "minecraft:wheat",
+          "min": 20,
+          "max": 20,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:potato",
+          "min": 26,
+          "max": 26,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:carrot",
+          "min": 22,
+          "max": 22,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:beetroot",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bread",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:pumpkin",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pumpkin_pie",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:apple",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cookie",
+          "min": 18,
+          "max": 18,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:melon",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cake",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:enchanted_book",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:golden_carrot",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:glistering_melon_slice",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:fisherman": [
+      {
+        "input1": {
+          "item": "minecraft:string",
+          "min": 20,
+          "max": 20,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:coal",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:cod",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cooked_cod",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cod_bucket",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:cod",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:salmon",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cooked_salmon",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:campfire",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:salmon",
+          "min": 13,
+          "max": 13,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:fishing_rod",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:tropical_fish",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:pufferfish",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "#minecraft:wool",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:shepherd": [
+      {
+        "input1": {
+          "item": "#minecraft:wool",
+          "min": 18,
+          "max": 18,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:shears",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:white_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:gray_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:black_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:light_blue_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:lime_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "#minecraft:wool",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "#minecraft:wool_carpets",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:yellow_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:light_gray_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:orange_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:red_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:pink_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:white_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:yellow_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:black_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brown_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cyan_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:gray_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:green_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_blue_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_gray_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lime_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:magenta_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:orange_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pink_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:purple_bed",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:brown_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:purple_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:blue_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:green_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:magenta_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:cyan_dye",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:white_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_blue_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pink_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:green_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lime_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:gray_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:black_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:purple_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:magenta_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cyan_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brown_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:yellow_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:orange_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_gray_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:painting",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:fletcher": [
+      {
+        "input1": {
+          "item": "minecraft:stick",
+          "min": 32,
+          "max": 32,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:arrow",
+          "min": 16,
+          "max": 16,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:gravel",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:flint",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:flint",
+          "min": 26,
+          "max": 26,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bow",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:string",
+          "min": 14,
+          "max": 14,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:crossbow",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:feather",
+          "min": 24,
+          "max": 24,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bow",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:tripwire_hook",
+          "min": 8,
+          "max": 8,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:crossbow",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:arrow",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:tipped_arrow",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:librarian": [
+      {
+        "input1": {
+          "item": "minecraft:paper",
+          "min": 24,
+          "max": 24,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:enchanted_book",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bookshelf",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:book",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lantern",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:ink_sac",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:glass",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:writable_book",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:clock",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:compass",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 20,
+          "max": 20,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:name_tag",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:cartographer": [
+      {
+        "input1": {
+          "item": "minecraft:paper",
+          "min": 24,
+          "max": 24,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:map",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:glass_pane",
+          "min": 11,
+          "max": 11,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 13,
+          "max": 13,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:filled_map",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:compass",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 14,
+          "max": 14,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:filled_map",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:item_frame",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:white_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_blue_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pink_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:green_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lime_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:gray_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:black_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:purple_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:magenta_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cyan_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brown_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:yellow_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:orange_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_gray_banner",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 8,
+          "max": 8,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:globe_banner_pattern",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:cleric": [
+      {
+        "input1": {
+          "item": "minecraft:rotten_flesh",
+          "min": 32,
+          "max": 32,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:redstone",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:gold_ingot",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lapis_lazuli",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:rabbit_foot",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:glowstone",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:scute",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:glass_bottle",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:ender_pearl",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:nether_wart",
+          "min": 22,
+          "max": 22,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:experience_bottle",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:armorer": [
+      {
+        "input1": {
+          "item": "minecraft:coal",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_leggings",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_boots",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_helmet",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_chestplate",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:iron_ingot",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 36,
+          "max": 36,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bell",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:chainmail_boots",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:chainmail_leggings",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:lava_bucket",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:diamond",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:chainmail_helmet",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:chainmail_chestplate",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:shield",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 14,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_leggings",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 8,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_boots",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 8,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_helmet",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 16,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_chestplate",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:weaponsmith": [
+      {
+        "input1": {
+          "item": "minecraft:coal",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_axe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_sword",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:iron_ingot",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 36,
+          "max": 36,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bell",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:flint",
+          "min": 24,
+          "max": 24,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:diamond",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 12,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_axe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 8,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_sword",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:toolsmith": [
+      {
+        "input1": {
+          "item": "minecraft:coal",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:stone_axe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:stone_shovel",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:stone_pickaxe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:stone_hoe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:iron_ingot",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 36,
+          "max": 36,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bell",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:flint",
+          "min": 30,
+          "max": 30,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_axe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_shovel",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:iron_pickaxe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_hoe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:diamond",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 12,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_axe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_shovel",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 13,
+          "max": 64,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:diamond_pickaxe",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:butcher": [
+      {
+        "input1": {
+          "item": "minecraft:chicken",
+          "min": 14,
+          "max": 14,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:porkchop",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:rabbit",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:rabbit_stew",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:coal",
+          "min": 15,
+          "max": 15,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cooked_porkchop",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cooked_chicken",
+          "min": 8,
+          "max": 8,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:mutton",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:beef",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:dried_kelp_block",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:sweet_berries",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:leatherworker": [
+      {
+        "input1": {
+          "item": "minecraft:leather",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:leather_leggings",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 7,
+          "max": 7,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:leather_chestplate",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:flint",
+          "min": 26,
+          "max": 26,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:leather_helmet",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:leather_boots",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:rabbit_hide",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:scute",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:leather_horse_armor",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:saddle",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:mason": [
+      {
+        "input1": {
+          "item": "minecraft:clay_ball",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brick",
+          "min": 10,
+          "max": 10,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:stone",
+          "min": 20,
+          "max": 20,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:chiseled_stone_bricks",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:granite",
+          "min": 16,
+          "max": 16,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:andesite",
+          "min": 16,
+          "max": 16,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:diorite",
+          "min": 16,
+          "max": 16,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:dripstone_block",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:polished_andesite",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:polished_diorite",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:polished_granite",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:quartz",
+          "min": 12,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "#minecraft:terracotta",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "#minecraft:glazed_terracotta",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:quartz_pillar",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:quartz_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "minecraft:wandering_trader": [
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:sea_pickle",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:slime_ball",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:glowstone",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:nautilus_shell",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:fern",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:sugar_cane",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pumpkin",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:kelp",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cactus",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:dandelion",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:poppy",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_orchid",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:allium",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:azure_bluet",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_tulip",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:orange_tulip",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:white_tulip",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pink_tulip",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:oxeye_daisy",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cornflower",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lily_of_the_valley",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:wheat_seeds",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:beetroot_seeds",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pumpkin_seeds",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:melon_seeds",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:acacia_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:birch_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:dark_oak_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:jungle_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:oak_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:spruce_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cherry_sapling",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:mangrove_propagule",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:white_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pink_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:black_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:green_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_gray_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:magenta_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:yellow_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:gray_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:purple_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:light_blue_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lime_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:orange_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brown_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:cyan_dye",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brain_coral_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:bubble_coral_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:fire_coral_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:horn_coral_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:tube_coral_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:vine",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:brown_mushroom",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_mushroom",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:lily_pad",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:small_dripleaf",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:sand",
+          "min": 8,
+          "max": 8,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:red_sand",
+          "min": 4,
+          "max": 4,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pointed_dripstone",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:rooted_dirt",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:moss_block",
+          "min": 2,
+          "max": 2,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:tropical_fish_bucket",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 5,
+          "max": 5,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:pufferfish_bucket",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:packed_ice",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 6,
+          "max": 6,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:blue_ice",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:gunpowder",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      },
+      {
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "output": {
+          "item": "minecraft:podzol",
+          "min": 3,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": []
+        },
+        "limit": 0
+      }
+    ],
+    "craftlevel:reforger": []
+  }
+}

@@ -55,8 +55,15 @@ public final class MerchantMenuHelper {
     }
 
     public static MerchantOffer getSelectedOffer(MerchantMenu menu) {
-        MerchantOffers offers = menu.getOffers();
         MerchantContainer container = getTradeContainer(menu);
+        if (container != null) {
+            MerchantOffer active = container.getActiveOffer();
+            if (active != null) {
+                return active;
+            }
+        }
+
+        MerchantOffers offers = menu.getOffers();
         if (offers == null || container == null || offers.isEmpty()) {
             return null;
         }
