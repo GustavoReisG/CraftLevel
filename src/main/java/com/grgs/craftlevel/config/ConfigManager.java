@@ -24,8 +24,8 @@ public class ConfigManager {
 
     /** Nomes dos arquivos JSON (sem extensão) usados na tela de config. */
     public static final String[] CONFIG_FILES = {
-            "config",
             "client",
+            "config",
             "player_stats",
             "mob_stats",
             "mob_overrides",
@@ -486,7 +486,8 @@ public class ConfigManager {
           "x": 2,
           "y": 2,
           "scale": 0.15,
-          "font_scale": 1.0
+          "font_scale": 1.0,
+          "font_y_offset": -2.0
         },
         "health_bar": {
           "enabled": true,
@@ -515,6 +516,17 @@ public class ConfigManager {
           "scale": 0.7,
           "font_scale": 1.0,
           "icon_side": "left"
+        },
+        "mob_focus": {
+          "anchor": "top_left",
+          "x": 50,
+          "y": 8,
+          "scale": 0.7,
+          "font_scale": 0.6,
+          "direction": "portrait_first",
+          "mob_yaw": 0.6,
+          "head_yaw": 0.0,
+          "camera_pitch": -0.2
         }
       }
     }

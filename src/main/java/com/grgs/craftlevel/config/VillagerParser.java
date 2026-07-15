@@ -51,9 +51,8 @@ public final class VillagerParser {
             }
             JsonObject obj = element.getAsJsonObject();
             String fullId = ProfessionIds.fullIdFromInput(id);
-            String path = ProfessionIds.pathFromFullId(fullId);
             String station = readString(obj, "station", "");
-            result.put(fullId, new VillagerProfessionDef(path, station));
+            result.put(fullId, new VillagerProfessionDef(station));
         });
         return result;
     }
@@ -163,7 +162,6 @@ public final class VillagerParser {
         JsonObject professions = new JsonObject();
         data.professions().forEach((id, def) -> {
             JsonObject obj = new JsonObject();
-            obj.addProperty("texture", ProfessionIds.pathFromFullId(id));
             obj.addProperty("station", def.station());
             professions.add(id, obj);
         });

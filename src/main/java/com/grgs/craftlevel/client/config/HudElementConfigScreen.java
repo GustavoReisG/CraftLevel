@@ -18,7 +18,8 @@ public class HudElementConfigScreen extends Screen {
         LEVEL_CIRCLE("Level Circle"),
         HEALTH_BAR("Health Bar"),
         HUNGER_BAR("Hunger Bar"),
-        EMERALDS("Emeralds");
+        EMERALDS("Emeralds"),
+        MOB_FOCUS("Mob Focus");
 
         private final String title;
 
@@ -37,12 +38,17 @@ public class HudElementConfigScreen extends Screen {
     private CycleButton<String> anchorButton;
     private CycleButton<Boolean> enabledButton;
     private CycleButton<String> iconSideButton;
+    private CycleButton<String> directionButton;
     private EditBox xField;
     private EditBox yField;
     private EditBox scaleField;
     private EditBox fontScaleField;
+    private EditBox fontYOffsetField;
     private EditBox marginField;
     private EditBox mountHealthMarginField;
+    private EditBox mobYawField;
+    private EditBox headYawField;
+    private EditBox cameraPitchField;
 
     private int rowEnabled = -1;
     private int rowAnchor;
@@ -50,7 +56,22 @@ public class HudElementConfigScreen extends Screen {
     private int rowY;
     private int rowScale;
     private int rowFontScale = -1;
+    private int rowFontYOffset = -1;
     private int rowIconSide = -1;
+    private int rowDirection = -1;
+    private int rowMobYaw = -1;
+    private int rowHeadYaw = -1;
+    private int rowCameraPitch = -1;
+    private int colAnchor;
+    private int colX;
+    private int colY;
+    private int colScale;
+    private int colFontScale = -1;
+    private int colFontYOffset = -1;
+    private int colDirection = -1;
+    private int colMobYaw = -1;
+    private int colHeadYaw = -1;
+    private int colCameraPitch = -1;
     private int rowMargin = -1;
     private int rowMountHealthMargin = -1;
 
@@ -63,10 +84,10 @@ public class HudElementConfigScreen extends Screen {
     @Override
     protected void init() {
         ClientConfigEditorState state = ClientConfigPersistence.session();
-        int row = 0;
+        int nextRow = 0;
 
         if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS) {
-            rowEnabled = row;
+            rowEnabled = nextRow;
             boolean enabled = switch (element) {
                 case HEALTH_BAR -> state.resolvedHealthBar().enabled();
                 case HUNGER_BAR -> state.resolvedHungerBar().enabled();
@@ -82,9 +103,9 @@ public class HudElementConfigScreen extends Screen {
             enabledButton = CycleButton.onOffBuilder()
                     .withInitialValue(enabled)
                     .displayOnlyValue()
-                    .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(label));
-            ConfigScreenLayout.positionField(this, row++, enabledButton);
-            addRenderableWidget(enabledButton);
+                    .create(0, 0, fieldWidth(), 20, Component.literal(label));
+            placeField(enabledButton, 0, rowEnabled);
+            nextRow++;
         }
 
         ClientConfigEditorState.HudElementValues values = switch (element) {
@@ -93,56 +114,87 @@ public class HudElementConfigScreen extends Screen {
             case HEALTH_BAR -> {
                 ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
                 yield new ClientConfigEditorState.HudElementValues(
-                        healthBar.anchor(), healthBar.x(), healthBar.y(), healthBar.scale(), healthBar.fontScale());
+                        healthBar.anchor(), healthBar.x(), healthBar.y(), healthBar.scale(), healthBar.fontScale(), null);
             }
             case HUNGER_BAR -> {
                 ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
                 yield new ClientConfigEditorState.HudElementValues(
-                        hungerBar.anchor(), hungerBar.x(), hungerBar.y(), hungerBar.scale(), hungerBar.fontScale());
+                        hungerBar.anchor(), hungerBar.x(), hungerBar.y(), hungerBar.scale(), hungerBar.fontScale(), null);
             }
             case EMERALDS -> {
                 ClientConfigEditorState.EmeraldHudValues emeralds = state.resolvedEmeralds();
                 yield new ClientConfigEditorState.HudElementValues(
-                        emeralds.anchor(), emeralds.x(), emeralds.y(), emeralds.scale(), emeralds.fontScale());
+                        emeralds.anchor(), emeralds.x(), emeralds.y(), emeralds.scale(), emeralds.fontScale(), null);
+            }
+            case MOB_FOCUS -> {
+                ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
+                yield new ClientConfigEditorState.HudElementValues(
+                        mobFocus.anchor(), mobFocus.x(), mobFocus.y(), mobFocus.scale(), mobFocus.fontScale(), null);
             }
         };
 
-        rowAnchor = row;
+        rowAnchor = assignRow(nextRow, 0);
+        colAnchor = 0;
 
         String anchor = values.anchor() != null ? values.anchor() : ClientConfig.ANCHORS[0];
         anchorButton = CycleButton.<String>builder(Component::literal)
                 .withValues(ClientConfig.ANCHORS)
                 .withInitialValue(findAnchor(anchor))
                 .displayOnlyValue()
-                .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
-        ConfigScreenLayout.positionField(this, row++, anchorButton);
-        addRenderableWidget(anchorButton);
+                .create(0, 0, fieldWidth(), 20, Component.empty());
+        placeField(anchorButton, colAnchor, rowAnchor);
+        if (!twoColumnLayout()) {
+            nextRow++;
+        }
 
-        rowX = row;
+        rowX = assignRow(nextRow, 1);
+        colX = 0;
         xField = newIntField(values.x());
-        ConfigScreenLayout.positionField(this, row++, xField);
-        addRenderableWidget(xField);
+        placeField(xField, colX, rowX);
+        if (!twoColumnLayout()) {
+            nextRow++;
+        }
 
-        rowY = row;
+        rowY = assignRow(nextRow, 2);
+        colY = 0;
         yField = newIntField(values.y());
-        ConfigScreenLayout.positionField(this, row++, yField);
-        addRenderableWidget(yField);
+        placeField(yField, colY, rowY);
+        if (!twoColumnLayout()) {
+            nextRow++;
+        }
 
-        rowScale = row;
+        rowScale = assignRow(nextRow, 3);
+        colScale = 0;
         scaleField = newFloatField(values.scale());
-        ConfigScreenLayout.positionField(this, row++, scaleField);
-        addRenderableWidget(scaleField);
+        placeField(scaleField, colScale, rowScale);
+        if (!twoColumnLayout()) {
+            nextRow++;
+        }
 
         if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR
-                || element == Element.LP_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS) {
-            rowFontScale = row;
+                || element == Element.LP_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS
+                || element == Element.MOB_FOCUS) {
+            rowFontScale = assignRow(nextRow, 4);
+            colFontScale = 0;
             fontScaleField = newFloatField(values.fontScale());
-            ConfigScreenLayout.positionField(this, row++, fontScaleField);
-            addRenderableWidget(fontScaleField);
+            placeField(fontScaleField, colFontScale, rowFontScale);
+            if (!twoColumnLayout()) {
+                nextRow++;
+            }
+        }
+
+        if (element == Element.LEVEL_CIRCLE) {
+            rowFontYOffset = assignRow(nextRow, 5);
+            colFontYOffset = 0;
+            fontYOffsetField = newFloatField(values.fontYOffset());
+            placeField(fontYOffsetField, colFontYOffset, rowFontYOffset);
+            if (!twoColumnLayout()) {
+                nextRow++;
+            }
         }
 
         if (element == Element.EMERALDS) {
-            rowIconSide = row;
+            rowIconSide = nextRow;
             String iconSide = state.resolvedEmeralds().iconSide() != null
                     ? state.resolvedEmeralds().iconSide()
                     : ClientConfigEditorState.ICON_SIDES[1];
@@ -150,38 +202,98 @@ public class HudElementConfigScreen extends Screen {
                     .withValues(ClientConfigEditorState.ICON_SIDES)
                     .withInitialValue(findIconSide(iconSide))
                     .displayOnlyValue()
-                    .create(0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
-            ConfigScreenLayout.positionField(this, row++, iconSideButton);
-            addRenderableWidget(iconSideButton);
+                    .create(0, 0, fieldWidth(), 20, Component.empty());
+            placeField(iconSideButton, 0, rowIconSide);
+            nextRow++;
+        }
+
+        if (element == Element.MOB_FOCUS) {
+            rowDirection = assignRow(nextRow, 0);
+            colDirection = 1;
+            String direction = state.resolvedMobFocus().direction() != null
+                    ? state.resolvedMobFocus().direction()
+                    : ClientConfigEditorState.MOB_FOCUS_DIRECTIONS[0];
+            directionButton = CycleButton.<String>builder(Component::literal)
+                    .withValues(ClientConfigEditorState.MOB_FOCUS_DIRECTIONS)
+                    .withInitialValue(findDirection(direction))
+                    .displayOnlyValue()
+                    .create(0, 0, fieldWidth(), 20, Component.empty());
+            placeField(directionButton, colDirection, rowDirection);
+
+            ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
+            rowMobYaw = assignRow(nextRow, 1);
+            colMobYaw = 1;
+            mobYawField = newFloatField(mobFocus.mobYaw());
+            placeField(mobYawField, colMobYaw, rowMobYaw);
+
+            rowHeadYaw = assignRow(nextRow, 2);
+            colHeadYaw = 1;
+            headYawField = newFloatField(mobFocus.headYaw());
+            placeField(headYawField, colHeadYaw, rowHeadYaw);
+
+            rowCameraPitch = assignRow(nextRow, 3);
+            colCameraPitch = 1;
+            cameraPitchField = newFloatField(mobFocus.cameraPitch());
+            placeField(cameraPitchField, colCameraPitch, rowCameraPitch);
         }
 
         if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR) {
-            rowMargin = row;
+            rowMargin = nextRow;
             Integer margin = element == Element.HEALTH_BAR
                     ? state.resolvedHealthBar().armorMargin()
                     : state.resolvedHungerBar().breathMargin();
             marginField = newIntField(margin);
-            ConfigScreenLayout.positionField(this, row++, marginField);
-            addRenderableWidget(marginField);
+            placeField(marginField, 0, rowMargin);
+            nextRow++;
         }
 
         if (element == Element.HUNGER_BAR) {
-            rowMountHealthMargin = row;
+            rowMountHealthMargin = nextRow;
             Integer mountMargin = state.resolvedHungerBar().mountHealthMargin();
             if (mountMargin == null) {
                 mountMargin = state.resolvedHungerBar().breathMargin();
             }
             mountHealthMarginField = newIntField(mountMargin);
-            ConfigScreenLayout.positionField(this, row++, mountHealthMarginField);
-            addRenderableWidget(mountHealthMarginField);
+            placeField(mountHealthMarginField, 0, rowMountHealthMargin);
         }
 
         addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::save));
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 
+    private boolean twoColumnLayout() {
+        return element == Element.MOB_FOCUS;
+    }
+
+    private int assignRow(int singleColumnRow, int twoColumnRow) {
+        return twoColumnLayout() ? twoColumnRow : singleColumnRow;
+    }
+
+    private int fieldWidth() {
+        return twoColumnLayout()
+                ? ConfigScreenLayout.twoColumnFieldWidth(this)
+                : ConfigScreenLayout.fieldWidth();
+    }
+
+    private void placeField(net.minecraft.client.gui.components.AbstractWidget widget, int column, int row) {
+        if (twoColumnLayout()) {
+            ConfigScreenLayout.positionFieldTwoColumn(this, column, row, widget);
+        } else {
+            ConfigScreenLayout.positionField(this, row, widget);
+        }
+        addRenderableWidget(widget);
+    }
+
+    private void drawFieldLabel(GuiGraphics graphics, int column, int row, String label) {
+        if (twoColumnLayout()) {
+            ConfigScreenLayout.renderLabelTwoColumn(this, graphics, column, row, label);
+        } else {
+            ConfigScreenLayout.renderLabel(this, graphics, row, label);
+        }
+    }
+
     private EditBox newIntField(Integer value) {
-        EditBox box = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
+        EditBox box = new EditBox(font, 0, 0, fieldWidth(), 20, Component.empty());
         if (value != null) {
             box.setValue(String.valueOf(value));
         }
@@ -191,7 +303,7 @@ public class HudElementConfigScreen extends Screen {
     }
 
     private EditBox newFloatField(Float value) {
-        EditBox box = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
+        EditBox box = new EditBox(font, 0, 0, fieldWidth(), 20, Component.empty());
         if (value != null) {
             box.setValue(String.valueOf(value));
         }
@@ -218,13 +330,23 @@ public class HudElementConfigScreen extends Screen {
         return ClientConfigEditorState.ICON_SIDES[1];
     }
 
+    private static String findDirection(String direction) {
+        for (String option : ClientConfigEditorState.MOB_FOCUS_DIRECTIONS) {
+            if (option.equals(direction)) {
+                return option;
+            }
+        }
+        return ClientConfigEditorState.MOB_FOCUS_DIRECTIONS[0];
+    }
+
     private void save() {
         ClientConfigEditorState.HudElementValues values = new ClientConfigEditorState.HudElementValues(
                 anchorButton.getValue(),
                 ConfigScalingForm.parseOptionalInt(xField),
                 ConfigScalingForm.parseOptionalInt(yField),
                 parseOptionalFloat(scaleField),
-                fontScaleField != null ? parseOptionalFloat(fontScaleField) : null
+                fontScaleField != null ? parseOptionalFloat(fontScaleField) : null,
+                fontYOffsetField != null ? parseOptionalFloat(fontYOffsetField) : null
         );
 
         ClientConfigEditorState session = ClientConfigPersistence.session();
@@ -254,6 +376,18 @@ public class HudElementConfigScreen extends Screen {
                     mountHealthMarginField != null
                             ? ConfigScalingForm.parseOptionalInt(mountHealthMarginField)
                             : null
+            ));
+        } else if (element == Element.MOB_FOCUS) {
+            session.setMobFocus(new ClientConfigEditorState.MobFocusValues(
+                    anchorButton.getValue(),
+                    values.x(),
+                    values.y(),
+                    values.scale(),
+                    values.fontScale(),
+                    directionButton != null ? directionButton.getValue() : "data_first",
+                    mobYawField != null ? parseOptionalFloat(mobYawField) : null,
+                    headYawField != null ? parseOptionalFloat(headYawField) : null,
+                    cameraPitchField != null ? parseOptionalFloat(cameraPitchField) : null
             ));
         } else {
             session.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
@@ -297,24 +431,39 @@ public class HudElementConfigScreen extends Screen {
                 case EMERALDS -> "Enable Emerald HUD";
                 default -> "Enable";
             };
-            ConfigScreenLayout.renderLabel(this, graphics, rowEnabled, enabledLabel);
+            drawFieldLabel(graphics, 0, rowEnabled, enabledLabel);
         }
-        ConfigScreenLayout.renderLabel(this, graphics, rowAnchor, "Anchor");
-        ConfigScreenLayout.renderLabel(this, graphics, rowX, "Pos X");
-        ConfigScreenLayout.renderLabel(this, graphics, rowY, "Pos Y");
-        ConfigScreenLayout.renderLabel(this, graphics, rowScale, "Scale");
+        drawFieldLabel(graphics, colAnchor, rowAnchor, "Anchor");
+        drawFieldLabel(graphics, colX, rowX, "Pos X");
+        drawFieldLabel(graphics, colY, rowY, "Pos Y");
+        drawFieldLabel(graphics, colScale, rowScale, "Scale");
         if (rowFontScale >= 0) {
-            ConfigScreenLayout.renderLabel(this, graphics, rowFontScale, "Font Scale");
+            drawFieldLabel(graphics, colFontScale, rowFontScale, "Font Scale");
+        }
+        if (rowFontYOffset >= 0) {
+            drawFieldLabel(graphics, colFontYOffset, rowFontYOffset, "Text Y Offset");
         }
         if (rowIconSide >= 0) {
-            ConfigScreenLayout.renderLabel(this, graphics, rowIconSide, "Icon Side");
+            drawFieldLabel(graphics, 0, rowIconSide, "Icon Side");
+        }
+        if (rowDirection >= 0) {
+            drawFieldLabel(graphics, colDirection, rowDirection, "Direction");
+        }
+        if (rowMobYaw >= 0) {
+            drawFieldLabel(graphics, colMobYaw, rowMobYaw, "Mob Yaw");
+        }
+        if (rowHeadYaw >= 0) {
+            drawFieldLabel(graphics, colHeadYaw, rowHeadYaw, "Head Yaw");
+        }
+        if (rowCameraPitch >= 0) {
+            drawFieldLabel(graphics, colCameraPitch, rowCameraPitch, "Camera Pitch");
         }
         if (rowMargin >= 0) {
             String marginLabel = element == Element.HEALTH_BAR ? "Armor Margin" : "Breath Margin";
-            ConfigScreenLayout.renderLabel(this, graphics, rowMargin, marginLabel);
+            drawFieldLabel(graphics, 0, rowMargin, marginLabel);
         }
         if (rowMountHealthMargin >= 0) {
-            ConfigScreenLayout.renderLabel(this, graphics, rowMountHealthMargin, "Mount Health Margin");
+            drawFieldLabel(graphics, 0, rowMountHealthMargin, "Mount Health Margin");
         }
         super.render(graphics, mouseX, mouseY, partialTick);
     }

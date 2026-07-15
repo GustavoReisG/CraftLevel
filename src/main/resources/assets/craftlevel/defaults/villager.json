@@ -1,7 +1,6 @@
 {
   "professions": {
     "craftlevel:reforger": {
-      "texture": "reforger",
       "station": "apotheosis:reforge_table"
     }
   },

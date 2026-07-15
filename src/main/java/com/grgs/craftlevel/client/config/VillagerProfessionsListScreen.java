@@ -69,7 +69,7 @@ public class VillagerProfessionsListScreen extends Screen {
         String path = "new_profession";
         String fullId = ProfessionIds.fullIdFromInput(path);
         VillagerPersistence.session().setProfession(fullId,
-                new com.grgs.craftlevel.villager.VillagerProfessionDef(path, "minecraft:smithing_table"));
+                new com.grgs.craftlevel.villager.VillagerProfessionDef("minecraft:smithing_table"));
         professionList.addRow(fullId);
     }
 
@@ -216,7 +216,6 @@ public class VillagerProfessionsListScreen extends Screen {
                 if (def != null) {
                     session.removeProfession(fullId);
                     session.setProfession(newId, new com.grgs.craftlevel.villager.VillagerProfessionDef(
-                            path,
                             def.station()
                     ));
                     var trades = session.trades().remove(fullId);

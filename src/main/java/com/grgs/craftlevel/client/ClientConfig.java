@@ -19,46 +19,58 @@ import java.nio.file.*;
 public class ClientConfig {
 
     // Posição e escala da barra de LP
-    public static int hudLpBarX = 0;
-    public static int hudLpBarY = 0;
-    public static float hudLpBarScale = 0.08f;
-    public static float hudLpBarFontScale = 0.5f;
+    public static int hudLpBarX = 2;
+    public static int hudLpBarY = -2;
+    public static float hudLpBarScale = 0.11f;
+    public static float hudLpBarFontScale = 0.6f;
 
     // Posição e escala do círculo de level
-    public static int hudLevelCircleX = 0;
-    public static int hudLevelCircleY = 0;
-    public static float hudLevelCircleScale = 0.1f;
-    public static float hudLevelCircleFontScale = 2.0f;
+    public static int hudLevelCircleX = 2;
+    public static int hudLevelCircleY = 2;
+    public static float hudLevelCircleScale = 0.15f;
+    public static float hudLevelCircleFontScale = 1.0f;
+    public static float hudLevelCircleFontYOffset = -2.0f;
     public static String hudLpBarAnchor = "bottom_left";
     public static String hudLevelCircleAnchor = "top_left";
 
     // Barra de HP customizada
     public static boolean hudHealthBarEnabled = true;
-    public static int hudHealthBarX = -50;
-    public static int hudHealthBarY = -48;
-    public static float hudHealthBarScale = 0.08f;
-    public static float hudHealthBarFontScale = 0.65f;
+    public static int hudHealthBarX = -62;
+    public static int hudHealthBarY = -31;
+    public static float hudHealthBarScale = 0.1f;
+    public static float hudHealthBarFontScale = 0.6f;
     public static String hudHealthBarAnchor = "bottom_center";
     public static int hudHealthBarArmorMargin = 10;
 
     // Barra de fome customizada
     public static boolean hudHungerBarEnabled = true;
-    public static int hudHungerBarX = -50;
-    public static int hudHungerBarY = -15;
-    public static float hudHungerBarScale = 0.08f;
-    public static float hudHungerBarFontScale = 0.5f;
+    public static int hudHungerBarX = 60;
+    public static int hudHungerBarY = -31;
+    public static float hudHungerBarScale = 0.1f;
+    public static float hudHungerBarFontScale = 0.6f;
     public static String hudHungerBarAnchor = "bottom_center";
     public static int hudHungerBarBreathMargin = 10;
-    public static int hudHungerBarMountHealthMargin = 10;
+    public static int hudHungerBarMountHealthMargin = 0;
 
     // HUD de esmeraldas da wallet
     public static boolean hudEmeraldsEnabled = true;
-    public static int hudEmeraldsX = -8;
-    public static int hudEmeraldsY = 8;
-    public static float hudEmeraldsScale = 1.0f;
+    public static int hudEmeraldsX = 2;
+    public static int hudEmeraldsY = -20;
+    public static float hudEmeraldsScale = 0.7f;
     public static float hudEmeraldsFontScale = 1.0f;
-    public static String hudEmeraldsAnchor = "top_right";
-    public static String hudEmeraldsIconSide = "right";
+    public static String hudEmeraldsAnchor = "bottom_left";
+    public static String hudEmeraldsIconSide = "left";
+
+    // Card de Mob Focus (mirar + E)
+    public static String hudMobFocusAnchor = "top_left";
+    public static int hudMobFocusX = 50;
+    public static int hudMobFocusY = 8;
+    public static float hudMobFocusScale = 0.7f;
+    public static float hudMobFocusFontScale = 0.6f;
+    public static String hudMobFocusDirection = "portrait_first";
+    public static float hudMobFocusMobYaw = 0.6f;
+    public static float hudMobFocusHeadYaw = 0.0f;
+    public static float hudMobFocusCameraPitch = -0.2f;
 
     public static final String[] ANCHORS = {
             "top_left",
@@ -126,6 +138,7 @@ public class ClientConfig {
         hudLevelCircleY = levelCircle.y();
         hudLevelCircleScale = levelCircle.scale();
         hudLevelCircleFontScale = levelCircle.fontScale();
+        hudLevelCircleFontYOffset = levelCircle.fontYOffset();
 
         ClientConfigEditorState.HealthBarValues healthBar = state.resolvedHealthBar();
         ClientConfigEditorState.HungerBarValues hungerBar = state.resolvedHungerBar();
@@ -156,17 +169,28 @@ public class ClientConfig {
         hudEmeraldsScale = emeralds.scale();
         hudEmeraldsFontScale = emeralds.fontScale();
         hudEmeraldsIconSide = emeralds.iconSide();
+
+        ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
+        hudMobFocusAnchor = mobFocus.anchor();
+        hudMobFocusX = mobFocus.x();
+        hudMobFocusY = mobFocus.y();
+        hudMobFocusScale = mobFocus.scale();
+        hudMobFocusFontScale = mobFocus.fontScale();
+        hudMobFocusDirection = mobFocus.direction();
+        hudMobFocusMobYaw = mobFocus.mobYaw();
+        hudMobFocusHeadYaw = mobFocus.headYaw();
+        hudMobFocusCameraPitch = mobFocus.cameraPitch();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
     public static void save() {
         ClientConfigEditorState state = ClientConfigEditorState.createDefault();
         state.setLpBar(new ClientConfigEditorState.HudElementValues(
-                hudLpBarAnchor, hudLpBarX, hudLpBarY, hudLpBarScale, hudLpBarFontScale
+                hudLpBarAnchor, hudLpBarX, hudLpBarY, hudLpBarScale, hudLpBarFontScale, null
         ));
         state.setLevelCircle(new ClientConfigEditorState.HudElementValues(
                 hudLevelCircleAnchor, hudLevelCircleX, hudLevelCircleY,
-                hudLevelCircleScale, hudLevelCircleFontScale
+                hudLevelCircleScale, hudLevelCircleFontScale, hudLevelCircleFontYOffset
         ));
         state.setHealthBar(new ClientConfigEditorState.HealthBarValues(
                 hudHealthBarEnabled, hudHealthBarAnchor, hudHealthBarX, hudHealthBarY,
@@ -180,6 +204,11 @@ public class ClientConfig {
         state.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
                 hudEmeraldsEnabled, hudEmeraldsAnchor, hudEmeraldsX, hudEmeraldsY,
                 hudEmeraldsScale, hudEmeraldsFontScale, hudEmeraldsIconSide
+        ));
+        state.setMobFocus(new ClientConfigEditorState.MobFocusValues(
+                hudMobFocusAnchor, hudMobFocusX, hudMobFocusY,
+                hudMobFocusScale, hudMobFocusFontScale, hudMobFocusDirection,
+                hudMobFocusMobYaw, hudMobFocusHeadYaw, hudMobFocusCameraPitch
         ));
         try {
             Path file = getConfigPath();

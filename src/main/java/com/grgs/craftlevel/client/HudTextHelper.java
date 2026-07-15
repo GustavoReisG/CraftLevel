@@ -95,6 +95,19 @@ final class HudTextHelper {
         drawScaledText(graphics, font, Component.literal(text), x, y, scale, color, shadow);
     }
 
+    static void drawScaledComponent(
+            GuiGraphics graphics,
+            Font font,
+            Component text,
+            int x,
+            int y,
+            float scale,
+            int color,
+            boolean shadow
+    ) {
+        drawScaledText(graphics, font, text, x, y, scale, color, shadow);
+    }
+
     static void drawCenteredInBox(
             GuiGraphics graphics,
             Font font,
@@ -107,10 +120,26 @@ final class HudTextHelper {
             int color,
             boolean shadow
     ) {
+        drawCenteredInBox(graphics, font, text, boxX, boxY, boxWidth, boxHeight, fontScale, 0.0f, color, shadow);
+    }
+
+    static void drawCenteredInBox(
+            GuiGraphics graphics,
+            Font font,
+            Component text,
+            int boxX,
+            int boxY,
+            int boxWidth,
+            int boxHeight,
+            float fontScale,
+            float yOffset,
+            int color,
+            boolean shadow
+    ) {
         int textWidth = Math.round(font.width(text) * fontScale);
         int textHeight = Math.round(TEXT_HEIGHT_FACTOR * fontScale);
         int textX = boxX + (boxWidth - textWidth) / 2;
-        int textY = boxY + (boxHeight - textHeight) / 2;
+        int textY = boxY + (boxHeight - textHeight) / 2 + Math.round(yOffset * fontScale);
         drawScaledText(graphics, font, text, textX, textY, fontScale, color, shadow);
     }
 

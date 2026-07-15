@@ -20,20 +20,29 @@ public final class ClientConfigEditorState {
     static final String KEY_HEALTH_BAR = "health_bar";
     static final String KEY_HUNGER_BAR = "hunger_bar";
     static final String KEY_EMERALDS = "emeralds";
+    static final String KEY_MOB_FOCUS = "mob_focus";
     static final String KEY_ENABLED = "enabled";
     static final String KEY_ANCHOR = "anchor";
     static final String KEY_X = "x";
     static final String KEY_Y = "y";
     static final String KEY_SCALE = "scale";
     static final String KEY_FONT_SCALE = "font_scale";
+    static final String KEY_FONT_Y_OFFSET = "font_y_offset";
     static final String KEY_ARMOR_MARGIN = "armor_margin";
     static final String KEY_MOUNT_HEALTH_MARGIN = "mount_health_margin";
     static final String KEY_BREATH_MARGIN = "breath_margin";
     static final String KEY_ICON_SIDE = "icon_side";
+    static final String KEY_DIRECTION = "direction";
+    static final String KEY_MOB_YAW = "mob_yaw";
+    static final String KEY_HEAD_YAW = "head_yaw";
+    static final String KEY_CAMERA_PITCH = "camera_pitch";
 
     public static final String[] ICON_SIDES = {"left", "right"};
+    public static final String[] MOB_FOCUS_DIRECTIONS = {"data_first", "portrait_first"};
 
-    public record HudElementValues(String anchor, Integer x, Integer y, Float scale, Float fontScale) {}
+    public record HudElementValues(
+            String anchor, Integer x, Integer y, Float scale, Float fontScale, Float fontYOffset
+    ) {}
 
     public record HealthBarValues(
             Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale,
@@ -49,6 +58,11 @@ public final class ClientConfigEditorState {
             Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
     ) {}
 
+    public record MobFocusValues(
+            String anchor, Integer x, Integer y, Float scale, Float fontScale, String direction,
+            Float mobYaw, Float headYaw, Float cameraPitch
+    ) {}
+
     private static ClientConfigEditorState defaultTemplate;
 
     private HudElementValues lpBar;
@@ -56,6 +70,7 @@ public final class ClientConfigEditorState {
     private HealthBarValues healthBar;
     private HungerBarValues hungerBar;
     private EmeraldHudValues emeralds;
+    private MobFocusValues mobFocus;
 
     public ClientConfigEditorState() {
         copyFrom(defaultsTemplate());
@@ -89,6 +104,7 @@ public final class ClientConfigEditorState {
         healthBar = mergeHealthBar(readHealthBar(hud), healthBar);
         hungerBar = mergeHungerBar(readHungerBar(hud), hungerBar);
         emeralds = mergeEmeralds(readEmeralds(hud), emeralds);
+        mobFocus = mergeMobFocus(readMobFocus(hud), mobFocus);
     }
 
     public JsonObject toJson() {
@@ -99,6 +115,7 @@ public final class ClientConfigEditorState {
         hud.add(KEY_HEALTH_BAR, writeHealthBar(resolvedHealthBar()));
         hud.add(KEY_HUNGER_BAR, writeHungerBar(resolvedHungerBar()));
         hud.add(KEY_EMERALDS, writeEmeralds(resolvedEmeralds()));
+        hud.add(KEY_MOB_FOCUS, writeMobFocus(resolvedMobFocus()));
         root.add(KEY_HUD, hud);
         return root;
     }
@@ -143,6 +160,14 @@ public final class ClientConfigEditorState {
         emeralds = values;
     }
 
+    public MobFocusValues mobFocus() {
+        return mobFocus;
+    }
+
+    public void setMobFocus(MobFocusValues values) {
+        mobFocus = values;
+    }
+
     public HudElementValues resolvedLpBar() {
         return mergeElement(lpBar, defaultsTemplate().lpBar, true);
     }
@@ -163,6 +188,10 @@ public final class ClientConfigEditorState {
         return mergeEmeralds(emeralds, defaultsTemplate().emeralds);
     }
 
+    public MobFocusValues resolvedMobFocus() {
+        return mergeMobFocus(mobFocus, defaultsTemplate().mobFocus);
+    }
+
     private static ClientConfigEditorState defaultsTemplate() {
         if (defaultTemplate == null) {
             defaultTemplate = parseDefaultTemplate();
@@ -176,11 +205,12 @@ public final class ClientConfigEditorState {
             JsonObject json = JsonParser.parseString(ConfigManager.DEFAULT_CLIENT).getAsJsonObject();
             state.importFrom(json);
         } catch (Exception ignored) {
-            state.lpBar = new HudElementValues("bottom_left", 0, 0, 0.08f, 0.5f);
-            state.levelCircle = new HudElementValues("top_left", 0, 0, 0.1f, 2.0f);
-            state.healthBar = new HealthBarValues(true, "bottom_center", -50, -48, 0.08f, 0.65f, 10);
-            state.hungerBar = new HungerBarValues(true, "bottom_center", -50, -15, 0.08f, 0.5f, 10, 10);
-            state.emeralds = new EmeraldHudValues(true, "top_right", -8, 8, 1.0f, 1.0f, "right");
+            state.lpBar = new HudElementValues("bottom_left", 2, -2, 0.11f, 0.6f, null);
+            state.levelCircle = new HudElementValues("top_left", 2, 2, 0.15f, 1.0f, -2.0f);
+            state.healthBar = new HealthBarValues(true, "bottom_center", -62, -31, 0.1f, 0.6f, 10);
+            state.hungerBar = new HungerBarValues(true, "bottom_center", 60, -31, 0.1f, 0.6f, 10, 0);
+            state.emeralds = new EmeraldHudValues(true, "bottom_left", 2, -20, 0.7f, 1.0f, "left");
+            state.mobFocus = new MobFocusValues("top_left", 50, 8, 0.7f, 0.6f, "portrait_first", 0.6f, 0.0f, -0.2f);
         }
         return state;
     }
@@ -203,6 +233,7 @@ public final class ClientConfigEditorState {
         healthBar = source.healthBar;
         hungerBar = source.hungerBar;
         emeralds = source.emeralds;
+        mobFocus = source.mobFocus;
     }
 
     private static HudElementValues mergeElement(HudElementValues loaded, HudElementValues defaults, boolean withFontScale) {
@@ -213,6 +244,9 @@ public final class ClientConfigEditorState {
                 loaded.scale() != null ? loaded.scale() : defaults.scale(),
                 withFontScale
                         ? (loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale())
+                        : null,
+                withFontScale
+                        ? (loaded.fontYOffset() != null ? loaded.fontYOffset() : defaults.fontYOffset())
                         : null
         );
     }
@@ -254,9 +288,23 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static MobFocusValues mergeMobFocus(MobFocusValues loaded, MobFocusValues defaults) {
+        return new MobFocusValues(
+                loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
+                loaded.x() != null ? loaded.x() : defaults.x(),
+                loaded.y() != null ? loaded.y() : defaults.y(),
+                loaded.scale() != null ? loaded.scale() : defaults.scale(),
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.direction() != null ? loaded.direction() : defaults.direction(),
+                loaded.mobYaw() != null ? loaded.mobYaw() : defaults.mobYaw(),
+                loaded.headYaw() != null ? loaded.headYaw() : defaults.headYaw(),
+                loaded.cameraPitch() != null ? loaded.cameraPitch() : defaults.cameraPitch()
+        );
+    }
+
     private static HudElementValues readElement(JsonObject hud, String elementKey, boolean withFontScale) {
         if (!hud.has(elementKey) || !hud.get(elementKey).isJsonObject()) {
-            return new HudElementValues(null, null, null, null, null);
+            return new HudElementValues(null, null, null, null, null, null);
         }
         JsonObject element = hud.getAsJsonObject(elementKey);
         return new HudElementValues(
@@ -264,7 +312,8 @@ public final class ClientConfigEditorState {
                 readOptionalInt(element, KEY_X),
                 readOptionalInt(element, KEY_Y),
                 readOptionalFloat(element, KEY_SCALE),
-                withFontScale ? readOptionalFloat(element, KEY_FONT_SCALE) : null
+                withFontScale ? readOptionalFloat(element, KEY_FONT_SCALE) : null,
+                withFontScale ? readOptionalFloat(element, KEY_FONT_Y_OFFSET) : null
         );
     }
 
@@ -321,6 +370,24 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static MobFocusValues readMobFocus(JsonObject hud) {
+        if (!hud.has(KEY_MOB_FOCUS) || !hud.get(KEY_MOB_FOCUS).isJsonObject()) {
+            return new MobFocusValues(null, null, null, null, null, null, null, null, null);
+        }
+        JsonObject element = hud.getAsJsonObject(KEY_MOB_FOCUS);
+        return new MobFocusValues(
+                readOptionalString(element, KEY_ANCHOR),
+                readOptionalInt(element, KEY_X),
+                readOptionalInt(element, KEY_Y),
+                readOptionalFloat(element, KEY_SCALE),
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalString(element, KEY_DIRECTION),
+                readOptionalFloat(element, KEY_MOB_YAW),
+                readOptionalFloat(element, KEY_HEAD_YAW),
+                readOptionalFloat(element, KEY_CAMERA_PITCH)
+        );
+    }
+
     private static JsonObject writeElement(HudElementValues values, boolean withFontScale) {
         JsonObject element = new JsonObject();
         element.addProperty(KEY_ANCHOR, values.anchor());
@@ -329,6 +396,9 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_SCALE, values.scale());
         if (withFontScale && values.fontScale() != null) {
             element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        }
+        if (withFontScale && values.fontYOffset() != null) {
+            element.addProperty(KEY_FONT_Y_OFFSET, values.fontYOffset());
         }
         return element;
     }
@@ -367,6 +437,20 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_SCALE, values.scale());
         element.addProperty(KEY_FONT_SCALE, values.fontScale());
         element.addProperty(KEY_ICON_SIDE, values.iconSide());
+        return element;
+    }
+
+    private static JsonObject writeMobFocus(MobFocusValues values) {
+        JsonObject element = new JsonObject();
+        element.addProperty(KEY_ANCHOR, values.anchor());
+        element.addProperty(KEY_X, values.x());
+        element.addProperty(KEY_Y, values.y());
+        element.addProperty(KEY_SCALE, values.scale());
+        element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_DIRECTION, values.direction());
+        element.addProperty(KEY_MOB_YAW, values.mobYaw());
+        element.addProperty(KEY_HEAD_YAW, values.headYaw());
+        element.addProperty(KEY_CAMERA_PITCH, values.cameraPitch());
         return element;
     }
 

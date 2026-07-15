@@ -32,6 +32,13 @@ public class ClientConfigMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 1, emeralds);
         addRenderableWidget(emeralds);
 
+        Button mobFocus = Button.builder(Component.literal("Mob Focus"), btn ->
+                minecraft.setScreen(new HudElementConfigScreen(this, HudElementConfigScreen.Element.MOB_FOCUS)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 2, mobFocus);
+        addRenderableWidget(mobFocus);
+
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 

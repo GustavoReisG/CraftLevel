@@ -2,5 +2,7 @@
   "item.craftlevel.emerald_wallet": "Carteira de Esmeraldas",
   "container.craftlevel.emerald_wallet": "Carteira de Esmeraldas",
   "gui.craftlevel.emerald_wallet.balance": "Saldo: %s",
-  "gui.craftlevel.emerald_wallet.section": "Carteira"
+  "gui.craftlevel.emerald_wallet.section": "Carteira",
+  "key.categories.craftlevel": "Craft Level",
+  "key.craftlevel.pin_mob": "Fixar Card do Mob"
 }

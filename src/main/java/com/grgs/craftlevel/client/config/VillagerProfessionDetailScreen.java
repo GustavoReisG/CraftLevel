@@ -31,7 +31,7 @@ public class VillagerProfessionDetailScreen extends Screen {
     @Override
     protected void init() {
         VillagerProfessionDef def = VillagerPersistence.session().professions().getOrDefault(
-                professionId, new VillagerProfessionDef(professionPath, "minecraft:smithing_table"));
+                professionId, new VillagerProfessionDef("minecraft:smithing_table"));
 
         textureField = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(""));
         textureField.setValue(professionPath + ".png");
@@ -54,15 +54,16 @@ public class VillagerProfessionDetailScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 3, openFolder);
         addRenderableWidget(openFolder);
 
-        addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::save));
-        addRenderableWidget(ConfigScreenLayout.bottomExit(this, this::onClose));
+        addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::saveAndClose));
+        addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 
-    private void save() {
+    private void saveAndClose() {
         VillagerPersistence.session().setProfession(professionId, new VillagerProfessionDef(
-                professionPath,
                 stationField.getValue().trim()
         ));
+        VillagerPersistence.save(minecraft);
+        onClose();
     }
 
     @Override

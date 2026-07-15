@@ -101,7 +101,7 @@ public final class CraftLevelProfessionsDatapack {
                 return;
             }
             ResourceLocation professionId = ResourceLocation.tryParse(id);
-            if (professionId == null || def.station() == null || def.station().isBlank()) {
+            if (professionId == null || !StationBlocks.exists(def.station())) {
                 return;
             }
             poiIds.add(poiIdFor(professionId));

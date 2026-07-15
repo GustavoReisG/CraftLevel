@@ -74,36 +74,46 @@ public class CraftLevelHUD {
         );
 
         float circleScale = ClientConfig.hudLevelCircleScale;
-
-        int circleWidth  = (int)(TEX_CIRCLE_WIDTH  * circleScale);
-        int circleHeight = (int)(TEX_CIRCLE_HEIGHT * circleScale);
+        int displaySize = MobPortraitCapturer.displaySize(circleScale);
 
         int[] circleAnchor = ClientHudLayout.anchorCenter(
-                ClientConfig.hudLevelCircleAnchor, screenWidth, screenHeight, circleWidth, circleHeight);
-        int cx = circleAnchor[0] - (circleWidth  / 2) + ClientConfig.hudLevelCircleX;
-        int cy = circleAnchor[1] - (circleHeight / 2) + ClientConfig.hudLevelCircleY;
+                ClientConfig.hudLevelCircleAnchor, screenWidth, screenHeight, displaySize, displaySize);
+        int cx = circleAnchor[0] - (displaySize / 2) + ClientConfig.hudLevelCircleX;
+        int cy = circleAnchor[1] - (displaySize / 2) + ClientConfig.hudLevelCircleY;
+
+        var graphics = event.getGuiGraphics();
+        graphics.pose().pushPose();
+        graphics.pose().translate(cx, cy, 0);
+        graphics.pose().scale(circleScale, circleScale, 1f);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-
-        event.getGuiGraphics().blit(
-            LEVEL_CIRCLE,
-            cx, cy,
-            circleWidth, circleHeight,
-            0, 0,
-            TEX_CIRCLE_WIDTH, TEX_CIRCLE_HEIGHT,
-            TEX_CIRCLE_WIDTH, TEX_CIRCLE_HEIGHT
+        graphics.blit(
+                LEVEL_CIRCLE,
+                0,
+                0,
+                TEX_CIRCLE_WIDTH,
+                TEX_CIRCLE_HEIGHT,
+                0,
+                0,
+                TEX_CIRCLE_WIDTH,
+                TEX_CIRCLE_HEIGHT,
+                TEX_CIRCLE_WIDTH,
+                TEX_CIRCLE_HEIGHT
         );
-
         RenderSystem.disableBlend();
+        graphics.pose().popPose();
 
-        float fontScale = ClientConfig.hudLevelCircleFontScale * circleScale / 0.1f;
         HudTextHelper.drawCenteredInBox(
-                event.getGuiGraphics(),
+                graphics,
                 mc.font,
                 HudTextHelper.immortalText(String.valueOf(cachedLevel)),
-                cx, cy, circleWidth, circleHeight,
-                fontScale,
+                cx,
+                cy,
+                displaySize,
+                displaySize,
+                ClientConfig.hudLevelCircleFontScale,
+                ClientConfig.hudLevelCircleFontYOffset,
                 0xFFFFFF,
                 false
         );

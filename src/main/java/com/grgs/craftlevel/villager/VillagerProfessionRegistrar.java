@@ -77,6 +77,14 @@ public final class VillagerProfessionRegistrar {
             if (professionId == null || stationId == null || stationId.toString().isBlank()) {
                 return;
             }
+            if (!StationBlocks.exists(stationId)) {
+                CraftLevel.LOGGER.warn(
+                        "[CraftLevel] Skipping profession {}: station {} not in block registry",
+                        professionId,
+                        stationId
+                );
+                return;
+            }
             CUSTOM_PROFESSIONS.put(professionId, stationId);
         });
 
@@ -90,14 +98,6 @@ public final class VillagerProfessionRegistrar {
     private static void registerPoiTypes(RegisterEvent event) {
         CUSTOM_PROFESSIONS.forEach((professionId, stationId) -> {
             Block block = BuiltInRegistries.BLOCK.get(stationId);
-            if (block == null) {
-                CraftLevel.LOGGER.warn(
-                        "[CraftLevel] Skipping profession {}: station {} not in block registry",
-                        professionId,
-                        stationId
-                );
-                return;
-            }
             Set<BlockState> states = new HashSet<>(block.getStateDefinition().getPossibleStates());
             ResourceLocation poiId = poiIdFor(professionId);
             event.register(Registries.POINT_OF_INTEREST_TYPE, poiId, () -> new PoiType(states, 1, 1));
@@ -107,10 +107,6 @@ public final class VillagerProfessionRegistrar {
 
     private static void registerProfessions(RegisterEvent event) {
         CUSTOM_PROFESSIONS.forEach((professionId, stationId) -> {
-            Block block = BuiltInRegistries.BLOCK.get(stationId);
-            if (block == null) {
-                return;
-            }
             ResourceKey<PoiType> poiKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, poiIdFor(professionId));
 
             event.register(Registries.VILLAGER_PROFESSION, professionId, () ->
