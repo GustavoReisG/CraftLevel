@@ -143,6 +143,75 @@ final class HudTextHelper {
         drawScaledText(graphics, font, text, textX, textY, fontScale, color, shadow);
     }
 
+    /**
+     * Texto Immortal centralizado num retângulo [left,right] × linha vertical {@code centerY}
+     * (coordenadas já em pixels de tela). Corta com "..." se passar da largura.
+     */
+    static void drawCenteredClipped(
+            GuiGraphics graphics,
+            Font font,
+            String text,
+            int left,
+            int right,
+            int centerY,
+            float fontScale,
+            int color,
+            boolean shadow
+    ) {
+        int boxWidth = Math.max(0, right - left);
+        if (boxWidth <= 0 || text == null || text.isEmpty()) {
+            return;
+        }
+
+        int maxUnscaled = Math.max(1, Math.round(boxWidth / Math.max(fontScale, 0.01f)));
+        Component component = immortalText(truncateToWidth(font, text, maxUnscaled));
+        int textWidth = Math.round(font.width(component) * fontScale);
+        int textHeight = Math.round(TEXT_HEIGHT_FACTOR * fontScale);
+        int textX = left + (boxWidth - textWidth) / 2;
+        int textY = centerY - textHeight / 2;
+        drawScaledText(graphics, font, component, textX, textY, fontScale, color, shadow);
+    }
+
+    /** Texto Immortal com centro em ({@code centerX}, {@code centerY}). */
+    static void drawCenteredAt(
+            GuiGraphics graphics,
+            Font font,
+            String text,
+            int centerX,
+            int centerY,
+            float fontScale,
+            int color,
+            boolean shadow
+    ) {
+        Component component = immortalText(text);
+        int textWidth = Math.round(font.width(component) * fontScale);
+        int textHeight = Math.round(TEXT_HEIGHT_FACTOR * fontScale);
+        int textX = centerX - textWidth / 2;
+        int textY = centerY - textHeight / 2;
+        drawScaledText(graphics, font, component, textX, textY, fontScale, color, shadow);
+    }
+
+    static String truncateToWidth(Font font, String text, int maxWidth) {
+        if (maxWidth <= 0) {
+            return "";
+        }
+        if (font.width(immortalText(text)) <= maxWidth) {
+            return text;
+        }
+
+        String ellipsis = "...";
+        int ellipsisWidth = font.width(immortalText(ellipsis));
+        if (ellipsisWidth >= maxWidth) {
+            return "";
+        }
+
+        int end = text.length();
+        while (end > 0 && font.width(immortalText(text.substring(0, end))) + ellipsisWidth > maxWidth) {
+            end--;
+        }
+        return end <= 0 ? ellipsis : text.substring(0, end) + ellipsis;
+    }
+
     static String formatCompactNumber(float value) {
         int rounded = Math.round(value);
         if (rounded >= 1_000_000) {

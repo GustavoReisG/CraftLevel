@@ -4,9 +4,11 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.RequestMobLevelPacket;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -30,17 +32,33 @@ import javax.annotation.Nullable;
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, value = Dist.CLIENT)
 public final class MobPinHud {
 
-    private static final int BASE_TEXT_WIDTH = 108;
-    private static final int BASE_BAR_WIDTH = 4;
-    private static final int BASE_BAR_GAP = 6;
-    private static final int BASE_PORTRAIT_GAP = 4;
-    private static final int BASE_LINE_HEIGHT = 11;
-    private static final float BASE_NAME_SCALE = 0.85f;
-    private static final float BASE_LINE_SCALE = 0.72f;
-    private static final int BAR_COLOR = 0xFFE8E8E8;
-    private static final int BAR_SHADOW = 0x80000000;
-    private static final int TEXT_COLOR = 0xFFFFFFFF;
-    private static final int MUTED_COLOR = 0xFFCCCCCC;
+    private static final ResourceLocation CARD_BG =
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/mob_circle_bg.png");
+    private static final ResourceLocation HEALTH_BAR =
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/mob_circle_bar.png");
+
+    /** Faixa da barra de vida na textura (px da esquerda). */
+    private static final int BAR_START_X = 308;
+    private static final int BAR_END_X = 476;
+
+    /** Fonte Immortal; tamanho final = font_scale da config × escala do card. */
+    private static final int TEXT_COLOR = 0xFFFFFF;
+
+    private static final int NAME_Y = 86;
+    private static final int NAME_LEFT = 272;
+    private static final int NAME_RIGHT = 472;
+
+    private static final int TYPE_Y = 206;
+    private static final int TYPE_LEFT = 272;
+    private static final int TYPE_RIGHT = 472;
+
+    private static final int HEALTH_Y = 146;
+    private static final int HEALTH_LEFT = 312;
+    private static final int HEALTH_RIGHT = 472;
+
+    private static final int LEVEL_CENTER_X = 362;
+    private static final int LEVEL_CENTER_Y = 254;
+
     private static final double FOCUS_REACH = 128.0D;
 
     @Nullable
@@ -198,20 +216,10 @@ public final class MobPinHud {
         }
 
         float scale = ClientConfig.hudMobFocusScale;
-        float fontScale = ClientConfig.hudMobFocusFontScale;
-        boolean portraitFirst = "portrait_first".equals(ClientConfig.hudMobFocusDirection);
+        float textScale = ClientConfig.hudMobFocusFontScale * scale;
 
-        int textWidth = Math.round(BASE_TEXT_WIDTH * scale);
-        int barWidth = Math.max(1, Math.round(BASE_BAR_WIDTH * scale));
-        int portraitSize = MobPortraitCapturer.displaySize(scale);
-        int barGap = Math.round(BASE_BAR_GAP * scale);
-        int portraitGap = Math.round(BASE_PORTRAIT_GAP * scale);
-        int lineHeight = Math.max(8, Math.round(BASE_LINE_HEIGHT * scale));
-        float nameScale = BASE_NAME_SCALE * fontScale;
-        float lineTextScale = BASE_LINE_SCALE * fontScale;
-
-        int cardWidth = textWidth + barGap + barWidth + portraitGap + portraitSize;
-        int cardHeight = portraitSize;
+        int cardWidth = MobPortraitCapturer.displayCardWidth(scale);
+        int cardHeight = MobPortraitCapturer.displayCardHeight(scale);
 
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
@@ -225,58 +233,121 @@ public final class MobPinHud {
         int cardX = anchor[0] - (cardWidth / 2) + ClientConfig.hudMobFocusX;
         int cardY = anchor[1] - (cardHeight / 2) + ClientConfig.hudMobFocusY;
 
-        int textX;
-        int barX;
-        int portraitX;
-        if (portraitFirst) {
-            portraitX = cardX;
-            barX = portraitX + portraitSize + portraitGap;
-            textX = barX + barWidth + barGap;
-        } else {
-            textX = cardX;
-            barX = textX + textWidth + barGap;
-            portraitX = barX + barWidth + portraitGap;
-        }
+        float progress = pinned.maxHealth > 0f
+                ? Math.min(1f, Math.max(0f, pinned.health / pinned.maxHealth))
+                : 0f;
 
-        graphics.fill(barX - 1, cardY - 1, portraitX + portraitSize + 1, cardY + cardHeight + 1, BAR_SHADOW);
-        graphics.fill(barX, cardY, barX + barWidth, cardY + cardHeight, BAR_COLOR);
+        // Fundo → barra de vida → busto → mob_circle → textos
+        blitFullCardTexture(graphics, CARD_BG, cardX, cardY, scale);
+        blitHealthBar(graphics, cardX, cardY, scale, progress);
+        MobPortraitCapturer.renderMobOnly(graphics, cardX, cardY, scale, pinned.preview);
+        MobPortraitCapturer.blitCard(graphics, cardX, cardY, scale);
 
-        if (pinned.preview != null) {
-            pinned.preview.renderPortrait(graphics, portraitX, cardY, scale);
-        } else {
-            MobPortraitCapturer.renderEmptyPortrait(graphics, portraitX, cardY, scale);
-        }
+        var font = minecraft.font;
 
-        int textY = cardY;
-        HudTextHelper.drawScaledComponent(
+        HudTextHelper.drawCenteredClipped(
                 graphics,
-                minecraft.font,
-                HudTextHelper.immortalText(pinned.name.getString()),
-                textX,
-                textY,
-                nameScale,
+                font,
+                pinned.name.getString(),
+                cardX + Math.round(NAME_LEFT * scale),
+                cardX + Math.round(NAME_RIGHT * scale),
+                cardY + Math.round(NAME_Y * scale),
+                textScale,
                 TEXT_COLOR,
-                true
+                false
         );
-        textY += lineHeight;
 
-        String levelLine = pinned.level > 0 ? "LVL " + pinned.level : "LVL ...";
-        HudTextHelper.drawScaledString(graphics, minecraft.font, levelLine, textX, textY, lineTextScale, TEXT_COLOR, true);
-        textY += lineHeight;
-
-        String hpLine = Math.round(pinned.health) + " / " + Math.round(pinned.maxHealth);
-        HudTextHelper.drawScaledString(graphics, minecraft.font, hpLine, textX, textY, lineTextScale, TEXT_COLOR, true);
-        textY += lineHeight;
-
-        HudTextHelper.drawScaledString(
+        HudTextHelper.drawCenteredClipped(
                 graphics,
-                minecraft.font,
+                font,
                 pinned.disposition,
-                textX,
-                textY,
-                lineTextScale,
-                MUTED_COLOR,
-                true
+                cardX + Math.round(TYPE_LEFT * scale),
+                cardX + Math.round(TYPE_RIGHT * scale),
+                cardY + Math.round(TYPE_Y * scale),
+                textScale,
+                TEXT_COLOR,
+                false
+        );
+
+        HudTextHelper.drawCenteredClipped(
+                graphics,
+                font,
+                String.valueOf(Math.round(pinned.health)),
+                cardX + Math.round(HEALTH_LEFT * scale),
+                cardX + Math.round(HEALTH_RIGHT * scale),
+                cardY + Math.round(HEALTH_Y * scale),
+                textScale,
+                TEXT_COLOR,
+                false
+        );
+
+        String levelText = pinned.level > 0 ? String.valueOf(pinned.level) : "...";
+        HudTextHelper.drawCenteredAt(
+                graphics,
+                font,
+                levelText,
+                cardX + Math.round(LEVEL_CENTER_X * scale),
+                cardY + Math.round(LEVEL_CENTER_Y * scale),
+                textScale,
+                TEXT_COLOR,
+                false
+        );
+    }
+
+    private static void blitFullCardTexture(
+            GuiGraphics graphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            float scale
+    ) {
+        int renderWidth = MobPortraitCapturer.displayCardWidth(scale);
+        int renderHeight = MobPortraitCapturer.displayCardHeight(scale);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.blit(
+                texture,
+                x,
+                y,
+                renderWidth,
+                renderHeight,
+                0,
+                0,
+                MobPortraitCapturer.CARD_WIDTH,
+                MobPortraitCapturer.CARD_HEIGHT,
+                MobPortraitCapturer.CARD_WIDTH,
+                MobPortraitCapturer.CARD_HEIGHT
+        );
+    }
+
+    /**
+     * Barra sob o card: corta {@code mob_circle_bar} da esquerda até
+     * {@code 308 + (476-308) * progress}.
+     */
+    private static void blitHealthBar(GuiGraphics graphics, int x, int y, float scale, float progress) {
+        int cutTex = BAR_START_X + Math.round((BAR_END_X - BAR_START_X) * progress);
+        if (cutTex <= 0) {
+            return;
+        }
+
+        int cutRender = Math.round(cutTex * scale);
+        int renderHeight = MobPortraitCapturer.displayCardHeight(scale);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.blit(
+                HEALTH_BAR,
+                x,
+                y,
+                cutRender,
+                renderHeight,
+                0,
+                0,
+                cutTex,
+                MobPortraitCapturer.CARD_HEIGHT,
+                MobPortraitCapturer.CARD_WIDTH,
+                MobPortraitCapturer.CARD_HEIGHT
         );
     }
 

@@ -21,21 +21,25 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Clone congelado do mob para desenhar busto no card.
- * Mob em {@link #MOB_RENDER_SIZE}px (circular), moldura em {@link #FRAME_SIZE}px; escala do HUD por último.
+ * Mob no quadrado esquerdo {@link #PORTRAIT_SIZE}px; card {@link #CARD_WIDTH}x{@link #CARD_HEIGHT}.
  */
 @OnlyIn(Dist.CLIENT)
 final class MobPortraitCapturer {
 
+    /** Área circular esquerda do card (e tamanho do círculo de level do jogador). */
     static final int FRAME_SIZE = 292;
+    static final int PORTRAIT_SIZE = FRAME_SIZE;
+    static final int CARD_WIDTH = 512;
+    static final int CARD_HEIGHT = 292;
     static final int MOB_RENDER_SIZE = 204;
-    private static final int MOB_OFFSET = (FRAME_SIZE - MOB_RENDER_SIZE) / 2;
+    private static final int MOB_OFFSET = (PORTRAIT_SIZE - MOB_RENDER_SIZE) / 2;
     private static final int CIRCLE_CLIP_PADDING = 4;
     private static final int BUST_SCALE = 30;
     private static final float FOCUS_HEIGHT_RATIO = 2f / 3f;
     private static final int BACKGROUND_COLOR = 0xFF1A1A1A;
 
-    private static final ResourceLocation FRAME_TEXTURE =
-            new ResourceLocation(CraftLevel.MODID, "textures/gui/mob_focus_frame.png");
+    private static final ResourceLocation CARD_TEXTURE =
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/mob_circle.png");
 
     private static final Set<LivingEntity> PORTRAIT_PREVIEWS =
             Collections.newSetFromMap(new IdentityHashMap<>());
@@ -68,6 +72,14 @@ final class MobPortraitCapturer {
         return Math.round(FRAME_SIZE * hudScale);
     }
 
+    static int displayCardWidth(float hudScale) {
+        return Math.round(CARD_WIDTH * hudScale);
+    }
+
+    static int displayCardHeight(float hudScale) {
+        return Math.round(CARD_HEIGHT * hudScale);
+    }
+
     static void renderEmptyPortrait(GuiGraphics graphics, int x, int y, float hudScale) {
         drawScaledPortrait(graphics, x, y, hudScale, null);
     }
@@ -76,7 +88,8 @@ final class MobPortraitCapturer {
         drawScaledPortrait(graphics, x, y, hudScale, this);
     }
 
-    private static void drawScaledPortrait(
+    /** Só o busto circular no quadrado esquerdo 292x292 (sem moldura do card). */
+    static void renderMobOnly(
             GuiGraphics graphics,
             int x,
             int y,
@@ -103,12 +116,25 @@ final class MobPortraitCapturer {
         graphics.pose().popPose();
 
         graphics.disableScissor();
+    }
 
+    static void blitCard(GuiGraphics graphics, int x, int y, float hudScale) {
         graphics.pose().pushPose();
         graphics.pose().translate(x, y, 0);
         graphics.pose().scale(hudScale, hudScale, 1f);
-        blitFrame(graphics);
+        blitCardTexture(graphics);
         graphics.pose().popPose();
+    }
+
+    private static void drawScaledPortrait(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            float hudScale,
+            @Nullable MobPortraitCapturer capturer
+    ) {
+        renderMobOnly(graphics, x, y, hudScale, capturer);
+        blitCard(graphics, x, y, hudScale);
     }
 
     private void renderMobLayer(GuiGraphics graphics) {
@@ -202,23 +228,23 @@ final class MobPortraitCapturer {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
 
-    private static void blitFrame(GuiGraphics graphics) {
+    private static void blitCardTexture(GuiGraphics graphics) {
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(
-                FRAME_TEXTURE,
+                CARD_TEXTURE,
                 0,
                 0,
-                FRAME_SIZE,
-                FRAME_SIZE,
+                CARD_WIDTH,
+                CARD_HEIGHT,
                 0,
                 0,
-                FRAME_SIZE,
-                FRAME_SIZE,
-                FRAME_SIZE,
-                FRAME_SIZE
+                CARD_WIDTH,
+                CARD_HEIGHT,
+                CARD_WIDTH,
+                CARD_HEIGHT
         );
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
