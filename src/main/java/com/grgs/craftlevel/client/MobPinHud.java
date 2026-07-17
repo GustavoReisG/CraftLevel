@@ -7,6 +7,7 @@ import com.grgs.craftlevel.network.RequestMobLevelPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -136,24 +138,49 @@ public final class MobPinHud {
                 start,
                 end,
                 searchBox,
-                entity -> entity instanceof LivingEntity living
-                        && living.isAlive()
-                        && living.isPickable()
-                        && living != player,
+                entity -> isFocusCandidate(entity, player),
                 FOCUS_REACH * FOCUS_REACH
         );
 
-        if (hit != null && hit.getEntity() instanceof LivingEntity living) {
-            return living;
+        if (hit != null) {
+            LivingEntity living = resolveLivingTarget(hit.getEntity());
+            if (living != null && living.isAlive() && living != player) {
+                return living;
+            }
         }
 
         HitResult crosshair = minecraft.hitResult;
-        if (crosshair instanceof EntityHitResult entityHit
-                && entityHit.getEntity() instanceof LivingEntity living
-                && living.isAlive()) {
-            return living;
+        if (crosshair instanceof EntityHitResult entityHit) {
+            LivingEntity living = resolveLivingTarget(entityHit.getEntity());
+            if (living != null && living.isAlive() && living != player) {
+                return living;
+            }
         }
 
+        return null;
+    }
+
+    /** Aceita LivingEntity ou PartEntity cujo parent seja LivingEntity (ex.: Ender Dragon). */
+    private static boolean isFocusCandidate(Entity entity, Player player) {
+        if (!entity.isPickable() || !entity.isAlive()) {
+            return false;
+        }
+        LivingEntity living = resolveLivingTarget(entity);
+        return living != null && living != player && living.isAlive();
+    }
+
+    /**
+     * Resolve partes multipart (Forge PartEntity / EnderDragonPart) para o LivingEntity pai.
+     * Entidades LivingEntity normais retornam a si mesmas.
+     */
+    @Nullable
+    private static LivingEntity resolveLivingTarget(Entity entity) {
+        if (entity instanceof LivingEntity living) {
+            return living;
+        }
+        if (entity instanceof PartEntity<?> part && part.getParent() instanceof LivingEntity parent) {
+            return parent;
+        }
         return null;
     }
 
