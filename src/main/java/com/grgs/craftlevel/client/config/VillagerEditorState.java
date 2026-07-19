@@ -89,7 +89,7 @@ final class VillagerEditorState {
     }
 
     static VillagerTradeDef emptyTrade() {
-        VillagerTradeSlotDef empty = new VillagerTradeSlotDef("", 0, 0, List.of(), List.of());
+        VillagerTradeSlotDef empty = new VillagerTradeSlotDef("", 0, 0, List.of(), List.of(), "");
         return new VillagerTradeDef(0, empty, empty, empty);
     }
 }

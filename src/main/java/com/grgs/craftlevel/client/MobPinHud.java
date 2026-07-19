@@ -48,7 +48,7 @@ public final class MobPinHud {
     private static final int NAME_LEFT = 272;
     private static final int NAME_RIGHT = 472;
 
-    private static final int TYPE_Y = 206;
+    private static final int TYPE_Y = 196;
     private static final int TYPE_LEFT = 272;
     private static final int TYPE_RIGHT = 472;
 
@@ -56,8 +56,13 @@ public final class MobPinHud {
     private static final int HEALTH_LEFT = 312;
     private static final int HEALTH_RIGHT = 472;
 
-    private static final int LEVEL_CENTER_X = 362;
+    /** Centro horizontal alinhado com a coluna de texto (NAME/LVL). */
+    private static final int LEVEL_CENTER_X = (TYPE_LEFT + TYPE_RIGHT) / 2;
     private static final int LEVEL_CENTER_Y = 254;
+    /** Raio da bolinha de disposition (Hostile/Peaceful) no card em px de textura. */
+    private static final int DISPOSITION_DOT_RADIUS = 14;
+    private static final int HOSTILE_DOT_COLOR = 0xFFE53935;
+    private static final int PEACEFUL_DOT_COLOR = 0xFF43A047;
 
     private static final double FOCUS_REACH = 128.0D;
 
@@ -127,7 +132,7 @@ public final class MobPinHud {
                 level,
                 entity.getHealth(),
                 entity.getMaxHealth(),
-                disposition(entity),
+                isHostile(entity),
                 preview
         );
     }
@@ -202,12 +207,13 @@ public final class MobPinHud {
         return null;
     }
 
-    private static String disposition(LivingEntity entity) {
+    /** Hostile = bolinha vermelha; Peaceful/Player = bolinha verde. */
+    private static boolean isHostile(LivingEntity entity) {
         if (entity instanceof Player) {
-            return "Player";
+            return false;
         }
         MobCategory category = entity.getType().getCategory();
-        return category.isFriendly() ? "Peaceful" : "Hostile";
+        return !category.isFriendly();
     }
 
     private static void renderCard(GuiGraphics graphics, Minecraft minecraft) {
@@ -257,10 +263,11 @@ public final class MobPinHud {
                 false
         );
 
+        String levelText = pinned.level > 0 ? "Lvl " + pinned.level : "Lvl ...";
         HudTextHelper.drawCenteredClipped(
                 graphics,
                 font,
-                pinned.disposition,
+                levelText,
                 cardX + Math.round(TYPE_LEFT * scale),
                 cardX + Math.round(TYPE_RIGHT * scale),
                 cardY + Math.round(TYPE_Y * scale),
@@ -272,7 +279,7 @@ public final class MobPinHud {
         HudTextHelper.drawCenteredClipped(
                 graphics,
                 font,
-                String.valueOf(Math.round(pinned.health)),
+                HudTextHelper.formatCompactNumber(pinned.health),
                 cardX + Math.round(HEALTH_LEFT * scale),
                 cardX + Math.round(HEALTH_RIGHT * scale),
                 cardY + Math.round(HEALTH_Y * scale),
@@ -281,17 +288,25 @@ public final class MobPinHud {
                 false
         );
 
-        String levelText = pinned.level > 0 ? String.valueOf(pinned.level) : "...";
-        HudTextHelper.drawCenteredAt(
+        drawDispositionDot(
                 graphics,
-                font,
-                levelText,
                 cardX + Math.round(LEVEL_CENTER_X * scale),
                 cardY + Math.round(LEVEL_CENTER_Y * scale),
-                textScale,
-                TEXT_COLOR,
-                false
+                Math.max(2, Math.round(DISPOSITION_DOT_RADIUS * scale)),
+                pinned.hostile ? HOSTILE_DOT_COLOR : PEACEFUL_DOT_COLOR
         );
+    }
+
+    private static void drawDispositionDot(GuiGraphics graphics, int centerX, int centerY, int radius, int color) {
+        // Diâmetro ímpar para o centro geométrico cair exatamente em (centerX, centerY).
+        int diameter = radius * 2 + 1;
+        int top = centerY - radius;
+        for (int row = 0; row < diameter; row++) {
+            int dy = row - radius;
+            int halfWidth = (int) Math.floor(Math.sqrt(Math.max(0, radius * radius - dy * dy)));
+            int y = top + row;
+            graphics.fill(centerX - halfWidth, y, centerX + halfWidth + 1, y + 1, color);
+        }
     }
 
     private static void blitFullCardTexture(
@@ -364,7 +379,7 @@ public final class MobPinHud {
         private int level;
         private float health;
         private float maxHealth;
-        private final String disposition;
+        private final boolean hostile;
         @Nullable
         private final MobPortraitCapturer preview;
 
@@ -374,7 +389,7 @@ public final class MobPinHud {
                 int level,
                 float health,
                 float maxHealth,
-                String disposition,
+                boolean hostile,
                 @Nullable MobPortraitCapturer preview
         ) {
             this.entityId = entityId;
@@ -382,7 +397,7 @@ public final class MobPinHud {
             this.level = level;
             this.health = health;
             this.maxHealth = maxHealth;
-            this.disposition = disposition;
+            this.hostile = hostile;
             this.preview = preview;
         }
 

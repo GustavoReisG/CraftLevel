@@ -251,8 +251,8 @@ public class ScalingVariablesScreen extends Screen {
                         18,
                         Component.empty()
                 );
+                nameField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 nameField.setValue(name);
-                nameField.setMaxLength(64);
 
                 openButton = Button.builder(Component.literal("..."), btn -> screen.openVariable(this))
                         .bounds(0, 0, OPEN_BTN_WIDTH, 18)

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LEL",
+    "CEC",
+    "CCC"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:string"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "C": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "craftlevel:emerald_wallet"
+  }
+}

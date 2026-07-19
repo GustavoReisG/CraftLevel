@@ -6,6 +6,19 @@
     "com/grgs/craftlevel/mixin/InventoryMixin": {
       "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F[I)V": "Lnet/minecraft/world/entity/player/Inventory;m_150072_(Lnet/minecraft/world/damagesource/DamageSource;F[I)V",
       "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/world/item/ItemStack;m_41622_(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V"
+    },
+    "com/grgs/craftlevel/mixin/MerchantMenuMixin": {
+      "removed(Lnet/minecraft/world/entity/player/Player;)V": "Lnet/minecraft/world/inventory/AbstractContainerMenu;m_6877_(Lnet/minecraft/world/entity/player/Player;)V"
+    },
+    "com/grgs/craftlevel/mixin/MerchantResultSlotMixin": {
+      "remove(I)Lnet/minecraft/world/item/ItemStack;": "Lnet/minecraft/world/inventory/MerchantResultSlot;m_6201_(I)Lnet/minecraft/world/item/ItemStack;"
+    },
+    "com/grgs/craftlevel/mixin/MerchantTradeSlotMixin": {
+      "mayPickup(Lnet/minecraft/world/entity/player/Player;)Z": "Lnet/minecraft/world/inventory/Slot;m_8010_(Lnet/minecraft/world/entity/player/Player;)Z",
+      "tryRemove(IILnet/minecraft/world/entity/player/Player;)Ljava/util/Optional;": "Lnet/minecraft/world/inventory/Slot;m_150641_(IILnet/minecraft/world/entity/player/Player;)Ljava/util/Optional;"
+    },
+    "com/grgs/craftlevel/mixin/MerchantContainerMixin": {
+      "updateSellItem()V": "Lnet/minecraft/world/inventory/MerchantContainer;m_40024_()V"
     }
   },
   "data": {
@@ -16,6 +29,19 @@
       "com/grgs/craftlevel/mixin/InventoryMixin": {
         "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F[I)V": "Lnet/minecraft/world/entity/player/Inventory;m_150072_(Lnet/minecraft/world/damagesource/DamageSource;F[I)V",
         "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V": "Lnet/minecraft/world/item/ItemStack;m_41622_(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V"
+      },
+      "com/grgs/craftlevel/mixin/MerchantMenuMixin": {
+        "removed(Lnet/minecraft/world/entity/player/Player;)V": "Lnet/minecraft/world/inventory/AbstractContainerMenu;m_6877_(Lnet/minecraft/world/entity/player/Player;)V"
+      },
+      "com/grgs/craftlevel/mixin/MerchantResultSlotMixin": {
+        "remove(I)Lnet/minecraft/world/item/ItemStack;": "Lnet/minecraft/world/inventory/MerchantResultSlot;m_6201_(I)Lnet/minecraft/world/item/ItemStack;"
+      },
+      "com/grgs/craftlevel/mixin/MerchantTradeSlotMixin": {
+        "mayPickup(Lnet/minecraft/world/entity/player/Player;)Z": "Lnet/minecraft/world/inventory/Slot;m_8010_(Lnet/minecraft/world/entity/player/Player;)Z",
+        "tryRemove(IILnet/minecraft/world/entity/player/Player;)Ljava/util/Optional;": "Lnet/minecraft/world/inventory/Slot;m_150641_(IILnet/minecraft/world/entity/player/Player;)Ljava/util/Optional;"
+      },
+      "com/grgs/craftlevel/mixin/MerchantContainerMixin": {
+        "updateSellItem()V": "Lnet/minecraft/world/inventory/MerchantContainer;m_40024_()V"
       }
     }
   }

@@ -212,15 +212,27 @@ final class HudTextHelper {
         return end <= 0 ? ellipsis : text.substring(0, end) + ellipsis;
     }
 
+    /** Abrevia vida/valores: 1000→1K, 1_000_000→1M, 1_000_000_000→1B. */
     static String formatCompactNumber(float value) {
-        int rounded = Math.round(value);
-        if (rounded >= 1_000_000) {
-            return String.format("%.1fM", rounded / 1_000_000f);
+        double amount = Math.max(0d, value);
+        if (amount >= 1_000_000_000d) {
+            return formatCompactSuffix(amount / 1_000_000_000d, "B");
         }
-        if (rounded >= 10_000) {
-            return String.format("%.1fk", rounded / 1_000f);
+        if (amount >= 1_000_000d) {
+            return formatCompactSuffix(amount / 1_000_000d, "M");
         }
-        return String.valueOf(rounded);
+        if (amount >= 1_000d) {
+            return formatCompactSuffix(amount / 1_000d, "K");
+        }
+        return String.valueOf(Math.round(amount));
+    }
+
+    private static String formatCompactSuffix(double scaled, String suffix) {
+        double rounded = Math.round(scaled * 10d) / 10d;
+        if (Math.abs(rounded - Math.rint(rounded)) < 0.05d) {
+            return String.valueOf((long) Math.rint(rounded)) + suffix;
+        }
+        return String.format("%.1f%s", rounded, suffix);
     }
 
     static String formatSaturation(float saturation) {

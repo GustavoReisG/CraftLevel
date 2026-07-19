@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "craftlevel:block/compressed_emerald_block"
+  }
+}

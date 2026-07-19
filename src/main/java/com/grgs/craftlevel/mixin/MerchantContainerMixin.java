@@ -6,36 +6,46 @@ import net.minecraft.world.inventory.MerchantContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 
 /** Impede que o resultado apareça quando o villager não tem saldo para pagar esmeraldas. */
 @Mixin(MerchantContainer.class)
 public abstract class MerchantContainerMixin {
 
     private static final int RESULT_SLOT = 2;
+    private static final Field MERCHANT_FIELD =
+            ObfuscationReflectionHelper.findField(MerchantContainer.class, "f_39997_");
 
-    @Shadow @Final private Merchant merchant;
-
-    @Shadow public abstract MerchantOffer getActiveOffer();
-
-    @Shadow public abstract void setItem(int slot, ItemStack stack);
-
-    @Inject(method = "updateSellItem", at = @At("TAIL"))
+    @Inject(method = "updateSellItem()V", at = @At("TAIL"))
     private void craftlevel$clearBlockedResult(CallbackInfo ci) {
-        if (!(merchant instanceof AbstractVillager villager)) {
+        MerchantContainer self = (MerchantContainer) (Object) this;
+        MerchantOffer offer = self.getActiveOffer();
+        if (offer == null) {
             return;
         }
 
-        MerchantOffer offer = getActiveOffer();
-        if (offer == null || VillagerTradeValidator.canCompleteTrade(villager, offer)) {
+        AbstractVillager villager = asVillager(self);
+        if (villager == null || VillagerTradeValidator.canCompleteTrade(villager, offer)) {
             return;
         }
 
-        setItem(RESULT_SLOT, ItemStack.EMPTY);
+        self.setItem(RESULT_SLOT, ItemStack.EMPTY);
+    }
+
+    @Nullable
+    private static AbstractVillager asVillager(MerchantContainer container) {
+        try {
+            Object merchant = MERCHANT_FIELD.get(container);
+            return merchant instanceof AbstractVillager villager ? villager : null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
     }
 }

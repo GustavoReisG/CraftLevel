@@ -36,7 +36,7 @@ public final class VillagerProfessionRegistrar {
 
     @SubscribeEvent
     public static void onConstruct(FMLConstructModEvent event) {
-        CraftLevelProfessionsDatapack.rebuildFromConfig();
+        // Só idiomas aqui — o datapack depende do block registry e é montado no RegisterEvent.
         ProfessionLanguages.refresh();
     }
 
@@ -45,6 +45,8 @@ public final class VillagerProfessionRegistrar {
         if (isRegistry(event, Registries.POINT_OF_INTEREST_TYPE)) {
             ensureLoaded();
             registerPoiTypes(event);
+            // Stations já estão no registry; gera acquirable_job_site para as que passaram.
+            CraftLevelProfessionsDatapack.rebuildFromRegistered(CUSTOM_PROFESSIONS);
         } else if (isRegistry(event, Registries.VILLAGER_PROFESSION)) {
             ensureLoaded();
             registerProfessions(event);

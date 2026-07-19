@@ -3,7 +3,6 @@ package com.grgs.craftlevel.mixin;
 import com.grgs.craftlevel.economy.MerchantMenuHelper;
 import com.grgs.craftlevel.villager.VillagerTradeValidator;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MerchantContainer;
@@ -11,9 +10,7 @@ import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,12 +23,9 @@ public abstract class MerchantTradeSlotMixin {
 
     private static final int MERCHANT_RESULT_SLOT = 2;
 
-    @Shadow @Final public Container container;
-    @Shadow public abstract int getContainerSlot();
-
-    @Inject(method = "mayPickup", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "mayPickup(Lnet/minecraft/world/entity/player/Player;)Z", at = @At("HEAD"), cancellable = true)
     private void craftlevel$validateVillagerTrade(Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (player.level().isClientSide() || !(player instanceof ServerPlayer serverPlayer)) {
+        if (player.level().isClientSide() || !(player instanceof ServerPlayer)) {
             return;
         }
         if (!(player.containerMenu instanceof MerchantMenu menu)) {
@@ -41,8 +35,9 @@ public abstract class MerchantTradeSlotMixin {
             return;
         }
 
+        Slot self = (Slot) (Object) this;
         MerchantContainer tradeContainer = MerchantMenuHelper.getTradeContainer(menu);
-        if (tradeContainer == null || container != tradeContainer || getContainerSlot() != MERCHANT_RESULT_SLOT) {
+        if (tradeContainer == null || self.container != tradeContainer || self.getContainerSlot() != MERCHANT_RESULT_SLOT) {
             return;
         }
 
@@ -52,7 +47,7 @@ public abstract class MerchantTradeSlotMixin {
         }
     }
 
-    @Inject(method = "tryRemove", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "tryRemove(IILnet/minecraft/world/entity/player/Player;)Ljava/util/Optional;", at = @At("HEAD"), cancellable = true)
     private void craftlevel$blockTryRemove(
             int count,
             int decrement,
@@ -69,8 +64,9 @@ public abstract class MerchantTradeSlotMixin {
             return;
         }
 
+        Slot self = (Slot) (Object) this;
         MerchantContainer tradeContainer = MerchantMenuHelper.getTradeContainer(menu);
-        if (tradeContainer == null || container != tradeContainer || getContainerSlot() != MERCHANT_RESULT_SLOT) {
+        if (tradeContainer == null || self.container != tradeContainer || self.getContainerSlot() != MERCHANT_RESULT_SLOT) {
             return;
         }
 

@@ -54,7 +54,7 @@ public class VillagerTradeListScreen extends Screen {
         list = new TradeList(this, tableWidth, listBottom - LIST_TOP, LIST_TOP, listBottom);
         List<VillagerTradeDef> trades = VillagerPersistence.session().tradesFor(professionId);
         for (int i = 0; i < trades.size(); i++) {
-            list.addRow(i);
+            list.addRow();
         }
         addRenderableWidget(list);
 
@@ -78,9 +78,8 @@ public class VillagerTradeListScreen extends Screen {
     }
 
     private void addTrade() {
-        int index = VillagerPersistence.session().tradesFor(professionId).size();
         VillagerPersistence.session().addTrade(professionId, VillagerEditorState.emptyTrade());
-        list.addRow(index);
+        list.addRow();
     }
 
     void openTrade(int index) {
@@ -176,8 +175,8 @@ public class VillagerTradeListScreen extends Screen {
             setLeftPos(screen.getTableLeft());
         }
 
-        void addRow(int index) {
-            addEntry(new TradeEntry(this, index));
+        void addRow() {
+            addEntry(new TradeEntry(this));
         }
 
         void removeRow(TradeEntry entry) {
@@ -197,21 +196,23 @@ public class VillagerTradeListScreen extends Screen {
         @OnlyIn(Dist.CLIENT)
         private static class TradeEntry extends Entry<TradeEntry> {
             private final TradeList list;
-            private final int index;
             private final Button openButton;
             private final Button removeButton;
 
-            TradeEntry(TradeList list, int index) {
+            TradeEntry(TradeList list) {
                 this.list = list;
-                this.index = index;
                 VillagerTradeListScreen screen = list.screen;
 
                 openButton = Button.builder(Component.literal("Config"), btn ->
-                        screen.openTrade(index)).bounds(0, 0, OPEN_BTN_WIDTH, 18).build();
+                        screen.openTrade(currentIndex())).bounds(0, 0, OPEN_BTN_WIDTH, 18).build();
 
                 removeButton = Button.builder(
                                 Component.literal("X").withStyle(style -> style.withColor(0xFF5555)),
                                 btn -> {
+                                    int index = currentIndex();
+                                    if (index < 0) {
+                                        return;
+                                    }
                                     screen.removeTrade(index);
                                     screen.removeRow(this);
                                 })
@@ -219,11 +220,21 @@ public class VillagerTradeListScreen extends Screen {
                         .build();
             }
 
+            /** Índice atual na lista UI (= posição no array de trades). */
+            private int currentIndex() {
+                return list.children().indexOf(this);
+            }
+
             @Override
             public void render(GuiGraphics graphics, int index, int top, int left, int rowWidth, int rowHeight,
                                int mouseX, int mouseY, boolean hovered, float partialTick) {
                 VillagerTradeListScreen screen = list.screen;
-                VillagerTradeDef trade = VillagerPersistence.session().tradesFor(screen.professionId).get(this.index);
+                List<VillagerTradeDef> trades = VillagerPersistence.session().tradesFor(screen.professionId);
+                int tradeIndex = currentIndex();
+                if (tradeIndex < 0 || tradeIndex >= trades.size()) {
+                    return;
+                }
+                VillagerTradeDef trade = trades.get(tradeIndex);
 
                 int tableLeft = screen.getTableLeft();
                 int x = tableLeft;

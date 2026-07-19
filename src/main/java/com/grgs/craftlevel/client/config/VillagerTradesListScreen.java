@@ -174,6 +174,7 @@ public class VillagerTradesListScreen extends Screen {
                 VillagerTradesListScreen screen = list.screen;
 
                 idField = new EditBox(screen.minecraft.font, 0, 0, screen.getColProfessionW() - 6, 18, Component.literal(""));
+                idField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 idField.setValue(id);
 
                 openButton = Button.builder(Component.literal("..."), btn ->

@@ -17,6 +17,7 @@ public class VillagerTradeSlotDetailScreen extends Screen {
     private static final int ROW_MAX = 2;
     private static final int ROW_WHITELIST = 3;
     private static final int ROW_BLACKLIST = 4;
+    private static final int ROW_NBT = 5;
 
     private final VillagerTradeDetailScreen parent;
     private final String professionId;
@@ -28,6 +29,7 @@ public class VillagerTradeSlotDetailScreen extends Screen {
     private EditBox maxField;
     private EditBox whitelistField;
     private EditBox blacklistField;
+    private EditBox nbtField;
 
     public VillagerTradeSlotDetailScreen(
             VillagerTradeDetailScreen parent,
@@ -59,18 +61,21 @@ public class VillagerTradeSlotDetailScreen extends Screen {
         maxField = numericField(String.valueOf(slot.max()));
         whitelistField = textField(VillagerListText.join(slot.whitelist()));
         blacklistField = textField(VillagerListText.join(slot.blacklist()));
+        nbtField = textField(slot.nbt() != null ? slot.nbt() : "");
 
         ConfigScreenLayout.positionField(this, ROW_ITEM, itemField);
         ConfigScreenLayout.positionField(this, ROW_MIN, minField);
         ConfigScreenLayout.positionField(this, ROW_MAX, maxField);
         ConfigScreenLayout.positionField(this, ROW_WHITELIST, whitelistField);
         ConfigScreenLayout.positionField(this, ROW_BLACKLIST, blacklistField);
+        ConfigScreenLayout.positionField(this, ROW_NBT, nbtField);
 
         addRenderableWidget(itemField);
         addRenderableWidget(minField);
         addRenderableWidget(maxField);
         addRenderableWidget(whitelistField);
         addRenderableWidget(blacklistField);
+        addRenderableWidget(nbtField);
 
         addRenderableWidget(ConfigScreenLayout.bottomSave(this, this::saveAndClose));
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
@@ -85,14 +90,19 @@ public class VillagerTradeSlotDetailScreen extends Screen {
     }
 
     private EditBox textField(String value) {
+        return textField(value, ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
+    }
+
+    private EditBox textField(String value, int maxLength) {
         EditBox field = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(""));
+        // setMaxLength before setValue — EditBox defaults to 32 and truncates on setValue.
+        field.setMaxLength(maxLength);
         field.setValue(value != null ? value : "");
-        field.setMaxLength(512);
         return field;
     }
 
     private EditBox numericField(String value) {
-        EditBox field = textField(value);
+        EditBox field = textField(value, 32);
         field.setFilter(text -> text.isEmpty() || text.matches("-?\\d+"));
         return field;
     }
@@ -103,7 +113,8 @@ public class VillagerTradeSlotDetailScreen extends Screen {
                 parseInt(minField.getValue(), 0),
                 parseInt(maxField.getValue(), 0),
                 VillagerListText.split(whitelistField.getValue()),
-                VillagerListText.split(blacklistField.getValue())
+                VillagerListText.split(blacklistField.getValue()),
+                nbtField.getValue().trim()
         ));
         onClose();
     }
@@ -130,6 +141,7 @@ public class VillagerTradeSlotDetailScreen extends Screen {
         ConfigScreenLayout.renderLabel(this, graphics, ROW_MAX, "Max");
         ConfigScreenLayout.renderLabel(this, graphics, ROW_WHITELIST, "Whitelist");
         ConfigScreenLayout.renderLabel(this, graphics, ROW_BLACKLIST, "Blacklist");
+        ConfigScreenLayout.renderLabel(this, graphics, ROW_NBT, "NBT fallback");
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 }

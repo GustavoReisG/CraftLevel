@@ -34,16 +34,16 @@ public class VillagerProfessionDetailScreen extends Screen {
                 professionId, new VillagerProfessionDef("minecraft:smithing_table"));
 
         textureField = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(""));
+        textureField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
         textureField.setValue(professionPath + ".png");
-        textureField.setMaxLength(128);
         textureField.setEditable(false);
         textureField.setTextColor(0xA0A0A0);
         ConfigScreenLayout.positionField(this, 0, textureField);
         addRenderableWidget(textureField);
 
         stationField = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.literal(""));
+        stationField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
         stationField.setValue(def.station());
-        stationField.setMaxLength(128);
         ConfigScreenLayout.positionField(this, 1, stationField);
         addRenderableWidget(stationField);
 

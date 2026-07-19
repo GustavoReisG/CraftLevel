@@ -185,8 +185,8 @@ public class VillagerProfessionsListScreen extends Screen {
                 VillagerProfessionsListScreen screen = list.screen;
 
                 idField = new EditBox(screen.minecraft.font, 0, 0, screen.getColProfessionW() - 6, 18, Component.literal(""));
+                idField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 idField.setValue(ProfessionIds.pathFromFullId(id));
-                idField.setMaxLength(64);
 
                 openButton = Button.builder(Component.literal("..."), btn -> {
                     syncId();

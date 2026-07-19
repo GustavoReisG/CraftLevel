@@ -270,8 +270,8 @@ public class EconomyBalanceConfigScreen extends Screen {
                         18,
                         Component.literal("Profession")
                 );
+                professionField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 professionField.setValue(data.professionId());
-                professionField.setMaxLength(256);
 
                 balanceField = new EditBox(
                         screen.font,

@@ -12,6 +12,8 @@ final class ConfigScreenLayout {
     static final int START_Y = 40;
     static final int LABEL_WIDTH = 115;
     static final int FIELD_GAP = 6;
+    /** Limite para EditBox de texto livre (EditBox default = 32). */
+    static final int TEXT_FIELD_MAX_LENGTH = 32767;
 
     static final int ACTION_BUTTON_WIDTH = 100;
     static final int ACTION_GAP = 8;

@@ -2,29 +2,36 @@ package com.grgs.craftlevel.economy;
 
 import com.grgs.craftlevel.CraftLevel;
 import net.minecraft.world.inventory.MerchantContainer;
-import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.inventory.MerchantMenu;
+import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 
-/** Acesso ao MerchantMenu via reflexão (sem mixin). */
+/**
+ * Acesso ao MerchantMenu via reflexão.
+ * Usa nomes SRG para funcionar no runtime do modpack (campos ofuscados).
+ */
 public final class MerchantMenuHelper {
 
-    private static Field tradeContainerField;
-    private static Field traderField;
+    // MerchantMenu.trader / tradeContainer
+    private static final Field TRADER_FIELD =
+            ObfuscationReflectionHelper.findField(MerchantMenu.class, "f_40027_");
+    private static final Field TRADE_CONTAINER_FIELD =
+            ObfuscationReflectionHelper.findField(MerchantMenu.class, "f_40028_");
+    // MerchantContainer.selectionHint
+    private static final Field SELECTION_HINT_FIELD =
+            ObfuscationReflectionHelper.findField(MerchantContainer.class, "f_40000_");
 
     private MerchantMenuHelper() {}
 
     public static Merchant getTrader(MerchantMenu menu) {
         try {
-            if (traderField == null) {
-                traderField = MerchantMenu.class.getDeclaredField("trader");
-                traderField.setAccessible(true);
-            }
-            return (Merchant) traderField.get(menu);
-        } catch (ReflectiveOperationException e) {
+            Object value = TRADER_FIELD.get(menu);
+            return value instanceof Merchant merchant ? merchant : null;
+        } catch (IllegalAccessException e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to access MerchantMenu.trader", e);
             return null;
         }
@@ -32,12 +39,9 @@ public final class MerchantMenuHelper {
 
     public static MerchantContainer getTradeContainer(MerchantMenu menu) {
         try {
-            if (tradeContainerField == null) {
-                tradeContainerField = MerchantMenu.class.getDeclaredField("tradeContainer");
-                tradeContainerField.setAccessible(true);
-            }
-            return (MerchantContainer) tradeContainerField.get(menu);
-        } catch (ReflectiveOperationException e) {
+            Object value = TRADE_CONTAINER_FIELD.get(menu);
+            return value instanceof MerchantContainer container ? container : null;
+        } catch (IllegalAccessException e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to access MerchantMenu.tradeContainer", e);
             return null;
         }
@@ -45,10 +49,8 @@ public final class MerchantMenuHelper {
 
     public static int getSelectionHint(MerchantContainer container) {
         try {
-            Field field = MerchantContainer.class.getDeclaredField("selectionHint");
-            field.setAccessible(true);
-            return field.getInt(container);
-        } catch (ReflectiveOperationException e) {
+            return SELECTION_HINT_FIELD.getInt(container);
+        } catch (IllegalAccessException e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to read MerchantContainer.selectionHint", e);
             return -1;
         }

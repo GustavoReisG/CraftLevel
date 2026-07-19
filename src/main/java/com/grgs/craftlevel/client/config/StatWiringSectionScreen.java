@@ -240,8 +240,8 @@ public class StatWiringSectionScreen extends Screen {
                         18,
                         Component.literal("Key")
                 );
+                keyField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 keyField.setValue(data.key());
-                keyField.setMaxLength(256);
                 keyField.setEditable(removable);
 
                 List<String> scalerOptions = ScalerOptions.optionsIncluding(screen.minecraft, data.scaler());

@@ -245,8 +245,8 @@ public class MobOverridesListScreen extends Screen {
                         18,
                         Component.empty()
                 );
+                nameField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 nameField.setValue(mobId);
-                nameField.setMaxLength(256);
 
                 openButton = Button.builder(Component.literal("..."), btn -> screen.openMob(this))
                         .bounds(0, 0, OPEN_BTN_WIDTH, 18)

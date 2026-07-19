@@ -1,8 +1,11 @@
 {
-  "item.craftlevel.emerald_wallet": "Emerald Wallet",
-  "container.craftlevel.emerald_wallet": "Emerald Wallet",
+  "item.craftlevel.emerald_wallet": "Emerald Bag",
+  "item.craftlevel.compressed_emerald_block": "Compressed Emerald Block",
+  "block.craftlevel.compressed_emerald_block": "Compressed Emerald Block",
+  "container.craftlevel.emerald_wallet": "Emerald Bag",
   "gui.craftlevel.emerald_wallet.balance": "Balance: %s",
-  "gui.craftlevel.emerald_wallet.section": "Wallet",
+  "gui.craftlevel.emerald_wallet.section": "Bag",
+  "itemGroup.craftlevel": "Craft Level",
   "key.categories.craftlevel": "Craft Level",
   "key.craftlevel.pin_mob": "Pin Mob Card"
 }

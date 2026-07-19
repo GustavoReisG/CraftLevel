@@ -35,8 +35,8 @@ public class ScalingVariableConfigScreen extends Screen {
         }
 
         nameField = new EditBox(font, 0, 0, ConfigScreenLayout.fieldWidth(), 20, Component.empty());
+        nameField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
         nameField.setValue(originalName);
-        nameField.setMaxLength(64);
         ConfigScreenLayout.positionField(this, ROW_NAME, nameField);
         addRenderableWidget(nameField);
 

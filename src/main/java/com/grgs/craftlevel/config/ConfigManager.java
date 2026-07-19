@@ -98,26 +98,28 @@ public class ConfigManager {
 
     private static final String DEFAULT_PLAYER_STATS = """
     {
-         "attribute": {
-             "minecraft:generic.max_health": "health"
-         },
-         "hurt": {
-             "minecraft:player_attack": "melee_power",
-             "minecraft:arrow": "melee_power",
-             "minecraft:trident": "melee_power",
-             "minecraft:magic": "spell",
-             "minecraft:indirect_magic": "spell",
-             "attributeslib:current_hp_damage": "flat",
-             "*irons_spellbooks*": "spell",
-             "default": "health"
-         },
-         "hurt_self": {
-             "default": "health"
-         },
-         "heal": {
-             "default": "health"
-         }
-     }
+        "attribute": {
+          "minecraft:generic.max_health": "health"
+        },
+        "hurt": {
+          "default": "health",
+          "minecraft:player_attack": "melee_power",
+          "minecraft:arrow": "melee_power",
+          "minecraft:trident": "melee_power",
+          "minecraft:magic": "spell",
+          "minecraft:indirect_magic": "spell",
+          "attributeslib:current_hp_damage": "flat",
+          "*irons_spellbooks*": "spell",
+          "cataclysm:lightning": "flat",
+          "minecraft:mob_projectile": "flat"
+        },
+        "hurt_self": {
+          "default": "health"
+        },
+        "heal": {
+          "default": "health"
+        }
+      }
     """;
 
     private static final String DEFAULT_MOB_STATS = """
@@ -144,7 +146,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -159,7 +161,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -174,7 +176,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -189,7 +191,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -204,7 +206,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -219,7 +221,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -234,7 +236,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -249,7 +251,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -264,7 +266,7 @@ public class ConfigManager {
           "minecraft:generic.max_health": "mob_health"
         },
         "hurt": {
-          "default": "mob_health"
+          "default": "health"
         },
         "hurt_self": {
           "default": "mob_health",
@@ -478,16 +480,16 @@ public class ConfigManager {
           "anchor": "bottom_left",
           "x": 2,
           "y": -2,
-          "scale": 0.11,
-          "font_scale": 0.6
+          "scale": 0.135,
+          "font_scale": 0.7
         },
         "level_circle": {
           "anchor": "top_left",
           "x": 2,
           "y": 2,
           "scale": 0.15,
-          "font_scale": 1.0,
-          "font_y_offset": -2.0
+          "font_scale": 1.4,
+          "font_y_offset": -0.0
         },
         "health_bar": {
           "enabled": true,
@@ -520,9 +522,9 @@ public class ConfigManager {
         "mob_focus": {
           "anchor": "top_left",
           "x": 50,
-          "y": 8,
-          "scale": 0.7,
-          "font_scale": 0.6,
+          "y": 2,
+          "scale": 0.15,
+          "font_scale": 4.0,
           "direction": "portrait_first",
           "mob_yaw": 0.6,
           "head_yaw": 0.0,

@@ -115,7 +115,7 @@ public final class VillagerParser {
 
     private static VillagerTradeSlotDef parseSlot(JsonObject trade, String key) {
         if (!trade.has(key) || !trade.get(key).isJsonObject()) {
-            return new VillagerTradeSlotDef("", 0, 0, List.of(), List.of());
+            return new VillagerTradeSlotDef("", 0, 0, List.of(), List.of(), "");
         }
         JsonObject slot = trade.getAsJsonObject(key);
         return new VillagerTradeSlotDef(
@@ -123,8 +123,30 @@ public final class VillagerParser {
                 readInt(slot, "min", 0),
                 readInt(slot, "max", 0),
                 readStringList(slot, "whitelist"),
-                readStringList(slot, "blacklist")
+                readStringList(slot, "blacklist"),
+                readNbt(slot)
         );
+    }
+
+    /** Aceita SNBT em string ou objeto JSON convertido para SNBT. */
+    private static String readNbt(JsonObject slot) {
+        if (!slot.has("nbt") || slot.get("nbt").isJsonNull()) {
+            return "";
+        }
+        JsonElement element = slot.get("nbt");
+        if (element.isJsonPrimitive()) {
+            return element.getAsString().trim();
+        }
+        if (element.isJsonObject() || element.isJsonArray()) {
+            try {
+                net.minecraft.nbt.Tag tag = com.mojang.serialization.JsonOps.INSTANCE
+                        .convertTo(net.minecraft.nbt.NbtOps.INSTANCE, element);
+                return tag != null ? tag.toString() : "";
+            } catch (Exception e) {
+                return "";
+            }
+        }
+        return "";
     }
 
     private static List<String> readStringList(JsonObject json, String key) {
@@ -196,6 +218,7 @@ public final class VillagerParser {
         obj.addProperty("max", slot.max());
         obj.add("whitelist", stringListToJson(slot.whitelist()));
         obj.add("blacklist", stringListToJson(slot.blacklist()));
+        obj.addProperty("nbt", slot.nbt() != null ? slot.nbt() : "");
         return obj;
     }
 

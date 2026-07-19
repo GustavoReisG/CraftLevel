@@ -1,6 +1,8 @@
 package com.grgs.craftlevel.item;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.block.ModBlocks;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -15,6 +17,11 @@ public final class ModItems {
     public static final RegistryObject<Item> EMERALD_WALLET = ITEMS.register(
             "emerald_wallet",
             () -> new EmeraldWalletItem(new Item.Properties().stacksTo(1))
+    );
+
+    public static final RegistryObject<Item> COMPRESSED_EMERALD_BLOCK = ITEMS.register(
+            "compressed_emerald_block",
+            () -> new BlockItem(ModBlocks.COMPRESSED_EMERALD_BLOCK.get(), new Item.Properties())
     );
 
     private ModItems() {}

@@ -45,7 +45,9 @@ public final class VillagerJsonMigrator {
         if (tag == null) {
             return slot;
         }
-        return new VillagerTradeSlotDef(tag, slot.min(), slot.max(), slot.whitelist(), slot.blacklist());
+        return new VillagerTradeSlotDef(
+                tag, slot.min(), slot.max(), slot.whitelist(), slot.blacklist(), slot.nbt()
+        );
     }
 
     private static String collapseSignature(VillagerTradeDef trade) {
@@ -56,7 +58,8 @@ public final class VillagerJsonMigrator {
         String itemKey = tagForItem(slot.item()) != null ? tagForItem(slot.item()) : slot.item();
         return itemKey + ":" + slot.min() + ":" + slot.max() + ":"
                 + String.join(",", slot.whitelist()) + ":"
-                + String.join(",", slot.blacklist());
+                + String.join(",", slot.blacklist()) + ":"
+                + (slot.nbt() != null ? slot.nbt() : "");
     }
 
     static String tagForItem(String item) {

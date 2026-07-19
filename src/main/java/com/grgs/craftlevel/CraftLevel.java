@@ -5,6 +5,8 @@ import com.grgs.craftlevel.capability.IMobLevel;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
+import com.grgs.craftlevel.block.ModBlocks;
+import com.grgs.craftlevel.item.ModCreativeTabs;
 import com.grgs.craftlevel.item.ModItems;
 import com.grgs.craftlevel.menu.ModMenus;
 import com.grgs.craftlevel.network.PacketHandler;
@@ -30,7 +32,9 @@ public class CraftLevel {
 
     public CraftLevel(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+        ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);

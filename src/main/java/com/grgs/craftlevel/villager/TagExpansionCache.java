@@ -34,7 +34,11 @@ public final class TagExpansionCache {
         if (entry == null || entry.isBlank()) {
             return List.of();
         }
-        return CACHE.computeIfAbsent(entry, TagExpansionCache::resolve);
+        String id = ItemSpec.idOnly(entry);
+        if (id.isBlank()) {
+            return List.of();
+        }
+        return CACHE.computeIfAbsent(id, TagExpansionCache::resolve);
     }
 
     public static Set<Item> expandAll(List<String> entries) {

@@ -3,8 +3,6 @@ package com.grgs.craftlevel.villager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.grgs.craftlevel.CraftLevel;
-import com.grgs.craftlevel.config.VillagerConfigFiles;
-import com.grgs.craftlevel.config.VillagerParser;
 import com.grgs.craftlevel.pack.DynamicPackWriter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,9 +18,14 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-/** Datapack dinâmico CraftLevel_Professions — recriado a cada boot. */
+/**
+ * Datapack dinâmico CraftLevel_Professions — recriado depois que as stations
+ * já existem no block registry (não no FMLConstructModEvent).
+ */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class CraftLevelProfessionsDatapack {
 
@@ -35,11 +38,12 @@ public final class CraftLevelProfessionsDatapack {
         if (event.getPackType() != PackType.SERVER_DATA) {
             return;
         }
-        Path packRoot = packRoot();
-        if (!Files.isDirectory(packRoot)) {
-            return;
-        }
+        // Sempre registra o source; o pack pode ser escrito depois do RegisterEvent.
         event.addRepositorySource(consumer -> {
+            Path packRoot = packRoot();
+            if (!Files.isDirectory(packRoot) || !Files.isRegularFile(packRoot.resolve("pack.mcmeta"))) {
+                return;
+            }
             Pack pack = Pack.readMetaAndCreate(
                     PACK_FOLDER,
                     Component.literal("CraftLevel Professions"),
@@ -55,11 +59,28 @@ public final class CraftLevelProfessionsDatapack {
         });
     }
 
-    public static void rebuildFromConfig() {
+    /** Reconstrói a tag acquirable_job_site a partir das profissões já carregadas. */
+    public static void rebuildFromRegistered(Map<ResourceLocation, ResourceLocation> professions) {
+        rebuild(poiIdsFor(professions.keySet()));
+    }
+
+    public static Path packRoot() {
+        return FMLPaths.GAMEDIR.get().resolve("datapacks").resolve(PACK_FOLDER);
+    }
+
+    private static List<ResourceLocation> poiIdsFor(Collection<ResourceLocation> professionIds) {
+        List<ResourceLocation> poiIds = new ArrayList<>(professionIds.size());
+        for (ResourceLocation professionId : professionIds) {
+            poiIds.add(poiIdFor(professionId));
+        }
+        return poiIds;
+    }
+
+    private static void rebuild(List<ResourceLocation> poiIds) {
         try {
-            List<ResourceLocation> poiIds = collectPoiIds();
             if (poiIds.isEmpty()) {
                 DynamicPackWriter.deleteIfExists(packRoot());
+                CraftLevel.LOGGER.info("[CraftLevel] No custom profession POIs; removed datapack {}", PACK_FOLDER);
                 return;
             }
 
@@ -88,25 +109,6 @@ public final class CraftLevelProfessionsDatapack {
         } catch (Exception e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to rebuild datapack {}", PACK_FOLDER, e);
         }
-    }
-
-    public static Path packRoot() {
-        return FMLPaths.GAMEDIR.get().resolve("datapacks").resolve(PACK_FOLDER);
-    }
-
-    private static List<ResourceLocation> collectPoiIds() {
-        List<ResourceLocation> poiIds = new ArrayList<>();
-        VillagerParser.parseProfessions(VillagerConfigFiles.loadVillagerJson()).forEach((id, def) -> {
-            if (!id.startsWith("craftlevel:")) {
-                return;
-            }
-            ResourceLocation professionId = ResourceLocation.tryParse(id);
-            if (professionId == null || !StationBlocks.exists(def.station())) {
-                return;
-            }
-            poiIds.add(poiIdFor(professionId));
-        });
-        return poiIds;
     }
 
     private static ResourceLocation poiIdFor(ResourceLocation professionId) {

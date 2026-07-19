@@ -213,8 +213,8 @@ public class MobLevelsConfigScreen extends Screen {
                         18,
                         Component.literal("Mob")
                 );
+                mobField.setMaxLength(ConfigScreenLayout.TEXT_FIELD_MAX_LENGTH);
                 mobField.setValue(data.mobId());
-                mobField.setMaxLength(256);
 
                 minField = new EditBox(
                         screen.font,
