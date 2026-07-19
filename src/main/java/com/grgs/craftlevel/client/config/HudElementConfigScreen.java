@@ -19,6 +19,7 @@ public class HudElementConfigScreen extends Screen {
         HEALTH_BAR("Health Bar"),
         HUNGER_BAR("Hunger Bar"),
         EMERALDS("Emeralds"),
+        SOULS("Souls"),
         MOB_FOCUS("Mob Focus");
 
         private final String title;
@@ -86,18 +87,21 @@ public class HudElementConfigScreen extends Screen {
         ClientConfigEditorState state = ClientConfigPersistence.session();
         int nextRow = 0;
 
-        if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS) {
+        if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR
+                || element == Element.EMERALDS || element == Element.SOULS) {
             rowEnabled = nextRow;
             boolean enabled = switch (element) {
                 case HEALTH_BAR -> state.resolvedHealthBar().enabled();
                 case HUNGER_BAR -> state.resolvedHungerBar().enabled();
                 case EMERALDS -> state.resolvedEmeralds().enabled();
+                case SOULS -> state.resolvedSouls().enabled();
                 default -> true;
             };
             String label = switch (element) {
                 case HEALTH_BAR -> "Enable CL Health Bar";
                 case HUNGER_BAR -> "Enable CL Hunger Bar";
                 case EMERALDS -> "Enable Emerald HUD";
+                case SOULS -> "Enable Souls HUD";
                 default -> "Enable";
             };
             enabledButton = CycleButton.onOffBuilder()
@@ -125,6 +129,11 @@ public class HudElementConfigScreen extends Screen {
                 ClientConfigEditorState.EmeraldHudValues emeralds = state.resolvedEmeralds();
                 yield new ClientConfigEditorState.HudElementValues(
                         emeralds.anchor(), emeralds.x(), emeralds.y(), emeralds.scale(), emeralds.fontScale(), null);
+            }
+            case SOULS -> {
+                ClientConfigEditorState.SoulsHudValues souls = state.resolvedSouls();
+                yield new ClientConfigEditorState.HudElementValues(
+                        souls.anchor(), souls.x(), souls.y(), souls.scale(), souls.fontScale(), null);
             }
             case MOB_FOCUS -> {
                 ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
@@ -173,7 +182,7 @@ public class HudElementConfigScreen extends Screen {
 
         if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR
                 || element == Element.LP_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS
-                || element == Element.MOB_FOCUS) {
+                || element == Element.SOULS || element == Element.MOB_FOCUS) {
             rowFontScale = assignRow(nextRow, 4);
             colFontScale = 0;
             fontScaleField = newFloatField(values.fontScale());
@@ -193,11 +202,15 @@ public class HudElementConfigScreen extends Screen {
             }
         }
 
-        if (element == Element.EMERALDS) {
+        if (element == Element.EMERALDS || element == Element.SOULS) {
             rowIconSide = nextRow;
-            String iconSide = state.resolvedEmeralds().iconSide() != null
+            String iconSide = element == Element.EMERALDS
+                    ? (state.resolvedEmeralds().iconSide() != null
                     ? state.resolvedEmeralds().iconSide()
-                    : ClientConfigEditorState.ICON_SIDES[1];
+                    : ClientConfigEditorState.ICON_SIDES[1])
+                    : (state.resolvedSouls().iconSide() != null
+                    ? state.resolvedSouls().iconSide()
+                    : ClientConfigEditorState.ICON_SIDES[1]);
             iconSideButton = CycleButton.<String>builder(Component::literal)
                     .withValues(ClientConfigEditorState.ICON_SIDES)
                     .withInitialValue(findIconSide(iconSide))
@@ -389,8 +402,18 @@ public class HudElementConfigScreen extends Screen {
                     headYawField != null ? parseOptionalFloat(headYawField) : null,
                     cameraPitchField != null ? parseOptionalFloat(cameraPitchField) : null
             ));
-        } else {
+        } else if (element == Element.EMERALDS) {
             session.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
+                    enabledButton.getValue(),
+                    anchorButton.getValue(),
+                    values.x(),
+                    values.y(),
+                    values.scale(),
+                    values.fontScale(),
+                    iconSideButton != null ? iconSideButton.getValue() : "right"
+            ));
+        } else if (element == Element.SOULS) {
+            session.setSouls(new ClientConfigEditorState.SoulsHudValues(
                     enabledButton.getValue(),
                     anchorButton.getValue(),
                     values.x(),
@@ -429,6 +452,7 @@ public class HudElementConfigScreen extends Screen {
                 case HEALTH_BAR -> "Enable CL Health Bar";
                 case HUNGER_BAR -> "Enable CL Hunger Bar";
                 case EMERALDS -> "Enable Emerald HUD";
+                case SOULS -> "Enable Souls HUD";
                 default -> "Enable";
             };
             drawFieldLabel(graphics, 0, rowEnabled, enabledLabel);

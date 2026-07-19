@@ -61,6 +61,15 @@ public class ClientConfig {
     public static String hudEmeraldsAnchor = "bottom_left";
     public static String hudEmeraldsIconSide = "left";
 
+    // HUD de souls
+    public static boolean hudSoulsEnabled = true;
+    public static int hudSoulsX = 2;
+    public static int hudSoulsY = 50;
+    public static float hudSoulsScale = 0.7f;
+    public static float hudSoulsFontScale = 1.0f;
+    public static String hudSoulsAnchor = "top_left";
+    public static String hudSoulsIconSide = "left";
+
     // Card de Mob Focus (mirar + E)
     public static String hudMobFocusAnchor = "top_left";
     public static int hudMobFocusX = 50;
@@ -170,6 +179,15 @@ public class ClientConfig {
         hudEmeraldsFontScale = emeralds.fontScale();
         hudEmeraldsIconSide = emeralds.iconSide();
 
+        ClientConfigEditorState.SoulsHudValues souls = state.resolvedSouls();
+        hudSoulsEnabled = souls.enabled();
+        hudSoulsAnchor = souls.anchor();
+        hudSoulsX = souls.x();
+        hudSoulsY = souls.y();
+        hudSoulsScale = souls.scale();
+        hudSoulsFontScale = souls.fontScale();
+        hudSoulsIconSide = souls.iconSide();
+
         ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
         hudMobFocusAnchor = mobFocus.anchor();
         hudMobFocusX = mobFocus.x();
@@ -204,6 +222,10 @@ public class ClientConfig {
         state.setEmeralds(new ClientConfigEditorState.EmeraldHudValues(
                 hudEmeraldsEnabled, hudEmeraldsAnchor, hudEmeraldsX, hudEmeraldsY,
                 hudEmeraldsScale, hudEmeraldsFontScale, hudEmeraldsIconSide
+        ));
+        state.setSouls(new ClientConfigEditorState.SoulsHudValues(
+                hudSoulsEnabled, hudSoulsAnchor, hudSoulsX, hudSoulsY,
+                hudSoulsScale, hudSoulsFontScale, hudSoulsIconSide
         ));
         state.setMobFocus(new ClientConfigEditorState.MobFocusValues(
                 hudMobFocusAnchor, hudMobFocusX, hudMobFocusY,

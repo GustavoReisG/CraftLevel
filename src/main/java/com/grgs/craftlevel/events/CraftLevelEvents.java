@@ -4,6 +4,7 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
+import com.grgs.craftlevel.capability.PlayerSoulsProvider;
 import com.grgs.craftlevel.capability.VillagerEconomyProvider;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
@@ -80,6 +81,10 @@ public class CraftLevelEvents {
             event.addCapability(
                     new ResourceLocation(CraftLevel.MODID, "emerald_wallet"),
                     new PlayerEmeraldWalletProvider()
+            );
+            event.addCapability(
+                    new ResourceLocation(CraftLevel.MODID, "player_souls"),
+                    new PlayerSoulsProvider()
             );
         }
 
@@ -263,6 +268,14 @@ public class CraftLevelEvents {
         original.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(oldCap -> {
             clone.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(newCap -> {
                 newCap.setBalance(oldCap.getBalance());
+                newCap.setInitialized(oldCap.isInitialized());
+            });
+        });
+
+        original.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(oldCap -> {
+            clone.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(newCap -> {
+                newCap.setSouls(oldCap.getSouls());
+                newCap.setRestoreProgressTicks(oldCap.getRestoreProgressTicks());
                 newCap.setInitialized(oldCap.isInitialized());
             });
         });

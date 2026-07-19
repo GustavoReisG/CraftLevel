@@ -97,6 +97,14 @@ public class PacketHandler {
                 SyncMerchantOffersPacket::decode,
                 SyncMerchantOffersPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                9,
+                SyncPlayerSoulsPacket.class,
+                SyncPlayerSoulsPacket::encode,
+                SyncPlayerSoulsPacket::decode,
+                SyncPlayerSoulsPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

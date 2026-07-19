@@ -23,6 +23,7 @@ public final class ModCreativeTabs {
                     .displayItems((params, output) -> {
                         output.accept(ModItems.EMERALD_WALLET.get());
                         output.accept(ModBlocks.COMPRESSED_EMERALD_BLOCK.get());
+                        output.accept(ModBlocks.PLAYER_GRAVESTONE.get());
                     })
                     .build()
     );

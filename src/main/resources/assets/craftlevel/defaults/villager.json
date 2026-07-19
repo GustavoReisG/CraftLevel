@@ -6900,6 +6900,116 @@
         "limit": 0
       }
     ],
-    "craftlevel:reforger": []
+    "craftlevel:reforger": [],
+    "craftlevel:banker": [
+      {
+        "limit": 0,
+        "input1": {
+          "item": "minecraft:emerald",
+          "min": 10,
+          "max": 12,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "input2": {
+          "item": "",
+          "min": 0,
+          "max": 0,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "output": {
+          "item": "minecraft:emerald_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        }
+      },
+      {
+        "limit": 0,
+        "input1": {
+          "item": "minecraft:emerald_block",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "output": {
+          "item": "craftlevel:compressed_emerald_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        }
+      },
+      {
+        "limit": 0,
+        "input1": {
+          "item": "minecraft:emerald_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "output": {
+          "item": "minecraft:emerald",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        }
+      },
+      {
+        "limit": 0,
+        "input1": {
+          "item": "craftlevel:compressed_emerald_block",
+          "min": 1,
+          "max": 1,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "input2": {
+          "item": "minecraft:emerald",
+          "min": 1,
+          "max": 3,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        },
+        "output": {
+          "item": "minecraft:emerald_block",
+          "min": 9,
+          "max": 9,
+          "whitelist": [],
+          "blacklist": [],
+          "nbt": ""
+        }
+      }
+    ]
   }
 }

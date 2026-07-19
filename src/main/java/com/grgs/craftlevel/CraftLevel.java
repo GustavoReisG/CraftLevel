@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.grgs.craftlevel.capability.IMobLevel;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
+import com.grgs.craftlevel.capability.IPlayerSouls;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
+import com.grgs.craftlevel.block.ModBlockEntities;
 import com.grgs.craftlevel.block.ModBlocks;
 import com.grgs.craftlevel.item.ModCreativeTabs;
 import com.grgs.craftlevel.item.ModItems;
@@ -33,6 +35,7 @@ public class CraftLevel {
     public CraftLevel(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
         ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
@@ -47,6 +50,7 @@ public class CraftLevel {
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerEmeraldWallet>() {});
         CapabilityManager.get(new CapabilityToken<IVillagerEconomy>() {});
+        CapabilityManager.get(new CapabilityToken<IPlayerSouls>() {});
         PacketHandler.register();
         LOGGER.info("Craft Level common setup complete!");
     }

@@ -1,7 +1,9 @@
 {
   "item.craftlevel.emerald_wallet": "Bolsa de Esmeraldas",
   "item.craftlevel.compressed_emerald_block": "Bloco de Esmeralda Comprimido",
+  "item.craftlevel.player_gravestone": "Lápide",
   "block.craftlevel.compressed_emerald_block": "Bloco de Esmeralda Comprimido",
+  "block.craftlevel.player_gravestone": "Lápide",
   "container.craftlevel.emerald_wallet": "Bolsa de Esmeraldas",
   "gui.craftlevel.emerald_wallet.balance": "Saldo: %s",
   "gui.craftlevel.emerald_wallet.section": "Bolsa",

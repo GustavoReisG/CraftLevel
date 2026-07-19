@@ -20,6 +20,7 @@ public final class ClientConfigEditorState {
     static final String KEY_HEALTH_BAR = "health_bar";
     static final String KEY_HUNGER_BAR = "hunger_bar";
     static final String KEY_EMERALDS = "emeralds";
+    static final String KEY_SOULS = "souls";
     static final String KEY_MOB_FOCUS = "mob_focus";
     static final String KEY_ENABLED = "enabled";
     static final String KEY_ANCHOR = "anchor";
@@ -58,6 +59,10 @@ public final class ClientConfigEditorState {
             Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
     ) {}
 
+    public record SoulsHudValues(
+            Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
+    ) {}
+
     public record MobFocusValues(
             String anchor, Integer x, Integer y, Float scale, Float fontScale, String direction,
             Float mobYaw, Float headYaw, Float cameraPitch
@@ -70,6 +75,7 @@ public final class ClientConfigEditorState {
     private HealthBarValues healthBar;
     private HungerBarValues hungerBar;
     private EmeraldHudValues emeralds;
+    private SoulsHudValues souls;
     private MobFocusValues mobFocus;
 
     public ClientConfigEditorState() {
@@ -104,6 +110,7 @@ public final class ClientConfigEditorState {
         healthBar = mergeHealthBar(readHealthBar(hud), healthBar);
         hungerBar = mergeHungerBar(readHungerBar(hud), hungerBar);
         emeralds = mergeEmeralds(readEmeralds(hud), emeralds);
+        souls = mergeSouls(readSouls(hud), souls);
         mobFocus = mergeMobFocus(readMobFocus(hud), mobFocus);
     }
 
@@ -115,6 +122,7 @@ public final class ClientConfigEditorState {
         hud.add(KEY_HEALTH_BAR, writeHealthBar(resolvedHealthBar()));
         hud.add(KEY_HUNGER_BAR, writeHungerBar(resolvedHungerBar()));
         hud.add(KEY_EMERALDS, writeEmeralds(resolvedEmeralds()));
+        hud.add(KEY_SOULS, writeSouls(resolvedSouls()));
         hud.add(KEY_MOB_FOCUS, writeMobFocus(resolvedMobFocus()));
         root.add(KEY_HUD, hud);
         return root;
@@ -160,6 +168,14 @@ public final class ClientConfigEditorState {
         emeralds = values;
     }
 
+    public SoulsHudValues souls() {
+        return souls;
+    }
+
+    public void setSouls(SoulsHudValues values) {
+        souls = values;
+    }
+
     public MobFocusValues mobFocus() {
         return mobFocus;
     }
@@ -188,6 +204,10 @@ public final class ClientConfigEditorState {
         return mergeEmeralds(emeralds, defaultsTemplate().emeralds);
     }
 
+    public SoulsHudValues resolvedSouls() {
+        return mergeSouls(souls, defaultsTemplate().souls);
+    }
+
     public MobFocusValues resolvedMobFocus() {
         return mergeMobFocus(mobFocus, defaultsTemplate().mobFocus);
     }
@@ -210,6 +230,7 @@ public final class ClientConfigEditorState {
             state.healthBar = new HealthBarValues(true, "bottom_center", -62, -31, 0.1f, 0.6f, 10);
             state.hungerBar = new HungerBarValues(true, "bottom_center", 60, -31, 0.1f, 0.6f, 10, 0);
             state.emeralds = new EmeraldHudValues(true, "bottom_left", 2, -20, 0.7f, 1.0f, "left");
+            state.souls = new SoulsHudValues(true, "top_left", 2, 50, 0.7f, 1.0f, "left");
             state.mobFocus = new MobFocusValues("top_left", 50, 8, 0.7f, 0.6f, "portrait_first", 0.6f, 0.0f, -0.2f);
         }
         return state;
@@ -233,6 +254,7 @@ public final class ClientConfigEditorState {
         healthBar = source.healthBar;
         hungerBar = source.hungerBar;
         emeralds = source.emeralds;
+        souls = source.souls;
         mobFocus = source.mobFocus;
     }
 
@@ -278,6 +300,18 @@ public final class ClientConfigEditorState {
 
     private static EmeraldHudValues mergeEmeralds(EmeraldHudValues loaded, EmeraldHudValues defaults) {
         return new EmeraldHudValues(
+                loaded.enabled() != null ? loaded.enabled() : defaults.enabled(),
+                loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
+                loaded.x() != null ? loaded.x() : defaults.x(),
+                loaded.y() != null ? loaded.y() : defaults.y(),
+                loaded.scale() != null ? loaded.scale() : defaults.scale(),
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.iconSide() != null ? loaded.iconSide() : defaults.iconSide()
+        );
+    }
+
+    private static SoulsHudValues mergeSouls(SoulsHudValues loaded, SoulsHudValues defaults) {
+        return new SoulsHudValues(
                 loaded.enabled() != null ? loaded.enabled() : defaults.enabled(),
                 loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
                 loaded.x() != null ? loaded.x() : defaults.x(),
@@ -370,6 +404,22 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static SoulsHudValues readSouls(JsonObject hud) {
+        if (!hud.has(KEY_SOULS) || !hud.get(KEY_SOULS).isJsonObject()) {
+            return new SoulsHudValues(null, null, null, null, null, null, null);
+        }
+        JsonObject element = hud.getAsJsonObject(KEY_SOULS);
+        return new SoulsHudValues(
+                readOptionalBoolean(element, KEY_ENABLED),
+                readOptionalString(element, KEY_ANCHOR),
+                readOptionalInt(element, KEY_X),
+                readOptionalInt(element, KEY_Y),
+                readOptionalFloat(element, KEY_SCALE),
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalString(element, KEY_ICON_SIDE)
+        );
+    }
+
     private static MobFocusValues readMobFocus(JsonObject hud) {
         if (!hud.has(KEY_MOB_FOCUS) || !hud.get(KEY_MOB_FOCUS).isJsonObject()) {
             return new MobFocusValues(null, null, null, null, null, null, null, null, null);
@@ -429,6 +479,18 @@ public final class ClientConfigEditorState {
     }
 
     private static JsonObject writeEmeralds(EmeraldHudValues values) {
+        JsonObject element = new JsonObject();
+        element.addProperty(KEY_ENABLED, values.enabled());
+        element.addProperty(KEY_ANCHOR, values.anchor());
+        element.addProperty(KEY_X, values.x());
+        element.addProperty(KEY_Y, values.y());
+        element.addProperty(KEY_SCALE, values.scale());
+        element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_ICON_SIDE, values.iconSide());
+        return element;
+    }
+
+    private static JsonObject writeSouls(SoulsHudValues values) {
         JsonObject element = new JsonObject();
         element.addProperty(KEY_ENABLED, values.enabled());
         element.addProperty(KEY_ANCHOR, values.anchor());

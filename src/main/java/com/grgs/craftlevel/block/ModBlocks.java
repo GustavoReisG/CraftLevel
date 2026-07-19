@@ -24,5 +24,10 @@ public final class ModBlocks {
                     .sound(SoundType.METAL))
     );
 
+    public static final RegistryObject<Block> PLAYER_GRAVESTONE = BLOCKS.register(
+            "player_gravestone",
+            PlayerGravestoneBlock::new
+    );
+
     private ModBlocks() {}
 }

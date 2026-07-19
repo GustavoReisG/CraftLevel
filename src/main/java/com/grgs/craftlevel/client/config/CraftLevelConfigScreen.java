@@ -28,8 +28,15 @@ public class CraftLevelConfigScreen extends Screen {
                         minecraft.setScreen(new EconomyConfigMenuScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)
                 .build();
-        ConfigScreenLayout.positionRow(this, row, economy);
+        ConfigScreenLayout.positionRow(this, row++, economy);
         addRenderableWidget(economy);
+
+        Button souls = Button.builder(Component.literal("Souls"), btn ->
+                        minecraft.setScreen(new SoulsConfigScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, row, souls);
+        addRenderableWidget(souls);
 
         addRenderableWidget(ConfigScreenLayout.bottomDone(this, this::onClose));
     }

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "craftlevel:block/player_gravestone" },
+    "facing=south": { "model": "craftlevel:block/player_gravestone", "y": 180 },
+    "facing=west": { "model": "craftlevel:block/player_gravestone", "y": 270 },
+    "facing=east": { "model": "craftlevel:block/player_gravestone", "y": 90 }
+  }
+}

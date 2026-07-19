@@ -111,12 +111,7 @@ public final class CraftLevelTexturesPack {
 
     public static void seedProfessionTextures() {
         ensurePackStructure();
-        try (InputStream defaultTexture = CraftLevel.class.getResourceAsStream(DEFAULT_WANDERING_TRADER)) {
-            if (defaultTexture == null) {
-                CraftLevel.LOGGER.warn("[CraftLevel] Missing default wandering_trader.png in mod jar");
-                return;
-            }
-            byte[] bytes = defaultTexture.readAllBytes();
+        try {
             VillagerParser.parseProfessions(VillagerConfigFiles.loadVillagerJson()).forEach((id, def) -> {
                 if (!id.startsWith("craftlevel:")) {
                     return;
@@ -128,13 +123,26 @@ public final class CraftLevelTexturesPack {
                 }
                 try {
                     Files.createDirectories(target.getParent());
-                    Files.write(target, bytes);
+                    String defaultPath = "/assets/craftlevel/defaults/" + professionPath + ".png";
+                    try (InputStream specific = CraftLevel.class.getResourceAsStream(defaultPath)) {
+                        if (specific != null) {
+                            Files.copy(specific, target, StandardCopyOption.REPLACE_EXISTING);
+                        } else {
+                            try (InputStream fallback = CraftLevel.class.getResourceAsStream(DEFAULT_WANDERING_TRADER)) {
+                                if (fallback == null) {
+                                    CraftLevel.LOGGER.warn("[CraftLevel] Missing default wandering_trader.png in mod jar");
+                                    return;
+                                }
+                                Files.copy(fallback, target, StandardCopyOption.REPLACE_EXISTING);
+                            }
+                        }
+                    }
                     CraftLevel.LOGGER.info("[CraftLevel] Seeded profession texture {}", target);
                 } catch (IOException e) {
                     CraftLevel.LOGGER.warn("[CraftLevel] Failed to seed texture for {}", id, e);
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to seed profession textures", e);
         }
     }

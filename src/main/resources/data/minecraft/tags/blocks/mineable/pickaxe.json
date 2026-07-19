@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "craftlevel:compressed_emerald_block"
+    "craftlevel:compressed_emerald_block",
+    "craftlevel:player_gravestone"
   ]
 }

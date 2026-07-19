@@ -519,6 +519,15 @@ public class ConfigManager {
           "font_scale": 1.0,
           "icon_side": "left"
         },
+        "souls": {
+          "enabled": true,
+          "anchor": "top_left",
+          "x": 2,
+          "y": 50,
+          "scale": 0.7,
+          "font_scale": 1.0,
+          "icon_side": "left"
+        },
         "mob_focus": {
           "anchor": "top_left",
           "x": 50,
@@ -552,6 +561,17 @@ public class ConfigManager {
     }
     """;
 
+    private static final String DEFAULT_SOULS = """
+    {
+      "max_souls": 3,
+      "time_restore": 1800,
+      "lost_emeralds_type": "percentage",
+      "lost_emeralds_quantity": 10,
+      "lost_items": "inventory",
+      "gravestone": true
+    }
+    """;
+
     // =========================================================
     // VALORES CARREGADOS
     // =========================================================
@@ -563,6 +583,7 @@ public class ConfigManager {
     public static JsonObject mobLevels = new JsonObject();
     public static JsonObject economy = new JsonObject();
     public static JsonObject villager = new JsonObject();
+    public static JsonObject souls = new JsonObject();
 
     // =========================================================
     // INIT
@@ -588,6 +609,7 @@ public class ConfigManager {
         loadMobOverrides();
         loadMobLevels();
         loadEconomy();
+        loadSouls();
         loadVillager();
 
         ConfigParser.parseConfig(config);
@@ -596,6 +618,7 @@ public class ConfigManager {
         ConfigParser.parseMobOverrides(mobOverrides);
         ConfigParser.parseMobLevels(mobLevels);
         EconomyParser.parseEconomy(economy);
+        SoulsParser.parse(souls);
         VillagerTradeCatalog.load(villager);
         VillagerTradeService.onReload();
         ProfessionLanguages.refresh();
@@ -643,6 +666,10 @@ public class ConfigManager {
 
     private static void loadEconomy() throws IOException {
         economy = loadOrCreate("economy.json", DEFAULT_ECONOMY);
+    }
+
+    private static void loadSouls() throws IOException {
+        souls = loadOrCreate("souls.json", DEFAULT_SOULS);
     }
 
     private static void loadVillager() {

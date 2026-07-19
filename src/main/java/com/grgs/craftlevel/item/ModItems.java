@@ -24,5 +24,10 @@ public final class ModItems {
             () -> new BlockItem(ModBlocks.COMPRESSED_EMERALD_BLOCK.get(), new Item.Properties())
     );
 
+    public static final RegistryObject<Item> PLAYER_GRAVESTONE = ITEMS.register(
+            "player_gravestone",
+            () -> new BlockItem(ModBlocks.PLAYER_GRAVESTONE.get(), new Item.Properties())
+    );
+
     private ModItems() {}
 }
