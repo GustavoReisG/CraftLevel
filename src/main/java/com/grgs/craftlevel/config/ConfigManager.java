@@ -106,10 +106,10 @@ public class ConfigManager {
           "minecraft:player_attack": "melee_power",
           "minecraft:arrow": "melee_power",
           "minecraft:trident": "melee_power",
-          "minecraft:magic": "spell",
-          "minecraft:indirect_magic": "spell",
+          "minecraft:magic": "spell_power",
+          "minecraft:indirect_magic": "spell_power",
           "attributeslib:current_hp_damage": "flat",
-          "*irons_spellbooks*": "spell",
+          "*irons_spellbooks*": "spell_power",
           "cataclysm:lightning": "flat",
           "minecraft:mob_projectile": "flat"
         },
@@ -543,7 +543,7 @@ public class ConfigManager {
     }
     """;
 
-    private static final String DEFAULT_ECONOMY = """
+    public static final String DEFAULT_ECONOMY = """
     {
       "player": {
         "starting_balance": 0
@@ -557,6 +557,66 @@ public class ConfigManager {
             "refresh_ticks": 24000
           }
         }
+      },
+      "kill_rewards": {
+        "same_level_emeralds": 1,
+        "low_level_emeralds": 0,
+        "high_level_bonus": 2,
+        "level_gap": 5,
+        "boss_bonus": 64,
+        "bosses": [
+          "minecraft:wither",
+          "minecraft:warden",
+          "minecraft:elder_guardian",
+          "minecraft:ender_dragon",
+          "cataclysm:the_leviathan",
+          "cataclysm:the_harbinger",
+          "cataclysm:netherite_monstrosity",
+          "cataclysm:scylla",
+          "cataclysm:ignis",
+          "cataclysm:ender_guardian",
+          "cataclysm:maledictus",
+          "cataclysm:ancient_remnant",
+          "irons_spellbooks:dead_king"
+        ],
+        "blacklist": [
+          "minecraft:allay",
+          "minecraft:axolotl",
+          "minecraft:bat",
+          "minecraft:bee",
+          "minecraft:camel",
+          "minecraft:cat",
+          "minecraft:chicken",
+          "minecraft:cod",
+          "minecraft:cow",
+          "minecraft:dolphin",
+          "minecraft:donkey",
+          "minecraft:fox",
+          "minecraft:frog",
+          "minecraft:glow_squid",
+          "minecraft:goat",
+          "minecraft:horse",
+          "minecraft:llama",
+          "minecraft:mooshroom",
+          "minecraft:mule",
+          "minecraft:ocelot",
+          "minecraft:panda",
+          "minecraft:parrot",
+          "minecraft:pig",
+          "minecraft:pufferfish",
+          "minecraft:rabbit",
+          "minecraft:salmon",
+          "minecraft:sheep",
+          "minecraft:sniffer",
+          "minecraft:snow_golem",
+          "minecraft:squid",
+          "minecraft:strider",
+          "minecraft:tadpole",
+          "minecraft:trader_llama",
+          "minecraft:tropical_fish",
+          "minecraft:turtle",
+          "minecraft:wolf"
+        ]
       }
     }
     """;
@@ -564,10 +624,10 @@ public class ConfigManager {
     private static final String DEFAULT_SOULS = """
     {
       "max_souls": 3,
-      "time_restore": 1800,
+      "time_restore": 1200,
       "lost_emeralds_type": "percentage",
       "lost_emeralds_quantity": 10,
-      "lost_items": "inventory",
+      "lost_items": "random",
       "gravestone": true
     }
     """;

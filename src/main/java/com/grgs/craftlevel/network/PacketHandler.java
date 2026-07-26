@@ -105,6 +105,14 @@ public class PacketHandler {
                 SyncPlayerSoulsPacket::decode,
                 SyncPlayerSoulsPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                10,
+                SyncEmeraldBankPacket.class,
+                SyncEmeraldBankPacket::encode,
+                SyncEmeraldBankPacket::decode,
+                SyncEmeraldBankPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

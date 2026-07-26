@@ -1,5 +1,10 @@
 {
   "mappings": {
+    "com/grgs/craftlevel/mixin/AbstractVillagerMixin": {
+      "notifyTrade": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_6996_(Lnet/minecraft/world/item/trading/MerchantOffer;)V",
+      "notifyTrade(Lnet/minecraft/world/item/trading/MerchantOffer;)V": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_6996_(Lnet/minecraft/world/item/trading/MerchantOffer;)V",
+      "Lnet/minecraft/world/entity/npc/AbstractVillager;rewardTradeXp(Lnet/minecraft/world/item/trading/MerchantOffer;)V": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_8058_(Lnet/minecraft/world/item/trading/MerchantOffer;)V"
+    },
     "com/grgs/craftlevel/mixin/LivingEntityMixin": {
       "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F)V": "Lnet/minecraft/world/entity/LivingEntity;m_6472_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
     },
@@ -23,6 +28,11 @@
   },
   "data": {
     "searge": {
+      "com/grgs/craftlevel/mixin/AbstractVillagerMixin": {
+        "notifyTrade": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_6996_(Lnet/minecraft/world/item/trading/MerchantOffer;)V",
+        "notifyTrade(Lnet/minecraft/world/item/trading/MerchantOffer;)V": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_6996_(Lnet/minecraft/world/item/trading/MerchantOffer;)V",
+        "Lnet/minecraft/world/entity/npc/AbstractVillager;rewardTradeXp(Lnet/minecraft/world/item/trading/MerchantOffer;)V": "Lnet/minecraft/world/entity/npc/AbstractVillager;m_8058_(Lnet/minecraft/world/item/trading/MerchantOffer;)V"
+      },
       "com/grgs/craftlevel/mixin/LivingEntityMixin": {
         "hurtArmor(Lnet/minecraft/world/damagesource/DamageSource;F)V": "Lnet/minecraft/world/entity/LivingEntity;m_6472_(Lnet/minecraft/world/damagesource/DamageSource;F)V"
       },

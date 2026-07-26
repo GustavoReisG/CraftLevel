@@ -4,11 +4,15 @@ import com.grgs.craftlevel.villager.VillagerTradeDef;
 import com.grgs.craftlevel.villager.VillagerTradeSlotDef;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
-/** Colapsa variantes coloridas de itens em tags no parse de trades. */
+/**
+ * Migra variantes coloridas (wool, etc.) para tags no parse.
+ * Duplicatas idênticas no JSON são preservadas (rolls extras do mesmo trade).
+ */
 public final class VillagerJsonMigrator {
 
     private static final List<String> WOOL_COLORS = List.of(
@@ -23,12 +27,30 @@ public final class VillagerJsonMigrator {
     }
 
     private static List<VillagerTradeDef> collapseTrades(List<VillagerTradeDef> trades) {
-        Map<String, VillagerTradeDef> groups = new LinkedHashMap<>();
+        List<VillagerTradeDef> result = new ArrayList<>(trades.size());
+        Set<String> collapsedColorSignatures = new HashSet<>();
+
         for (VillagerTradeDef trade : trades) {
-            String signature = collapseSignature(trade);
-            groups.putIfAbsent(signature, collapseTrade(trade));
+            VillagerTradeDef collapsed = collapseTrade(trade);
+            boolean colorMigrated = wasColorMigrated(trade, collapsed);
+
+            if (colorMigrated) {
+                String signature = collapseSignature(collapsed);
+                // Várias cores iguais (ex.: white_wool + orange_wool) → um trade com tag
+                if (!collapsedColorSignatures.add(signature)) {
+                    continue;
+                }
+            }
+
+            result.add(collapsed);
         }
-        return new ArrayList<>(groups.values());
+        return result;
+    }
+
+    private static boolean wasColorMigrated(VillagerTradeDef original, VillagerTradeDef collapsed) {
+        return !Objects.equals(original.input1().item(), collapsed.input1().item())
+                || !Objects.equals(original.input2().item(), collapsed.input2().item())
+                || !Objects.equals(original.output().item(), collapsed.output().item());
     }
 
     private static VillagerTradeDef collapseTrade(VillagerTradeDef trade) {

@@ -1,8 +1,8 @@
 package com.grgs.craftlevel.villager;
 
 import com.grgs.craftlevel.capability.IVillagerEconomy;
-import com.grgs.craftlevel.villager.VillagerTradeRollCache;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -21,9 +21,10 @@ public final class TradeOfferBuilder {
     public static MerchantOffers build(
             List<VillagerTradeDef> trades,
             IVillagerEconomy economy,
-            UUID entityId,
+            AbstractVillager villager,
             RandomSource random
     ) {
+        UUID entityId = villager.getUUID();
         MerchantOffers offers = new MerchantOffers();
         List<TradeRollState> rolls = ensureRolls(trades, entityId, random);
 
@@ -39,7 +40,7 @@ public final class TradeOfferBuilder {
 
             ItemStack costA = roll.input1().toStack();
             ItemStack costB = roll.input2().toStack();
-            ItemStack result = roll.output().toStack();
+            ItemStack result = resolveOutput(trade, roll, i, rolls, villager, entityId, random);
 
             if (!isValidRoll(trade, costA, costB, result)) {
                 continue;
@@ -67,6 +68,35 @@ public final class TradeOfferBuilder {
         return rolls;
     }
 
+    private static ItemStack resolveOutput(
+            VillagerTradeDef trade,
+            TradeRollState roll,
+            int index,
+            List<TradeRollState> rolls,
+            AbstractVillager villager,
+            UUID entityId,
+            RandomSource random
+    ) {
+        if (!ExplorerMapService.isMarker(trade.output()) && !ExplorerMapService.isMarkerSlot(roll.output())) {
+            return roll.output().toStack();
+        }
+
+        // Já gerado e cacheado como filled_map
+        if (!ExplorerMapService.isMarkerSlot(roll.output())) {
+            return roll.output().toStack();
+        }
+
+        ItemStack map = ExplorerMapService.create(villager, random);
+        if (map.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+
+        TradeRollState updated = new TradeRollState(roll.input1(), roll.input2(), ResolvedTradeSlot.fromStack(map));
+        rolls.set(index, updated);
+        VillagerTradeRollCache.set(entityId, rolls);
+        return map;
+    }
+
     private static List<TradeRollState> ensureRolls(
             List<VillagerTradeDef> trades,
             UUID entityId,
@@ -83,10 +113,13 @@ public final class TradeOfferBuilder {
     }
 
     private static TradeRollState rollTrade(VillagerTradeDef trade, RandomSource random) {
+        ResolvedTradeSlot output = ExplorerMapService.isMarker(trade.output())
+                ? ExplorerMapService.markerSlot()
+                : TradeSlotResolver.resolveCached(trade.output(), random);
         return new TradeRollState(
                 TradeSlotResolver.resolveCached(trade.input1(), random),
                 TradeSlotResolver.resolveCached(trade.input2(), random),
-                TradeSlotResolver.resolveCached(trade.output(), random)
+                output
         );
     }
 

@@ -23,11 +23,20 @@ public class EconomyConfigMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 0, balance);
         addRenderableWidget(balance);
 
+        Button killRewards = Button.builder(Component.literal("Kill Rewards"), btn -> {
+                        KillRewardsPersistence.beginEditing(minecraft);
+                        minecraft.setScreen(new KillRewardsConfigScreen(this));
+                    })
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 1, killRewards);
+        addRenderableWidget(killRewards);
+
         Button villagers = Button.builder(Component.literal("Villagers"), btn ->
                         minecraft.setScreen(new VillagerConfigMenuScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)
                 .build();
-        ConfigScreenLayout.positionRow(this, 1, villagers);
+        ConfigScreenLayout.positionRow(this, 2, villagers);
         addRenderableWidget(villagers);
 
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));

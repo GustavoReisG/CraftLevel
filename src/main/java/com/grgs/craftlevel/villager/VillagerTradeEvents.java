@@ -4,6 +4,7 @@ import com.grgs.craftlevel.events.CraftLevelEvents;
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
 import com.grgs.craftlevel.capability.VillagerEconomyProvider;
+import com.grgs.craftlevel.economy.BankPaymentService;
 import com.grgs.craftlevel.economy.EmeraldPaymentService;
 import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.economy.MerchantMenuHelper;
@@ -132,6 +133,7 @@ public final class VillagerTradeEvents {
                 MerchantOffer selected = MerchantMenuHelper.getSelectedOffer(openMenu);
                 if (selected != null) {
                     EmeraldPaymentService.refillPaymentBuffer(player, openMenu, selected);
+                    BankPaymentService.refillPaymentBuffer(player, openMenu, selected);
                 }
                 PacketHandler.sendToPlayer(
                         player,

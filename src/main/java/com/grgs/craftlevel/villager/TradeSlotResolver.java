@@ -43,6 +43,9 @@ public final class TradeSlotResolver {
         if (slot == null || slot.isEmpty()) {
             return true;
         }
+        if (ExplorerMapService.isMarker(slot)) {
+            return true;
+        }
         return !candidates(slot).isEmpty();
     }
 

@@ -1,7 +1,9 @@
 package com.grgs.craftlevel.economy;
 
+import com.grgs.craftlevel.capability.IPlayerEmeraldBank;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
+import com.grgs.craftlevel.capability.PlayerEmeraldBankProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.VillagerEconomyProvider;
 import com.grgs.craftlevel.config.EconomyParser;
@@ -25,6 +27,12 @@ public final class EconomyService {
             if (!wallet.isInitialized()) {
                 wallet.setBalance(EconomyParser.playerStartingBalance);
                 wallet.setInitialized(true);
+            }
+        });
+        player.getCapability(PlayerEmeraldBankProvider.EMERALD_BANK).ifPresent(bank -> {
+            if (!bank.isInitialized()) {
+                bank.setBalance(0L);
+                bank.setInitialized(true);
             }
         });
     }
@@ -103,6 +111,12 @@ public final class EconomyService {
     public static long getWalletBalance(Player player) {
         return player.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET)
                 .map(IPlayerEmeraldWallet::getBalance)
+                .orElse(0L);
+    }
+
+    public static long getBankBalance(Player player) {
+        return player.getCapability(PlayerEmeraldBankProvider.EMERALD_BANK)
+                .map(IPlayerEmeraldBank::getBalance)
                 .orElse(0L);
     }
 

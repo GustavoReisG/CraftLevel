@@ -38,7 +38,7 @@ public final class VillagerTradeService {
 
         String professionId = EconomyService.professionId(villager);
         List<VillagerTradeDef> trades = VillagerTradeCatalog.tradesFor(professionId);
-        MerchantOffers offers = TradeOfferBuilder.build(trades, economy, villager.getUUID(), villager.getRandom());
+        MerchantOffers offers = TradeOfferBuilder.build(trades, economy, villager, villager.getRandom());
         VillagerTradeValidator.applyEconomyLocks(offers, economy);
         replaceOffers(villager, offers);
         APPLIED_PROFESSION.put(villager.getUUID(), professionId);
@@ -64,7 +64,7 @@ public final class VillagerTradeService {
         List<VillagerTradeDef> trades = VillagerTradeCatalog.tradesFor(professionId);
         List<TradeRollState> rolls = TradeOfferBuilder.rollAll(trades, villager.getRandom());
         VillagerTradeRollCache.set(villager.getUUID(), rolls);
-        MerchantOffers offers = TradeOfferBuilder.build(trades, economy, villager.getUUID(), villager.getRandom());
+        MerchantOffers offers = TradeOfferBuilder.build(trades, economy, villager, villager.getRandom());
         VillagerTradeValidator.applyEconomyLocks(offers, economy);
         replaceOffers(villager, offers);
     }

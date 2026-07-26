@@ -2,6 +2,7 @@ package com.grgs.craftlevel.events;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
+import com.grgs.craftlevel.capability.PlayerEmeraldBankProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.capability.PlayerSoulsProvider;
@@ -10,8 +11,10 @@ import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.damage.EventScalingService;
 import com.grgs.craftlevel.economy.EconomyService;
+import com.grgs.craftlevel.economy.KillRewardService;
 import com.grgs.craftlevel.network.DamageIndicatorPacket;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.network.SyncEmeraldBankPacket;
 import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
 import com.grgs.craftlevel.scaling.StatRefreshService;
@@ -81,6 +84,10 @@ public class CraftLevelEvents {
             event.addCapability(
                     new ResourceLocation(CraftLevel.MODID, "emerald_wallet"),
                     new PlayerEmeraldWalletProvider()
+            );
+            event.addCapability(
+                    new ResourceLocation(CraftLevel.MODID, "emerald_bank"),
+                    new PlayerEmeraldBankProvider()
             );
             event.addCapability(
                     new ResourceLocation(CraftLevel.MODID, "player_souls"),
@@ -214,12 +221,14 @@ public class CraftLevelEvents {
 
     /**
      * Morte de mob por player: concede LP (baseado na vida máxima do mob),
-     * processa level ups encadeados e sincroniza HUD.
+     * processa level ups encadeados, sincroniza HUD e credita kill rewards na wallet.
      */
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (!(event.getEntity() instanceof Mob mob)) return;
+
+        KillRewardService.rewardKill(player, mob);
 
         player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(playerCap -> {
             int lp = Math.max(1, (int) mob.getMaxHealth());
@@ -272,6 +281,13 @@ public class CraftLevelEvents {
             });
         });
 
+        original.getCapability(PlayerEmeraldBankProvider.EMERALD_BANK).ifPresent(oldCap -> {
+            clone.getCapability(PlayerEmeraldBankProvider.EMERALD_BANK).ifPresent(newCap -> {
+                newCap.setBalance(oldCap.getBalance());
+                newCap.setInitialized(oldCap.isInitialized());
+            });
+        });
+
         original.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(oldCap -> {
             clone.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(newCap -> {
                 newCap.setSouls(oldCap.getSouls());
@@ -302,6 +318,7 @@ public class CraftLevelEvents {
         EconomyService.ensurePlayerEconomy(serverPlayer);
         applyPlayerState(serverPlayer);
         PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(serverPlayer)));
+        PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldBankPacket(EconomyService.getBankBalance(serverPlayer)));
         DebugLog.info("Player login: {}", serverPlayer.getName().getString());
     }
 

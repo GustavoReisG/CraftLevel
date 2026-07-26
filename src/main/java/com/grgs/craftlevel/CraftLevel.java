@@ -2,6 +2,7 @@ package com.grgs.craftlevel;
 
 import com.mojang.logging.LogUtils;
 import com.grgs.craftlevel.capability.IMobLevel;
+import com.grgs.craftlevel.capability.IPlayerEmeraldBank;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
 import com.grgs.craftlevel.capability.IPlayerSouls;
@@ -49,6 +50,7 @@ public class CraftLevel {
         CapabilityManager.get(new CapabilityToken<IPlayerLevel>() {});
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerEmeraldWallet>() {});
+        CapabilityManager.get(new CapabilityToken<IPlayerEmeraldBank>() {});
         CapabilityManager.get(new CapabilityToken<IVillagerEconomy>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerSouls>() {});
         PacketHandler.register();

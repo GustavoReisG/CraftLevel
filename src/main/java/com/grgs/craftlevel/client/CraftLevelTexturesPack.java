@@ -17,11 +17,15 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+
+import com.google.gson.JsonParser;
 
 /**
  * Resource pack CraftLevel_Textures em resourcepacks/CraftLevel_Textures/.
@@ -112,39 +116,57 @@ public final class CraftLevelTexturesPack {
     public static void seedProfessionTextures() {
         ensurePackStructure();
         try {
-            VillagerParser.parseProfessions(VillagerConfigFiles.loadVillagerJson()).forEach((id, def) -> {
-                if (!id.startsWith("craftlevel:")) {
-                    return;
-                }
+            for (String id : craftlevelProfessionIds()) {
                 String professionPath = ProfessionIds.pathFromFullId(id);
                 Path target = packTexturePath(professionPath);
-                if (Files.exists(target)) {
-                    return;
-                }
                 try {
                     Files.createDirectories(target.getParent());
                     String defaultPath = "/assets/craftlevel/defaults/" + professionPath + ".png";
                     try (InputStream specific = CraftLevel.class.getResourceAsStream(defaultPath)) {
                         if (specific != null) {
+                            // Default do jar (reforger.png, banker.png, …) sempre gera/atualiza no pack.
                             Files.copy(specific, target, StandardCopyOption.REPLACE_EXISTING);
-                        } else {
-                            try (InputStream fallback = CraftLevel.class.getResourceAsStream(DEFAULT_WANDERING_TRADER)) {
-                                if (fallback == null) {
-                                    CraftLevel.LOGGER.warn("[CraftLevel] Missing default wandering_trader.png in mod jar");
-                                    return;
-                                }
-                                Files.copy(fallback, target, StandardCopyOption.REPLACE_EXISTING);
-                            }
+                            CraftLevel.LOGGER.info("[CraftLevel] Seeded profession texture {}", target);
+                            continue;
                         }
+                    }
+                    if (Files.exists(target)) {
+                        continue;
+                    }
+                    try (InputStream fallback = CraftLevel.class.getResourceAsStream(DEFAULT_WANDERING_TRADER)) {
+                        if (fallback == null) {
+                            CraftLevel.LOGGER.warn("[CraftLevel] Missing default wandering_trader.png in mod jar");
+                            continue;
+                        }
+                        Files.copy(fallback, target, StandardCopyOption.REPLACE_EXISTING);
                     }
                     CraftLevel.LOGGER.info("[CraftLevel] Seeded profession texture {}", target);
                 } catch (IOException e) {
                     CraftLevel.LOGGER.warn("[CraftLevel] Failed to seed texture for {}", id, e);
                 }
-            });
+            }
         } catch (Exception e) {
             CraftLevel.LOGGER.warn("[CraftLevel] Failed to seed profession textures", e);
         }
+    }
+
+    /** Une profissões do config e do villager.json default do jar (ex.: reforger em installs antigas). */
+    private static LinkedHashSet<String> craftlevelProfessionIds() {
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        VillagerParser.parseProfessions(VillagerConfigFiles.loadVillagerJson()).keySet().stream()
+                .filter(id -> id.startsWith("craftlevel:"))
+                .forEach(ids::add);
+        try (InputStream stream = CraftLevel.class.getResourceAsStream("/assets/craftlevel/defaults/villager.json")) {
+            if (stream != null) {
+                var json = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
+                VillagerParser.parseProfessions(json).keySet().stream()
+                        .filter(id -> id.startsWith("craftlevel:"))
+                        .forEach(ids::add);
+            }
+        } catch (Exception e) {
+            CraftLevel.LOGGER.warn("[CraftLevel] Failed to read default villager professions for textures", e);
+        }
+        return ids;
     }
 
     private static void cleanupLegacyFolders() {

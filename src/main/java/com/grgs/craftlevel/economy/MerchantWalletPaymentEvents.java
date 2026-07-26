@@ -4,6 +4,7 @@ import com.grgs.craftlevel.CraftLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MerchantMenu;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -46,7 +47,9 @@ public final class MerchantWalletPaymentEvents {
         }
 
         LAST_SELECTION.put(player.getUUID(), selection);
-        EmeraldPaymentService.refillPaymentFromWallet(player, menu, MerchantMenuHelper.getSelectedOffer(menu));
+        MerchantOffer offer = MerchantMenuHelper.getSelectedOffer(menu);
+        EmeraldPaymentService.refillPaymentFromWallet(player, menu, offer);
+        BankPaymentService.refillPaymentFromBank(player, menu, offer);
     }
 
     @SubscribeEvent
@@ -77,5 +80,6 @@ public final class MerchantWalletPaymentEvents {
 
         var container = MerchantMenuHelper.getTradeContainer(menu);
         EmeraldPaymentService.returnPaymentEmeraldsToWallet(player, container);
+        BankPaymentService.depositAllStorageOnClose(player, menu);
     }
 }

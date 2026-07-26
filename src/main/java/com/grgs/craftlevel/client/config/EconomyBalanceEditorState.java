@@ -19,6 +19,8 @@ final class EconomyBalanceEditorState {
     private int villagerDefaultStarting = 1000;
     private int villagerRefreshTicks = 24000;
     private final LinkedHashMap<String, ProfessionEntry> perProfession = new LinkedHashMap<>();
+    /** Preserva kill_rewards ao salvar Balance. */
+    private JsonObject killRewards;
 
     static EconomyBalanceEditorState loadFrom(Path file) {
         EconomyBalanceEditorState state = new EconomyBalanceEditorState();
@@ -60,6 +62,10 @@ final class EconomyBalanceEditorState {
                 });
             }
         }
+
+        if (json.has("kill_rewards") && json.get("kill_rewards").isJsonObject()) {
+            killRewards = json.getAsJsonObject("kill_rewards").deepCopy();
+        }
     }
 
     JsonObject toJson() {
@@ -82,6 +88,12 @@ final class EconomyBalanceEditorState {
         });
         villager.add("per_profession", professions);
         root.add("villager_balance", villager);
+
+        if (killRewards != null) {
+            root.add("kill_rewards", killRewards.deepCopy());
+        } else {
+            root.add("kill_rewards", new KillRewardsEditorState().toKillRewardsJson());
+        }
 
         return root;
     }

@@ -20,6 +20,7 @@ import java.util.List;
  * Resolve curingas {@code "*"} em valores NBT.
  * <ul>
  *   <li>{@code id:"*"} / {@code lvl:"*"} → encantamento tradeable + nível</li>
+ *   <li>{@code id:"*"} + {@code level} → spell aleatório do Iron's Spells (se presente)</li>
  *   <li>{@code Potion:"*"} → poção aleatória do registry (exceto empty)</li>
  * </ul>
  */
@@ -43,6 +44,7 @@ public final class NbtWildcardResolver {
     private static void walk(Tag tag, RandomSource random) {
         if (tag instanceof CompoundTag compound) {
             resolvePotionTag(compound, random);
+            resolveSpellCompound(compound, random);
             resolveEnchantmentCompound(compound, random);
             for (String key : List.copyOf(compound.getAllKeys())) {
                 Tag child = compound.get(key);
@@ -72,7 +74,27 @@ public final class NbtWildcardResolver {
         compound.putString("Potion", key.toString());
     }
 
+    /** ISP scroll entries usam {@code level}; encantamentos usam {@code lvl}. */
+    private static void resolveSpellCompound(CompoundTag compound, RandomSource random) {
+        if (!isWildcardString(compound.get("id"))) {
+            return;
+        }
+        if (!compound.contains("level") || compound.contains("lvl")) {
+            return;
+        }
+        String spellId = pickIronSpellId(random);
+        if (spellId == null) {
+            return;
+        }
+        compound.putString("id", spellId);
+    }
+
     private static void resolveEnchantmentCompound(CompoundTag compound, RandomSource random) {
+        // Evita tratar entry de spell (Iron's Spells) como encantamento.
+        if (compound.contains("level") && !compound.contains("lvl")) {
+            return;
+        }
+
         boolean idWildcard = isWildcardString(compound.get("id"));
         boolean lvlWildcard = isWildcardString(compound.get("lvl"));
         if (!idWildcard && !lvlWildcard) {
@@ -164,5 +186,35 @@ public final class NbtWildcardResolver {
             return null;
         }
         return options.get(random.nextInt(options.size()));
+    }
+
+    /** Reflection — sem dependência hard em Iron's Spells. */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static String pickIronSpellId(RandomSource random) {
+        try {
+            Class<?> spellRegistry = Class.forName("io.redspace.ironsspellbooks.api.registry.SpellRegistry");
+            Object registrySupplier = spellRegistry.getField("REGISTRY").get(null);
+            Object registry = registrySupplier.getClass().getMethod("get").invoke(registrySupplier);
+            java.util.Collection values =
+                    (java.util.Collection) registry.getClass().getMethod("getValues").invoke(registry);
+            List<String> ids = new ArrayList<>();
+            for (Object spell : values) {
+                Object key = registry.getClass().getMethod("getKey", Object.class).invoke(registry, spell);
+                if (key == null) {
+                    continue;
+                }
+                String id = key.toString();
+                if (id.endsWith(":none") || id.equals("none")) {
+                    continue;
+                }
+                ids.add(id);
+            }
+            if (ids.isEmpty()) {
+                return null;
+            }
+            return ids.get(random.nextInt(ids.size()));
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 }
