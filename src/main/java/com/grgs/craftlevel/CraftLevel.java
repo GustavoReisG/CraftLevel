@@ -13,6 +13,7 @@ import com.grgs.craftlevel.item.ModCreativeTabs;
 import com.grgs.craftlevel.item.ModItems;
 import com.grgs.craftlevel.menu.ModMenus;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.sound.ModSounds;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -38,6 +39,7 @@ public class CraftLevel {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModSounds.SOUND_EVENTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);

@@ -5,6 +5,7 @@ import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.RequestMobLevelPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -56,8 +58,8 @@ public final class MobPinHud {
     private static final int HEALTH_LEFT = 312;
     private static final int HEALTH_RIGHT = 472;
 
-    /** Centro horizontal alinhado com a coluna de texto (NAME/LVL). */
-    private static final int LEVEL_CENTER_X = (TYPE_LEFT + TYPE_RIGHT) / 2;
+    /** Centro do encaixe inferior do painel direito (não o centro da coluna de texto). */
+    private static final int LEVEL_CENTER_X = 362;
     private static final int LEVEL_CENTER_Y = 254;
     /** Raio da bolinha de disposition (Hostile/Peaceful) no card em px de textura. */
     private static final int DISPOSITION_DOT_RADIUS = 14;
@@ -150,31 +152,46 @@ public final class MobPinHud {
             return null;
         }
 
-        float partialTick = minecraft.getFrameTime();
-        Vec3 start = player.getEyePosition(partialTick);
-        Vec3 look = player.getViewVector(partialTick);
-        Vec3 end = start.add(look.scale(FOCUS_REACH));
-        AABB searchBox = player.getBoundingBox().expandTowards(look.scale(FOCUS_REACH)).inflate(1.0D);
+        // Preferir o alvo exato do crosshair vanilla (centro da tela).
+        HitResult crosshair = minecraft.hitResult;
+        if (crosshair instanceof EntityHitResult entityHit) {
+            LivingEntity living = resolveLivingTarget(entityHit.getEntity());
+            if (living != null && living.isAlive() && living != player) {
+                return living;
+            }
+        }
 
+        // Alcance estendido: raio da câmera (ponteiro/centro da tela), não da cabeça do player.
+        Camera camera = minecraft.gameRenderer.getMainCamera();
+        Vec3 start = camera.getPosition();
+        var lookVec = camera.getLookVector();
+        Vec3 look = new Vec3(lookVec.x(), lookVec.y(), lookVec.z());
+        Vec3 end = start.add(look.scale(FOCUS_REACH));
+
+        double maxDistSq = FOCUS_REACH * FOCUS_REACH;
+        HitResult blockHit = minecraft.level.clip(new ClipContext(
+                start,
+                end,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player
+        ));
+        if (blockHit.getType() == HitResult.Type.BLOCK) {
+            maxDistSq = start.distanceToSqr(blockHit.getLocation());
+        }
+
+        AABB searchBox = new AABB(start, end).inflate(1.0D);
         EntityHitResult hit = ProjectileUtil.getEntityHitResult(
                 player,
                 start,
                 end,
                 searchBox,
                 entity -> isFocusCandidate(entity, player),
-                FOCUS_REACH * FOCUS_REACH
+                maxDistSq
         );
 
         if (hit != null) {
             LivingEntity living = resolveLivingTarget(hit.getEntity());
-            if (living != null && living.isAlive() && living != player) {
-                return living;
-            }
-        }
-
-        HitResult crosshair = minecraft.hitResult;
-        if (crosshair instanceof EntityHitResult entityHit) {
-            LivingEntity living = resolveLivingTarget(entityHit.getEntity());
             if (living != null && living.isAlive() && living != player) {
                 return living;
             }

@@ -1,8 +1,10 @@
 package com.grgs.craftlevel.network;
 
+import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.CraftLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -113,10 +115,31 @@ public class PacketHandler {
                 SyncEmeraldBankPacket::decode,
                 SyncEmeraldBankPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                11,
+                PlayLevelUpSoundPacket.class,
+                PlayLevelUpSoundPacket::encode,
+                PlayLevelUpSoundPacket::decode,
+                PlayLevelUpSoundPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */
     public static void sendToPlayer(ServerPlayer player, Object packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+
+    /** Sincroniza o level do mob para quem o está trackeando (nametag / Mob Focus). */
+    public static void syncMobLevel(Mob mob) {
+        mob.getCapability(MobLevelProvider.MOB_LEVEL).ifPresent(cap -> {
+            if (cap.getLevel() <= 0) {
+                return;
+            }
+            CHANNEL.send(
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> mob),
+                    new SyncMobLevelPacket(mob.getId(), cap.getLevel())
+            );
+        });
     }
 }

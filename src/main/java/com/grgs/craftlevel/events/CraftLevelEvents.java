@@ -14,6 +14,7 @@ import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.economy.KillRewardService;
 import com.grgs.craftlevel.network.DamageIndicatorPacket;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.network.PlayLevelUpSoundPacket;
 import com.grgs.craftlevel.network.SyncEmeraldBankPacket;
 import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
@@ -242,11 +243,13 @@ public class CraftLevelEvents {
                     playerCap.getLp()
             );
 
+            int levelsGained = 0;
             while (playerCap.canLevelUp()) {
                 playerCap.levelUp();
                 StatRefreshService.refreshPlayer(player, playerCap.getLevel());
                 DebugLog.info("Level up: {} -> {}", levelBefore, playerCap.getLevel());
                 levelBefore = playerCap.getLevel();
+                levelsGained++;
             }
 
             if (player instanceof ServerPlayer serverPlayer) {
@@ -255,6 +258,9 @@ public class CraftLevelEvents {
                         playerCap.getLp(),
                         playerCap.getLpToNextLevel()
                 ));
+                if (levelsGained > 0) {
+                    PacketHandler.sendToPlayer(serverPlayer, new PlayLevelUpSoundPacket());
+                }
             }
         });
     }

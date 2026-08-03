@@ -1,0 +1,17 @@
+{
+  "level_up": {
+    "subtitle": "subtitles.craftlevel.level_up",
+    "sounds": [
+      "craftlevel:item/level_up"
+    ]
+  },
+  "level_flask_fail": {
+    "subtitle": "subtitles.craftlevel.level_flask.fail",
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bass",
+        "type": "event"
+      }
+    ]
+  }
+}
