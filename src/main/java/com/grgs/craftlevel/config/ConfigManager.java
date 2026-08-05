@@ -480,7 +480,7 @@ public class ConfigManager {
           "anchor": "bottom_left",
           "x": 2,
           "y": -2,
-          "scale": 0.135,
+          "scale": 0.11,
           "font_scale": 0.7
         },
         "level_circle": {

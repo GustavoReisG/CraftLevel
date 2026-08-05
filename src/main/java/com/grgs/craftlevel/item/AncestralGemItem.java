@@ -26,15 +26,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Frasco que sobe +1 level em qualquer mob (não player),
+ * Gema que sobe +1 level em qualquer mob (não player),
  * desde que o level do mob fique estritamente abaixo do level do player.
  */
-public class LevelFlaskItem extends Item {
+public class AncestralGemItem extends Item {
 
     /** Nome sempre laranja (estilo lendário). */
     private static final Rarity LEGENDARY = Rarity.create("craftlevel_legendary", ChatFormatting.GOLD);
 
-    public LevelFlaskItem(Properties properties) {
+    public AncestralGemItem(Properties properties) {
         super(properties);
     }
 
@@ -50,11 +50,11 @@ public class LevelFlaskItem extends Item {
             List<Component> tooltip,
             TooltipFlag flag
     ) {
-        tooltip.add(Component.translatable("item.craftlevel.level_flask.tooltip.use")
+        tooltip.add(Component.translatable("item.craftlevel.ancestral_gem.tooltip.use")
                 .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.craftlevel.level_flask.tooltip.cap")
+        tooltip.add(Component.translatable("item.craftlevel.ancestral_gem.tooltip.cap")
                 .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.craftlevel.level_flask.tooltip.players")
+        tooltip.add(Component.translatable("item.craftlevel.ancestral_gem.tooltip.players")
                 .withStyle(ChatFormatting.DARK_GRAY));
     }
 
@@ -89,7 +89,7 @@ public class LevelFlaskItem extends Item {
                     mob.getX(),
                     mob.getY(),
                     mob.getZ(),
-                    ModSounds.LEVEL_FLASK_FAIL.get(),
+                    ModSounds.ANCESTRAL_GEM_FAIL.get(),
                     SoundSource.PLAYERS,
                     1.0F,
                     1.0F

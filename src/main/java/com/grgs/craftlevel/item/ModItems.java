@@ -14,14 +14,19 @@ public final class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, CraftLevel.MODID);
 
-    public static final RegistryObject<Item> LEVEL_FLASK = ITEMS.register(
-            "level_flask",
-            () -> new LevelFlaskItem(new Item.Properties())
+    public static final RegistryObject<Item> ANCESTRAL_GEM = ITEMS.register(
+            "ancestral_gem",
+            () -> new AncestralGemItem(new Item.Properties())
+    );
+
+    public static final RegistryObject<Item> IMBUE_FLASK = ITEMS.register(
+            "imbue_flask",
+            () -> new Item(new Item.Properties().stacksTo(16))
     );
 
     public static final RegistryObject<Item> IMBUE_POTION = ITEMS.register(
             "imbue_potion",
-            () -> new ImbuePotionItem(new Item.Properties().stacksTo(16))
+            () -> new ImbuePotionItem(new Item.Properties().stacksTo(1))
     );
 
     public static final RegistryObject<Item> EMERALD_WALLET = ITEMS.register(

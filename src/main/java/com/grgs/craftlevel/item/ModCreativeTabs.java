@@ -21,7 +21,8 @@ public final class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.craftlevel"))
                     .icon(() -> new ItemStack(ModItems.EMERALD_WALLET.get()))
                     .displayItems((params, output) -> {
-                        output.accept(ModItems.LEVEL_FLASK.get());
+                        output.accept(ModItems.ANCESTRAL_GEM.get());
+                        output.accept(ModItems.IMBUE_FLASK.get());
                         ImbuePotionItem.fillCreative(output, ModItems.IMBUE_POTION.get());
                         output.accept(ModItems.EMERALD_WALLET.get());
                         output.accept(ModBlocks.COMPRESSED_EMERALD_BLOCK.get());

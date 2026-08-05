@@ -13,8 +13,11 @@ import com.grgs.craftlevel.item.ModCreativeTabs;
 import com.grgs.craftlevel.item.ModItems;
 import com.grgs.craftlevel.menu.ModMenus;
 import com.grgs.craftlevel.network.PacketHandler;
+import com.grgs.craftlevel.recipe.ImbuePotionBrewingRecipe;
+import com.grgs.craftlevel.recipe.ModRecipes;
 import com.grgs.craftlevel.sound.ModSounds;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -42,12 +45,13 @@ public class CraftLevel {
         ModSounds.SOUND_EVENTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
+        ModRecipes.SERIALIZERS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         LOGGER.info("Craft Level initialized!");
     }
 
-    /** Setup comum: capabilities + canal de rede. */
+    /** Setup comum: capabilities + canal de rede + brewing. */
     private void commonSetup(final FMLCommonSetupEvent event) {
         CapabilityManager.get(new CapabilityToken<IPlayerLevel>() {});
         CapabilityManager.get(new CapabilityToken<IMobLevel>() {});
@@ -56,6 +60,7 @@ public class CraftLevel {
         CapabilityManager.get(new CapabilityToken<IVillagerEconomy>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerSouls>() {});
         PacketHandler.register();
+        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new ImbuePotionBrewingRecipe()));
         LOGGER.info("Craft Level common setup complete!");
     }
 }

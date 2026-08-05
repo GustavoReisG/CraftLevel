@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "craftlevel:item/level_flask"
+    "layer0": "craftlevel:item/ancestral_gem"
   }
 }

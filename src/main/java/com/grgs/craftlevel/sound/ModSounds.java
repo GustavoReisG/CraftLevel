@@ -10,18 +10,18 @@ import net.minecraftforge.registries.RegistryObject;
 /**
  * Sons do Craft Level.
  * <p>
- * Fail do frasco ainda usa placeholder vanilla em {@code sounds.json}
- * até o .ogg final existir em {@code sounds/item/level_flask_fail.ogg}.
+ * Fail da gema ainda usa placeholder vanilla em {@code sounds.json}
+ * até o .ogg final existir em {@code sounds/item/ancestral_gem_fail.ogg}.
  */
 public final class ModSounds {
 
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, CraftLevel.MODID);
 
-    /** Level up do player e sucesso do frasco no mob. */
+    /** Level up do player e sucesso da gema no mob. */
     public static final RegistryObject<SoundEvent> LEVEL_UP = register("level_up");
 
-    public static final RegistryObject<SoundEvent> LEVEL_FLASK_FAIL = register("level_flask_fail");
+    public static final RegistryObject<SoundEvent> ANCESTRAL_GEM_FAIL = register("ancestral_gem_fail");
 
     private ModSounds() {}
 
