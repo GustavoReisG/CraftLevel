@@ -5,8 +5,10 @@ import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldBankProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
+import com.grgs.craftlevel.capability.PlayerGloryProvider;
 import com.grgs.craftlevel.capability.PlayerSoulsProvider;
 import com.grgs.craftlevel.capability.VillagerEconomyProvider;
+import com.grgs.craftlevel.glory.GloryKillsService;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.damage.EventScalingService;
@@ -93,6 +95,10 @@ public class CraftLevelEvents {
             event.addCapability(
                     new ResourceLocation(CraftLevel.MODID, "player_souls"),
                     new PlayerSoulsProvider()
+            );
+            event.addCapability(
+                    new ResourceLocation(CraftLevel.MODID, "player_glory"),
+                    new PlayerGloryProvider()
             );
         }
 
@@ -230,6 +236,7 @@ public class CraftLevelEvents {
         if (!(event.getEntity() instanceof Mob mob)) return;
 
         KillRewardService.rewardKill(player, mob);
+        GloryKillsService.rewardKill(player, mob);
 
         player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(playerCap -> {
             int lp = Math.max(1, (int) mob.getMaxHealth());
@@ -302,6 +309,13 @@ public class CraftLevelEvents {
             });
         });
 
+        original.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(oldCap -> {
+            clone.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(newCap -> {
+                newCap.setGloryKills(oldCap.getGloryKills());
+                newCap.setSkillPoints(oldCap.getSkillPoints());
+            });
+        });
+
         original.invalidateCaps();
         applyPlayerState(clone);
         DebugLog.info("Player clone: level {} LP {}", clone.getName().getString(), clone.getCapability(PlayerLevelProvider.PLAYER_LEVEL).map(c -> c.getLp()).orElse(-1));
@@ -310,6 +324,9 @@ public class CraftLevelEvents {
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         applyPlayerState(event.getEntity());
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            GloryKillsService.sync(serverPlayer);
+        }
         DebugLog.info("Player respawn: {}", event.getEntity().getName().getString());
     }
 
@@ -325,6 +342,7 @@ public class CraftLevelEvents {
         applyPlayerState(serverPlayer);
         PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(serverPlayer)));
         PacketHandler.sendToPlayer(serverPlayer, new SyncEmeraldBankPacket(EconomyService.getBankBalance(serverPlayer)));
+        GloryKillsService.sync(serverPlayer);
         DebugLog.info("Player login: {}", serverPlayer.getName().getString());
     }
 

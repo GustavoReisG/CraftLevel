@@ -74,5 +74,15 @@ public final class ModItems {
             () -> new BlockItem(ModBlocks.PLAYER_GRAVESTONE.get(), new Item.Properties())
     );
 
+    public static final RegistryObject<Item> ALTAR_OF_DEATH = ITEMS.register(
+            "altar_of_death",
+            () -> new BlockItem(ModBlocks.ALTAR_OF_DEATH.get(), new Item.Properties())
+    );
+
+    public static final RegistryObject<Item> ARCANE_SHARD = ITEMS.register(
+            "arcane_shard",
+            () -> new ArcaneShardItem(new Item.Properties())
+    );
+
     private ModItems() {}
 }

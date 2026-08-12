@@ -46,6 +46,13 @@ public class ClientConfigMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 3, souls);
         addRenderableWidget(souls);
 
+        Button gloryKills = Button.builder(Component.literal("Glory Kills"), btn ->
+                minecraft.setScreen(new HudElementConfigScreen(this, HudElementConfigScreen.Element.GLORY_KILLS)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 4, gloryKills);
+        addRenderableWidget(gloryKills);
+
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 

@@ -21,6 +21,7 @@ public final class ClientConfigEditorState {
     static final String KEY_HUNGER_BAR = "hunger_bar";
     static final String KEY_EMERALDS = "emeralds";
     static final String KEY_SOULS = "souls";
+    static final String KEY_GLORY_KILLS = "glory_kills";
     static final String KEY_MOB_FOCUS = "mob_focus";
     static final String KEY_ENABLED = "enabled";
     static final String KEY_ANCHOR = "anchor";
@@ -63,6 +64,10 @@ public final class ClientConfigEditorState {
             Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
     ) {}
 
+    public record GloryKillsHudValues(
+            Boolean enabled, String anchor, Integer x, Integer y, Float scale, Float fontScale, String iconSide
+    ) {}
+
     public record MobFocusValues(
             String anchor, Integer x, Integer y, Float scale, Float fontScale, String direction,
             Float mobYaw, Float headYaw, Float cameraPitch
@@ -76,6 +81,7 @@ public final class ClientConfigEditorState {
     private HungerBarValues hungerBar;
     private EmeraldHudValues emeralds;
     private SoulsHudValues souls;
+    private GloryKillsHudValues gloryKills;
     private MobFocusValues mobFocus;
 
     public ClientConfigEditorState() {
@@ -111,6 +117,7 @@ public final class ClientConfigEditorState {
         hungerBar = mergeHungerBar(readHungerBar(hud), hungerBar);
         emeralds = mergeEmeralds(readEmeralds(hud), emeralds);
         souls = mergeSouls(readSouls(hud), souls);
+        gloryKills = mergeGloryKills(readGloryKills(hud), gloryKills);
         mobFocus = mergeMobFocus(readMobFocus(hud), mobFocus);
     }
 
@@ -123,6 +130,7 @@ public final class ClientConfigEditorState {
         hud.add(KEY_HUNGER_BAR, writeHungerBar(resolvedHungerBar()));
         hud.add(KEY_EMERALDS, writeEmeralds(resolvedEmeralds()));
         hud.add(KEY_SOULS, writeSouls(resolvedSouls()));
+        hud.add(KEY_GLORY_KILLS, writeGloryKills(resolvedGloryKills()));
         hud.add(KEY_MOB_FOCUS, writeMobFocus(resolvedMobFocus()));
         root.add(KEY_HUD, hud);
         return root;
@@ -176,6 +184,14 @@ public final class ClientConfigEditorState {
         souls = values;
     }
 
+    public GloryKillsHudValues gloryKills() {
+        return gloryKills;
+    }
+
+    public void setGloryKills(GloryKillsHudValues values) {
+        gloryKills = values;
+    }
+
     public MobFocusValues mobFocus() {
         return mobFocus;
     }
@@ -208,6 +224,10 @@ public final class ClientConfigEditorState {
         return mergeSouls(souls, defaultsTemplate().souls);
     }
 
+    public GloryKillsHudValues resolvedGloryKills() {
+        return mergeGloryKills(gloryKills, defaultsTemplate().gloryKills);
+    }
+
     public MobFocusValues resolvedMobFocus() {
         return mergeMobFocus(mobFocus, defaultsTemplate().mobFocus);
     }
@@ -231,6 +251,7 @@ public final class ClientConfigEditorState {
             state.hungerBar = new HungerBarValues(true, "bottom_center", 60, -31, 0.1f, 0.6f, 10, 0);
             state.emeralds = new EmeraldHudValues(true, "bottom_left", 2, -20, 0.7f, 1.0f, "left");
             state.souls = new SoulsHudValues(true, "top_left", 2, 50, 0.7f, 1.0f, "left");
+            state.gloryKills = new GloryKillsHudValues(true, "top_left", 2, 70, 0.7f, 1.0f, "left");
             state.mobFocus = new MobFocusValues("top_left", 50, 8, 0.7f, 0.6f, "portrait_first", 0.6f, 0.0f, -0.2f);
         }
         return state;
@@ -255,6 +276,7 @@ public final class ClientConfigEditorState {
         hungerBar = source.hungerBar;
         emeralds = source.emeralds;
         souls = source.souls;
+        gloryKills = source.gloryKills;
         mobFocus = source.mobFocus;
     }
 
@@ -312,6 +334,18 @@ public final class ClientConfigEditorState {
 
     private static SoulsHudValues mergeSouls(SoulsHudValues loaded, SoulsHudValues defaults) {
         return new SoulsHudValues(
+                loaded.enabled() != null ? loaded.enabled() : defaults.enabled(),
+                loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
+                loaded.x() != null ? loaded.x() : defaults.x(),
+                loaded.y() != null ? loaded.y() : defaults.y(),
+                loaded.scale() != null ? loaded.scale() : defaults.scale(),
+                loaded.fontScale() != null ? loaded.fontScale() : defaults.fontScale(),
+                loaded.iconSide() != null ? loaded.iconSide() : defaults.iconSide()
+        );
+    }
+
+    private static GloryKillsHudValues mergeGloryKills(GloryKillsHudValues loaded, GloryKillsHudValues defaults) {
+        return new GloryKillsHudValues(
                 loaded.enabled() != null ? loaded.enabled() : defaults.enabled(),
                 loaded.anchor() != null ? loaded.anchor() : defaults.anchor(),
                 loaded.x() != null ? loaded.x() : defaults.x(),
@@ -420,6 +454,22 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static GloryKillsHudValues readGloryKills(JsonObject hud) {
+        if (!hud.has(KEY_GLORY_KILLS) || !hud.get(KEY_GLORY_KILLS).isJsonObject()) {
+            return new GloryKillsHudValues(null, null, null, null, null, null, null);
+        }
+        JsonObject element = hud.getAsJsonObject(KEY_GLORY_KILLS);
+        return new GloryKillsHudValues(
+                readOptionalBoolean(element, KEY_ENABLED),
+                readOptionalString(element, KEY_ANCHOR),
+                readOptionalInt(element, KEY_X),
+                readOptionalInt(element, KEY_Y),
+                readOptionalFloat(element, KEY_SCALE),
+                readOptionalFloat(element, KEY_FONT_SCALE),
+                readOptionalString(element, KEY_ICON_SIDE)
+        );
+    }
+
     private static MobFocusValues readMobFocus(JsonObject hud) {
         if (!hud.has(KEY_MOB_FOCUS) || !hud.get(KEY_MOB_FOCUS).isJsonObject()) {
             return new MobFocusValues(null, null, null, null, null, null, null, null, null);
@@ -491,6 +541,18 @@ public final class ClientConfigEditorState {
     }
 
     private static JsonObject writeSouls(SoulsHudValues values) {
+        JsonObject element = new JsonObject();
+        element.addProperty(KEY_ENABLED, values.enabled());
+        element.addProperty(KEY_ANCHOR, values.anchor());
+        element.addProperty(KEY_X, values.x());
+        element.addProperty(KEY_Y, values.y());
+        element.addProperty(KEY_SCALE, values.scale());
+        element.addProperty(KEY_FONT_SCALE, values.fontScale());
+        element.addProperty(KEY_ICON_SIDE, values.iconSide());
+        return element;
+    }
+
+    private static JsonObject writeGloryKills(GloryKillsHudValues values) {
         JsonObject element = new JsonObject();
         element.addProperty(KEY_ENABLED, values.enabled());
         element.addProperty(KEY_ANCHOR, values.anchor());

@@ -1,14 +1,22 @@
 package com.grgs.craftlevel.client.config;
 
 import com.grgs.craftlevel.config.ConfigManager;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Tela inicial aberta pelo botão Config na lista de mods. */
 public class CraftLevelConfigScreen extends Screen {
 
     private final Screen parent;
+    private final List<Button> categoryButtons = new ArrayList<>();
+    private int scrollY;
+    private int maxScroll;
 
     public CraftLevelConfigScreen(Screen parent) {
         super(Component.literal("CraftLevel Config"));
@@ -17,11 +25,13 @@ public class CraftLevelConfigScreen extends Screen {
 
     @Override
     protected void init() {
+        categoryButtons.clear();
         int row = 0;
         for (String fileName : ConfigManager.CONFIG_FILES) {
             Button button = createFileButton(fileName);
             ConfigScreenLayout.positionRow(this, row++, button);
             addRenderableWidget(button);
+            categoryButtons.add(button);
         }
 
         Button economy = Button.builder(Component.literal("Economy"), btn ->
@@ -30,15 +40,53 @@ public class CraftLevelConfigScreen extends Screen {
                 .build();
         ConfigScreenLayout.positionRow(this, row++, economy);
         addRenderableWidget(economy);
+        categoryButtons.add(economy);
 
         Button souls = Button.builder(Component.literal("Souls"), btn ->
                         minecraft.setScreen(new SoulsConfigScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)
                 .build();
-        ConfigScreenLayout.positionRow(this, row, souls);
+        ConfigScreenLayout.positionRow(this, row++, souls);
         addRenderableWidget(souls);
+        categoryButtons.add(souls);
+
+        Button gloryKills = Button.builder(Component.literal("Glory Kills"), btn ->
+                        minecraft.setScreen(new GloryKillsConfigScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, row, gloryKills);
+        addRenderableWidget(gloryKills);
+        categoryButtons.add(gloryKills);
+
+        int contentHeight = categoryButtons.size() * ConfigScreenLayout.ROW_HEIGHT;
+        int viewHeight = Math.max(1, ConfigScreenLayout.contentBottom(this) - ConfigScreenLayout.START_Y);
+        maxScroll = Math.max(0, contentHeight - viewHeight);
+        scrollY = Mth.clamp(scrollY, 0, maxScroll);
+        applyScroll();
 
         addRenderableWidget(ConfigScreenLayout.bottomDone(this, this::onClose));
+    }
+
+    private void applyScroll() {
+        int viewTop = ConfigScreenLayout.START_Y;
+        int viewBottom = ConfigScreenLayout.contentBottom(this);
+        for (int i = 0; i < categoryButtons.size(); i++) {
+            Button button = categoryButtons.get(i);
+            int y = ConfigScreenLayout.START_Y + i * ConfigScreenLayout.ROW_HEIGHT - scrollY;
+            button.setY(y);
+            button.visible = y + 20 > viewTop && y < viewBottom;
+            button.active = button.visible;
+        }
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (maxScroll > 0) {
+            scrollY = Mth.clamp(scrollY - (int) Math.round(delta * 12), 0, maxScroll);
+            applyScroll();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     private Button createFileButton(String fileName) {
@@ -73,9 +121,20 @@ public class CraftLevelConfigScreen extends Screen {
     }
 
     @Override
-    public void render(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(graphics);
         graphics.drawCenteredString(font, title, width / 2, 16, 0xFFFFFF);
+        if (maxScroll > 0) {
+            int trackX = ConfigScreenLayout.centerX(this) + ConfigScreenLayout.BUTTON_WIDTH + 6;
+            int trackTop = ConfigScreenLayout.START_Y;
+            int trackBottom = ConfigScreenLayout.contentBottom(this);
+            int trackHeight = Math.max(1, trackBottom - trackTop);
+            graphics.fill(trackX, trackTop, trackX + 3, trackBottom, 0x66000000);
+            float ratio = (float) scrollY / (float) maxScroll;
+            int thumbHeight = Math.max(12, (int) (trackHeight * (trackHeight / (float) (trackHeight + maxScroll))));
+            int thumbY = trackTop + (int) ((trackHeight - thumbHeight) * ratio);
+            graphics.fill(trackX, thumbY, trackX + 3, thumbY + thumbHeight, 0xAAFFFFFF);
+        }
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 }

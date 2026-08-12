@@ -20,6 +20,7 @@ public class HudElementConfigScreen extends Screen {
         HUNGER_BAR("Hunger Bar"),
         EMERALDS("Emeralds"),
         SOULS("Souls"),
+        GLORY_KILLS("Glory Kills"),
         MOB_FOCUS("Mob Focus");
 
         private final String title;
@@ -88,13 +89,15 @@ public class HudElementConfigScreen extends Screen {
         int nextRow = 0;
 
         if (element == Element.HEALTH_BAR || element == Element.HUNGER_BAR
-                || element == Element.EMERALDS || element == Element.SOULS) {
+                || element == Element.EMERALDS || element == Element.SOULS
+                || element == Element.GLORY_KILLS) {
             rowEnabled = nextRow;
             boolean enabled = switch (element) {
                 case HEALTH_BAR -> state.resolvedHealthBar().enabled();
                 case HUNGER_BAR -> state.resolvedHungerBar().enabled();
                 case EMERALDS -> state.resolvedEmeralds().enabled();
                 case SOULS -> state.resolvedSouls().enabled();
+                case GLORY_KILLS -> state.resolvedGloryKills().enabled();
                 default -> true;
             };
             String label = switch (element) {
@@ -102,6 +105,7 @@ public class HudElementConfigScreen extends Screen {
                 case HUNGER_BAR -> "Enable CL Hunger Bar";
                 case EMERALDS -> "Enable Emerald HUD";
                 case SOULS -> "Enable Souls HUD";
+                case GLORY_KILLS -> "Enable Glory Kills HUD";
                 default -> "Enable";
             };
             enabledButton = CycleButton.onOffBuilder()
@@ -134,6 +138,12 @@ public class HudElementConfigScreen extends Screen {
                 ClientConfigEditorState.SoulsHudValues souls = state.resolvedSouls();
                 yield new ClientConfigEditorState.HudElementValues(
                         souls.anchor(), souls.x(), souls.y(), souls.scale(), souls.fontScale(), null);
+            }
+            case GLORY_KILLS -> {
+                ClientConfigEditorState.GloryKillsHudValues gloryKills = state.resolvedGloryKills();
+                yield new ClientConfigEditorState.HudElementValues(
+                        gloryKills.anchor(), gloryKills.x(), gloryKills.y(),
+                        gloryKills.scale(), gloryKills.fontScale(), null);
             }
             case MOB_FOCUS -> {
                 ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
@@ -182,7 +192,7 @@ public class HudElementConfigScreen extends Screen {
 
         if (element == Element.LEVEL_CIRCLE || element == Element.HEALTH_BAR
                 || element == Element.LP_BAR || element == Element.HUNGER_BAR || element == Element.EMERALDS
-                || element == Element.SOULS || element == Element.MOB_FOCUS) {
+                || element == Element.SOULS || element == Element.GLORY_KILLS || element == Element.MOB_FOCUS) {
             rowFontScale = assignRow(nextRow, 4);
             colFontScale = 0;
             fontScaleField = newFloatField(values.fontScale());
@@ -202,15 +212,19 @@ public class HudElementConfigScreen extends Screen {
             }
         }
 
-        if (element == Element.EMERALDS || element == Element.SOULS) {
+        if (element == Element.EMERALDS || element == Element.SOULS || element == Element.GLORY_KILLS) {
             rowIconSide = nextRow;
-            String iconSide = element == Element.EMERALDS
-                    ? (state.resolvedEmeralds().iconSide() != null
-                    ? state.resolvedEmeralds().iconSide()
-                    : ClientConfigEditorState.ICON_SIDES[1])
-                    : (state.resolvedSouls().iconSide() != null
-                    ? state.resolvedSouls().iconSide()
-                    : ClientConfigEditorState.ICON_SIDES[1]);
+            String iconSide = switch (element) {
+                case EMERALDS -> state.resolvedEmeralds().iconSide() != null
+                        ? state.resolvedEmeralds().iconSide()
+                        : ClientConfigEditorState.ICON_SIDES[1];
+                case SOULS -> state.resolvedSouls().iconSide() != null
+                        ? state.resolvedSouls().iconSide()
+                        : ClientConfigEditorState.ICON_SIDES[1];
+                default -> state.resolvedGloryKills().iconSide() != null
+                        ? state.resolvedGloryKills().iconSide()
+                        : ClientConfigEditorState.ICON_SIDES[1];
+            };
             iconSideButton = CycleButton.<String>builder(Component::literal)
                     .withValues(ClientConfigEditorState.ICON_SIDES)
                     .withInitialValue(findIconSide(iconSide))
@@ -422,6 +436,16 @@ public class HudElementConfigScreen extends Screen {
                     values.fontScale(),
                     iconSideButton != null ? iconSideButton.getValue() : "right"
             ));
+        } else if (element == Element.GLORY_KILLS) {
+            session.setGloryKills(new ClientConfigEditorState.GloryKillsHudValues(
+                    enabledButton.getValue(),
+                    anchorButton.getValue(),
+                    values.x(),
+                    values.y(),
+                    values.scale(),
+                    values.fontScale(),
+                    iconSideButton != null ? iconSideButton.getValue() : "right"
+            ));
         }
         ClientConfigPersistence.save(minecraft);
     }
@@ -453,6 +477,7 @@ public class HudElementConfigScreen extends Screen {
                 case HUNGER_BAR -> "Enable CL Hunger Bar";
                 case EMERALDS -> "Enable Emerald HUD";
                 case SOULS -> "Enable Souls HUD";
+                case GLORY_KILLS -> "Enable Glory Kills HUD";
                 default -> "Enable";
             };
             drawFieldLabel(graphics, 0, rowEnabled, enabledLabel);

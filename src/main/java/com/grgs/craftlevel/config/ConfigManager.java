@@ -528,6 +528,15 @@ public class ConfigManager {
           "font_scale": 1.0,
           "icon_side": "left"
         },
+        "glory_kills": {
+          "enabled": true,
+          "anchor": "top_left",
+          "x": 2,
+          "y": 70,
+          "scale": 0.7,
+          "font_scale": 1.0,
+          "icon_side": "left"
+        },
         "mob_focus": {
           "anchor": "top_left",
           "x": 50,
@@ -632,6 +641,13 @@ public class ConfigManager {
     }
     """;
 
+    private static final String DEFAULT_GLORY_KILLS = """
+    {
+      "kills_per_shard": 100,
+      "min_level_gap": 5
+    }
+    """;
+
     // =========================================================
     // VALORES CARREGADOS
     // =========================================================
@@ -644,6 +660,7 @@ public class ConfigManager {
     public static JsonObject economy = new JsonObject();
     public static JsonObject villager = new JsonObject();
     public static JsonObject souls = new JsonObject();
+    public static JsonObject gloryKills = new JsonObject();
 
     // =========================================================
     // INIT
@@ -670,6 +687,7 @@ public class ConfigManager {
         loadMobLevels();
         loadEconomy();
         loadSouls();
+        loadGloryKills();
         loadVillager();
 
         ConfigParser.parseConfig(config);
@@ -679,6 +697,7 @@ public class ConfigManager {
         ConfigParser.parseMobLevels(mobLevels);
         EconomyParser.parseEconomy(economy);
         SoulsParser.parse(souls);
+        GloryKillsParser.parse(gloryKills);
         VillagerTradeCatalog.load(villager);
         VillagerTradeService.onReload();
         ProfessionLanguages.refresh();
@@ -730,6 +749,10 @@ public class ConfigManager {
 
     private static void loadSouls() throws IOException {
         souls = loadOrCreate("souls.json", DEFAULT_SOULS);
+    }
+
+    private static void loadGloryKills() throws IOException {
+        gloryKills = loadOrCreate("glory_kills.json", DEFAULT_GLORY_KILLS);
     }
 
     private static void loadVillager() {

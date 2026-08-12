@@ -21,5 +21,14 @@ public final class ModBlockEntities {
                     ).build(null)
             );
 
+    public static final RegistryObject<BlockEntityType<AltarOfDeathBlockEntity>> ALTAR_OF_DEATH =
+            BLOCK_ENTITIES.register(
+                    "altar_of_death",
+                    () -> BlockEntityType.Builder.of(
+                            AltarOfDeathBlockEntity::new,
+                            ModBlocks.ALTAR_OF_DEATH.get()
+                    ).build(null)
+            );
+
     private ModBlockEntities() {}
 }

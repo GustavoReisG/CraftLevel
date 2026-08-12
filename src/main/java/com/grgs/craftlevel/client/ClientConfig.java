@@ -70,6 +70,15 @@ public class ClientConfig {
     public static String hudSoulsAnchor = "top_left";
     public static String hudSoulsIconSide = "left";
 
+    // HUD de Glory Kills
+    public static boolean hudGloryKillsEnabled = true;
+    public static int hudGloryKillsX = 2;
+    public static int hudGloryKillsY = 70;
+    public static float hudGloryKillsScale = 0.7f;
+    public static float hudGloryKillsFontScale = 1.0f;
+    public static String hudGloryKillsAnchor = "top_left";
+    public static String hudGloryKillsIconSide = "left";
+
     // Card de Mob Focus (mirar + E)
     public static String hudMobFocusAnchor = "top_left";
     public static int hudMobFocusX = 50;
@@ -188,6 +197,15 @@ public class ClientConfig {
         hudSoulsFontScale = souls.fontScale();
         hudSoulsIconSide = souls.iconSide();
 
+        ClientConfigEditorState.GloryKillsHudValues gloryKills = state.resolvedGloryKills();
+        hudGloryKillsEnabled = gloryKills.enabled();
+        hudGloryKillsAnchor = gloryKills.anchor();
+        hudGloryKillsX = gloryKills.x();
+        hudGloryKillsY = gloryKills.y();
+        hudGloryKillsScale = gloryKills.scale();
+        hudGloryKillsFontScale = gloryKills.fontScale();
+        hudGloryKillsIconSide = gloryKills.iconSide();
+
         ClientConfigEditorState.MobFocusValues mobFocus = state.resolvedMobFocus();
         hudMobFocusAnchor = mobFocus.anchor();
         hudMobFocusX = mobFocus.x();
@@ -226,6 +244,10 @@ public class ClientConfig {
         state.setSouls(new ClientConfigEditorState.SoulsHudValues(
                 hudSoulsEnabled, hudSoulsAnchor, hudSoulsX, hudSoulsY,
                 hudSoulsScale, hudSoulsFontScale, hudSoulsIconSide
+        ));
+        state.setGloryKills(new ClientConfigEditorState.GloryKillsHudValues(
+                hudGloryKillsEnabled, hudGloryKillsAnchor, hudGloryKillsX, hudGloryKillsY,
+                hudGloryKillsScale, hudGloryKillsFontScale, hudGloryKillsIconSide
         ));
         state.setMobFocus(new ClientConfigEditorState.MobFocusValues(
                 hudMobFocusAnchor, hudMobFocusX, hudMobFocusY,

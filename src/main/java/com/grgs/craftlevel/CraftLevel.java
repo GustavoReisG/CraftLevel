@@ -5,6 +5,7 @@ import com.grgs.craftlevel.capability.IMobLevel;
 import com.grgs.craftlevel.capability.IPlayerEmeraldBank;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
 import com.grgs.craftlevel.capability.IPlayerLevel;
+import com.grgs.craftlevel.capability.IPlayerGlory;
 import com.grgs.craftlevel.capability.IPlayerSouls;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
 import com.grgs.craftlevel.block.ModBlockEntities;
@@ -59,6 +60,7 @@ public class CraftLevel {
         CapabilityManager.get(new CapabilityToken<IPlayerEmeraldBank>() {});
         CapabilityManager.get(new CapabilityToken<IVillagerEconomy>() {});
         CapabilityManager.get(new CapabilityToken<IPlayerSouls>() {});
+        CapabilityManager.get(new CapabilityToken<IPlayerGlory>() {});
         PacketHandler.register();
         event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(new ImbuePotionBrewingRecipe()));
         LOGGER.info("Craft Level common setup complete!");

@@ -29,5 +29,10 @@ public final class ModBlocks {
             PlayerGravestoneBlock::new
     );
 
+    public static final RegistryObject<Block> ALTAR_OF_DEATH = BLOCKS.register(
+            "altar_of_death",
+            AltarOfDeathBlock::new
+    );
+
     private ModBlocks() {}
 }

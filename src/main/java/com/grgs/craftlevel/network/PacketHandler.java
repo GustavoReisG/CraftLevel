@@ -123,6 +123,14 @@ public class PacketHandler {
                 PlayLevelUpSoundPacket::decode,
                 PlayLevelUpSoundPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                12,
+                SyncPlayerGloryPacket.class,
+                SyncPlayerGloryPacket::encode,
+                SyncPlayerGloryPacket::decode,
+                SyncPlayerGloryPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

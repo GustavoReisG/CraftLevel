@@ -1,0 +1,442 @@
+{
+  "variants": {
+    "facing=north,index=0,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=0,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=0,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=0,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=0,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=0,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=0,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=0,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=1,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=1,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=1,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=1,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=1,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=1,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=1,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=1,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=2,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=2,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=2,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=2,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=2,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=2,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=2,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=2,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=3,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=3,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=3,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=3,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=3,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=3,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=3,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=3,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=4,lit=false": {
+      "model": "craftlevel:block/altar_of_death"
+    },
+    "facing=north,index=4,lit=true": {
+      "model": "craftlevel:block/altar_of_death"
+    },
+    "facing=south,index=4,lit=false": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 180
+    },
+    "facing=south,index=4,lit=true": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 180
+    },
+    "facing=west,index=4,lit=false": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 270
+    },
+    "facing=west,index=4,lit=true": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 270
+    },
+    "facing=east,index=4,lit=false": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 90
+    },
+    "facing=east,index=4,lit=true": {
+      "model": "craftlevel:block/altar_of_death",
+      "y": 90
+    },
+    "facing=north,index=5,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=5,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=5,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=5,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=5,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=5,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=5,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=5,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=6,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=6,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=6,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=6,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=6,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=6,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=6,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=6,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=7,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=7,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=7,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=7,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=7,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=7,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=7,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=7,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=8,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=8,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=8,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=8,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=8,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=8,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=8,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=8,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=9,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=9,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=9,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=9,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=9,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=9,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=9,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=9,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=10,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=10,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=10,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=10,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=10,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=10,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=10,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=10,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=11,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=11,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=11,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=11,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=11,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=11,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=11,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=11,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=12,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=12,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=12,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=12,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=12,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=12,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=12,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=12,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=13,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=13,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=13,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=13,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=13,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=13,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=13,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=13,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=14,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=14,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=14,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=14,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=14,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=14,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=14,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=14,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=15,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=15,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=15,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=15,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=15,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=15,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=15,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=15,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=16,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=16,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=16,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=16,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=16,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=16,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=16,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=16,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=17,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=north,index=17,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=17,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=south,index=17,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=17,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=west,index=17,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=17,lit=false": {
+      "model": "craftlevel:block/altar_of_death_part"
+    },
+    "facing=east,index=17,lit=true": {
+      "model": "craftlevel:block/altar_of_death_part"
+    }
+  }
+}
