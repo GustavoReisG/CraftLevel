@@ -3,13 +3,16 @@ package com.grgs.craftlevel.commands;
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.IPlayerEmeraldBank;
 import com.grgs.craftlevel.capability.IPlayerEmeraldWallet;
+import com.grgs.craftlevel.capability.IPlayerGlory;
 import com.grgs.craftlevel.capability.IPlayerLevel;
 import com.grgs.craftlevel.capability.IPlayerSouls;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldBankProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
+import com.grgs.craftlevel.capability.PlayerGloryProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.capability.PlayerSoulsProvider;
+import com.grgs.craftlevel.glory.GloryKillsService;
 import com.grgs.craftlevel.config.ConfigManager;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.config.SoulsParser;
@@ -41,7 +44,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
 
-/** Comandos admin: /craftlevel lp|level|souls|emerald_bag|emerald_bank|reload (requer OP 2). */
+/** Comandos admin: /craftlevel lp|level|souls|emerald_bag|emerald_bank|glory_kills|skill_points|reset_skills|reload (OP 2). */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
 public class CraftLevelCommands {
 
@@ -63,6 +66,14 @@ public class CraftLevelCommands {
                         .then(intOps("souls", CraftLevelCommands::mutateSouls))
                         .then(longOps("emerald_bag", CraftLevelCommands::mutateWallet))
                         .then(longOps("emerald_bank", CraftLevelCommands::mutateBank))
+                        .then(intOps("glory_kills", CraftLevelCommands::mutateGloryKills))
+                        .then(intOps("skill_points", CraftLevelCommands::mutateSkillPoints))
+                        .then(Commands.literal("reset_skills")
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .executes(ctx -> resetSkills(
+                                                ctx.getSource(),
+                                                EntityArgument.getEntity(ctx, "target")
+                                        ))))
                         .then(Commands.literal("reload")
                                 .executes(ctx -> reload(ctx.getSource())))
         );
@@ -261,6 +272,69 @@ public class CraftLevelCommands {
         DebugLog.info("Comando emerald_bank {}: {} = {}", op.name().toLowerCase(),
                 player.getGameProfile().getName(), next);
         return success(source, "Emerald bank de " + player.getGameProfile().getName() + " definido para " + next + ".");
+    }
+
+    private static int mutateGloryKills(CommandSourceStack source, Entity target, Op op, int amount)
+            throws CommandSyntaxException {
+        ServerPlayer player = requirePlayer(source, target, "Glory Kills");
+        if (player == null) {
+            return 0;
+        }
+
+        IPlayerGlory glory = player.getCapability(PlayerGloryProvider.PLAYER_GLORY).orElse(null);
+        if (glory == null) {
+            source.sendFailure(Component.literal("[CraftLevel] Capability de glory não encontrada."));
+            return 0;
+        }
+
+        int next = applyIntOp(glory.getGloryKills(), op, amount, 0, Integer.MAX_VALUE);
+        glory.setGloryKills(next);
+        GloryKillsService.sync(player);
+
+        DebugLog.info("Comando glory_kills {}: {} = {}", op.name().toLowerCase(),
+                player.getGameProfile().getName(), next);
+        return success(source, "Glory Kills de " + player.getGameProfile().getName() + " definido para " + next + ".");
+    }
+
+    private static int mutateSkillPoints(CommandSourceStack source, Entity target, Op op, int amount)
+            throws CommandSyntaxException {
+        ServerPlayer player = requirePlayer(source, target, "Skill Points");
+        if (player == null) {
+            return 0;
+        }
+
+        IPlayerGlory glory = player.getCapability(PlayerGloryProvider.PLAYER_GLORY).orElse(null);
+        if (glory == null) {
+            source.sendFailure(Component.literal("[CraftLevel] Capability de glory não encontrada."));
+            return 0;
+        }
+
+        int next = applyIntOp(glory.getSkillPoints(), op, amount, 0, Integer.MAX_VALUE);
+        glory.setSkillPoints(next);
+        GloryKillsService.sync(player);
+
+        DebugLog.info("Comando skill_points {}: {} = {}", op.name().toLowerCase(),
+                player.getGameProfile().getName(), next);
+        return success(source, "Skill Points de " + player.getGameProfile().getName() + " definido para " + next + ".");
+    }
+
+    private static int resetSkills(CommandSourceStack source, Entity target) {
+        ServerPlayer player = requirePlayer(source, target, "Reset skills");
+        if (player == null) {
+            return 0;
+        }
+
+        IPlayerGlory glory = player.getCapability(PlayerGloryProvider.PLAYER_GLORY).orElse(null);
+        if (glory == null) {
+            source.sendFailure(Component.literal("[CraftLevel] Capability de glory não encontrada."));
+            return 0;
+        }
+
+        glory.resetSkills();
+        GloryKillsService.sync(player);
+
+        DebugLog.info("Comando reset_skills: {}", player.getGameProfile().getName());
+        return success(source, "Skills de " + player.getGameProfile().getName() + " resetadas.");
     }
 
     private static ServerPlayer requirePlayer(CommandSourceStack source, Entity target, String label) {

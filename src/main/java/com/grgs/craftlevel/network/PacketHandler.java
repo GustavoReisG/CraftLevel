@@ -131,6 +131,33 @@ public class PacketHandler {
                 SyncPlayerGloryPacket::decode,
                 SyncPlayerGloryPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                13,
+                SpendSkillPointPacket.class,
+                SpendSkillPointPacket::encode,
+                SpendSkillPointPacket::decode,
+                SpendSkillPointPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        CHANNEL.registerMessage(
+                14,
+                UseSkillPacket.class,
+                UseSkillPacket::encode,
+                UseSkillPacket::decode,
+                UseSkillPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        CHANNEL.registerMessage(
+                15,
+                AssignSpellHotbarPacket.class,
+                AssignSpellHotbarPacket::encode,
+                AssignSpellHotbarPacket::decode,
+                AssignSpellHotbarPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

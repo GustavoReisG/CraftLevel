@@ -4,6 +4,8 @@ import com.grgs.craftlevel.capability.PlayerSoulsProvider;
 import com.grgs.craftlevel.config.SoulsParser;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerSoulsPacket;
+import com.grgs.craftlevel.skill.SoulAnchorSkill;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -76,9 +78,13 @@ public final class SoulsEvents {
             return;
         }
         ensureInitialized(player);
-        player.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(souls -> {
-            souls.setSouls(Math.max(0, souls.getSouls() - 1));
-        });
+        if (SoulAnchorSkill.trySaveSoul(player)) {
+            player.displayClientMessage(Component.translatable("gui.craftlevel.skill.soul_anchor.saved"), true);
+        } else {
+            player.getCapability(PlayerSoulsProvider.PLAYER_SOULS).ifPresent(souls -> {
+                souls.setSouls(Math.max(0, souls.getSouls() - 1));
+            });
+        }
         sync(player);
     }
 

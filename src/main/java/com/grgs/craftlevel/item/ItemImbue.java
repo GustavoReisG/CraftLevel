@@ -115,19 +115,20 @@ public final class ItemImbue {
     }
 
     /**
-     * Aplica a poção na arma/tool: +{@link #PER_POTION} (cap {@link #MAX}) e grava o efeito.
+     * Aplica a poção na arma/tool: +{@code amount} (cap {@link #MAX}) e grava o efeito.
      * Só aceita o mesmo ID de poção se a arma já tiver imbue.
      *
      * @return {@code true} se aplicou
      */
-    public static boolean applyFromPotion(ItemStack weapon, ItemStack potion) {
+    public static boolean applyFromPotion(ItemStack weapon, ItemStack potion, int amount) {
         if (!canApplyFromPotion(weapon, potion) || isCleaningPotion(potion)) {
             return false;
         }
 
+        int add = Math.max(0, amount);
         int current = getAmount(weapon);
         CompoundTag imbue = weapon.getOrCreateTagElement(TAG);
-        imbue.putInt(AMOUNT, Math.min(MAX, current + PER_POTION));
+        imbue.putInt(AMOUNT, Math.min(MAX, current + add));
 
         CompoundTag potionTag = potion.getTag();
         if (potionTag != null && potionTag.contains("Potion", Tag.TAG_STRING)) {
@@ -146,6 +147,11 @@ public final class ItemImbue {
             imbue.remove("CustomPotionColor");
         }
         return true;
+    }
+
+    /** Aplica com a quantidade base ({@link #PER_POTION}). */
+    public static boolean applyFromPotion(ItemStack weapon, ItemStack potion) {
+        return applyFromPotion(weapon, potion, PER_POTION);
     }
 
     /** Remove o imbue da arma/tool. */

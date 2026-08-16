@@ -1,5 +1,6 @@
 package com.grgs.craftlevel.item;
 
+import com.grgs.craftlevel.skill.ImbueMasterSkill;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -33,7 +34,7 @@ import java.util.function.Consumer;
  *   <li>{@code tintindex 1} — rolha/tampa ({@code CorkColor} NBT ou marrom padrão)</li>
  * </ul>
  * Uso: mão com a poção + arma/tool na outra mão → animação {@link UseAnim#BRUSH},
- * partículas na cor da poção; ao terminar aplica +250 imbue (máx. 1000).
+ * partículas na cor da poção; ao terminar aplica imbue (base 250, até 500 com Imbue Master; máx. 1000).
  * Só o mesmo ID de poção pode ser reaplicado; água limpa o imbue.
  * Craft: frasco + poção + botão de carvalho (+ tinta opcional na tampa).
  * Vidro translúcido: {@code TranslucentItemModel} no bake (sem BEWLR).
@@ -88,9 +89,15 @@ public class ImbuePotionItem extends Item {
             tooltip.add(Component.translatable("item.craftlevel.imbue_potion.tooltip.clean")
                     .withStyle(net.minecraft.ChatFormatting.AQUA));
         } else {
+            int amount = ItemImbue.PER_POTION;
+            if (level != null && level.isClientSide()) {
+                amount = ImbueMasterSkill.amountPerPotion(
+                        ImbueMasterSkill.clientSkillLevel()
+                );
+            }
             tooltip.add(Component.translatable(
                     "item.craftlevel.imbue_potion.tooltip.amount",
-                    ItemImbue.PER_POTION,
+                    amount,
                     ItemImbue.MAX
             ).withStyle(net.minecraft.ChatFormatting.DARK_PURPLE));
             tooltip.add(Component.translatable("item.craftlevel.imbue_potion.tooltip.same_potion")
@@ -160,7 +167,9 @@ public class ImbuePotionItem extends Item {
         ItemStack target = otherHandItem(player, hand);
         boolean cleaning = ItemImbue.isCleaningPotion(stack);
 
-        boolean ok = cleaning ? ItemImbue.clear(target) : ItemImbue.applyFromPotion(target, stack);
+        boolean ok = cleaning
+                ? ItemImbue.clear(target)
+                : ItemImbue.applyFromPotion(target, stack, ImbueMasterSkill.amountForPlayer(player));
         if (!ok) {
             return stack;
         }

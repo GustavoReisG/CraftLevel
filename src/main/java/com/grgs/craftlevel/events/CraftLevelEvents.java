@@ -310,10 +310,7 @@ public class CraftLevelEvents {
         });
 
         original.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(oldCap -> {
-            clone.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(newCap -> {
-                newCap.setGloryKills(oldCap.getGloryKills());
-                newCap.setSkillPoints(oldCap.getSkillPoints());
-            });
+            clone.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(newCap -> newCap.copyFrom(oldCap));
         });
 
         original.invalidateCaps();

@@ -661,6 +661,7 @@ public class ConfigManager {
     public static JsonObject villager = new JsonObject();
     public static JsonObject souls = new JsonObject();
     public static JsonObject gloryKills = new JsonObject();
+    public static JsonObject skills = new JsonObject();
 
     // =========================================================
     // INIT
@@ -688,6 +689,7 @@ public class ConfigManager {
         loadEconomy();
         loadSouls();
         loadGloryKills();
+        loadSkills();
         loadVillager();
 
         ConfigParser.parseConfig(config);
@@ -698,6 +700,7 @@ public class ConfigManager {
         EconomyParser.parseEconomy(economy);
         SoulsParser.parse(souls);
         GloryKillsParser.parse(gloryKills);
+        SkillsParser.parse(skills);
         VillagerTradeCatalog.load(villager);
         VillagerTradeService.onReload();
         ProfessionLanguages.refresh();
@@ -753,6 +756,10 @@ public class ConfigManager {
 
     private static void loadGloryKills() throws IOException {
         gloryKills = loadOrCreate("glory_kills.json", DEFAULT_GLORY_KILLS);
+    }
+
+    private static void loadSkills() throws IOException {
+        skills = loadOrCreate("skills.json", toPrettyJson(SkillsParser.toDefaultJson()));
     }
 
     private static void loadVillager() {

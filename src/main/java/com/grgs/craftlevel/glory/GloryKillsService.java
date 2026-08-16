@@ -1,17 +1,22 @@
 package com.grgs.craftlevel.glory;
 
+import com.grgs.craftlevel.capability.IPlayerGlory;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerGloryProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.config.GloryKillsParser;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerGloryPacket;
+import com.grgs.craftlevel.skill.SkillService;
 import com.grgs.craftlevel.util.DebugLog;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /** Crédito de Glory Kills e sync para o cliente. */
 public final class GloryKillsService {
@@ -56,9 +61,24 @@ public final class GloryKillsService {
 
     public static void sync(ServerPlayer player) {
         player.getCapability(PlayerGloryProvider.PLAYER_GLORY).ifPresent(glory ->
-                PacketHandler.sendToPlayer(
-                        player,
-                        new SyncPlayerGloryPacket(glory.getGloryKills(), glory.getSkillPoints())
-                ));
+                PacketHandler.sendToPlayer(player, createSyncPacket(player, glory)));
+    }
+
+    private static SyncPlayerGloryPacket createSyncPacket(ServerPlayer player, IPlayerGlory glory) {
+        long now = player.serverLevel().getGameTime();
+        Map<String, Integer> remaining = new HashMap<>();
+        glory.getCooldownReadyAt().forEach((id, readyAt) -> {
+            int ticks = SkillService.remainingCooldownTicks(glory, id, now);
+            if (ticks > 0) {
+                remaining.put(id, ticks);
+            }
+        });
+        return new SyncPlayerGloryPacket(
+                glory.getGloryKills(),
+                glory.getSkillPoints(),
+                glory.getSkillLevels(),
+                remaining,
+                glory.getSpellHotbar()
+        );
     }
 }

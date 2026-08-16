@@ -54,9 +54,17 @@ public class CraftLevelConfigScreen extends Screen {
                         minecraft.setScreen(new GloryKillsConfigScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)
                 .build();
-        ConfigScreenLayout.positionRow(this, row, gloryKills);
+        ConfigScreenLayout.positionRow(this, row++, gloryKills);
         addRenderableWidget(gloryKills);
         categoryButtons.add(gloryKills);
+
+        Button skills = Button.builder(Component.literal("Skills"), btn ->
+                        minecraft.setScreen(new SkillsConfigListScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, row, skills);
+        addRenderableWidget(skills);
+        categoryButtons.add(skills);
 
         int contentHeight = categoryButtons.size() * ConfigScreenLayout.ROW_HEIGHT;
         int viewHeight = Math.max(1, ConfigScreenLayout.contentBottom(this) - ConfigScreenLayout.START_Y);

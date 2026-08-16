@@ -16,6 +16,8 @@ public final class MobPinKeys {
 
     public static final String CATEGORY = "key.categories.craftlevel";
     public static KeyMapping PIN_MOB;
+    public static KeyMapping OPEN_SKILLS;
+    public static KeyMapping SPELL_HOTBAR;
 
     private MobPinKeys() {}
 
@@ -27,6 +29,20 @@ public final class MobPinKeys {
                 GLFW.GLFW_KEY_E,
                 CATEGORY
         );
+        OPEN_SKILLS = new KeyMapping(
+                "key.craftlevel.open_skills",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_O,
+                CATEGORY
+        );
+        SPELL_HOTBAR = new KeyMapping(
+                "key.craftlevel.spell_hotbar",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_Q,
+                CATEGORY
+        );
         event.register(PIN_MOB);
+        event.register(OPEN_SKILLS);
+        event.register(SPELL_HOTBAR);
     }
 }
