@@ -23,6 +23,7 @@ public final class ClientConfigEditorState {
     static final String KEY_SOULS = "souls";
     static final String KEY_GLORY_KILLS = "glory_kills";
     static final String KEY_MOB_FOCUS = "mob_focus";
+    static final String KEY_SKILLS = "skills";
     static final String KEY_ENABLED = "enabled";
     static final String KEY_ANCHOR = "anchor";
     static final String KEY_X = "x";
@@ -35,12 +36,17 @@ public final class ClientConfigEditorState {
     static final String KEY_BREATH_MARGIN = "breath_margin";
     static final String KEY_ICON_SIDE = "icon_side";
     static final String KEY_DIRECTION = "direction";
+    static final String KEY_FILL_SENSE = "fill_sense";
+    static final String KEY_TEXT_SENSE = "text_sense";
     static final String KEY_MOB_YAW = "mob_yaw";
     static final String KEY_HEAD_YAW = "head_yaw";
     static final String KEY_CAMERA_PITCH = "camera_pitch";
 
     public static final String[] ICON_SIDES = {"left", "right"};
     public static final String[] MOB_FOCUS_DIRECTIONS = {"data_first", "portrait_first"};
+    public static final String[] SKILLS_DIRECTIONS = {"row", "column"};
+    public static final String[] SKILLS_FILL_SENSES = {"ascending", "center", "descending"};
+    public static final String[] SKILLS_TEXT_SENSES = {"after_icon", "before_icon"};
 
     public record HudElementValues(
             String anchor, Integer x, Integer y, Float scale, Float fontScale, Float fontYOffset
@@ -73,6 +79,17 @@ public final class ClientConfigEditorState {
             Float mobYaw, Float headYaw, Float cameraPitch
     ) {}
 
+    public record SkillsHudValues(
+            Boolean enabled,
+            String direction,
+            String fillSense,
+            String textSense,
+            String anchor,
+            Integer x,
+            Integer y,
+            Float scale
+    ) {}
+
     private static ClientConfigEditorState defaultTemplate;
 
     private HudElementValues lpBar;
@@ -83,6 +100,7 @@ public final class ClientConfigEditorState {
     private SoulsHudValues souls;
     private GloryKillsHudValues gloryKills;
     private MobFocusValues mobFocus;
+    private SkillsHudValues skills;
 
     public ClientConfigEditorState() {
         copyFrom(defaultsTemplate());
@@ -119,6 +137,7 @@ public final class ClientConfigEditorState {
         souls = mergeSouls(readSouls(hud), souls);
         gloryKills = mergeGloryKills(readGloryKills(hud), gloryKills);
         mobFocus = mergeMobFocus(readMobFocus(hud), mobFocus);
+        skills = mergeSkills(readSkills(hud), skills);
     }
 
     public JsonObject toJson() {
@@ -132,6 +151,7 @@ public final class ClientConfigEditorState {
         hud.add(KEY_SOULS, writeSouls(resolvedSouls()));
         hud.add(KEY_GLORY_KILLS, writeGloryKills(resolvedGloryKills()));
         hud.add(KEY_MOB_FOCUS, writeMobFocus(resolvedMobFocus()));
+        hud.add(KEY_SKILLS, writeSkills(resolvedSkills()));
         root.add(KEY_HUD, hud);
         return root;
     }
@@ -200,6 +220,14 @@ public final class ClientConfigEditorState {
         mobFocus = values;
     }
 
+    public SkillsHudValues skills() {
+        return skills;
+    }
+
+    public void setSkills(SkillsHudValues values) {
+        skills = values;
+    }
+
     public HudElementValues resolvedLpBar() {
         return mergeElement(lpBar, defaultsTemplate().lpBar, true);
     }
@@ -232,6 +260,10 @@ public final class ClientConfigEditorState {
         return mergeMobFocus(mobFocus, defaultsTemplate().mobFocus);
     }
 
+    public SkillsHudValues resolvedSkills() {
+        return mergeSkills(skills, defaultsTemplate().skills);
+    }
+
     private static ClientConfigEditorState defaultsTemplate() {
         if (defaultTemplate == null) {
             defaultTemplate = parseDefaultTemplate();
@@ -253,6 +285,7 @@ public final class ClientConfigEditorState {
             state.souls = new SoulsHudValues(true, "top_left", 2, 50, 0.7f, 1.0f, "left");
             state.gloryKills = new GloryKillsHudValues(true, "top_left", 2, 70, 0.7f, 1.0f, "left");
             state.mobFocus = new MobFocusValues("top_left", 50, 8, 0.7f, 0.6f, "portrait_first", 0.6f, 0.0f, -0.2f);
+            state.skills = new SkillsHudValues(true, "row", "ascending", "after_icon", "top_right", -8, 40, 0.85f);
         }
         return state;
     }
@@ -278,6 +311,7 @@ public final class ClientConfigEditorState {
         souls = source.souls;
         gloryKills = source.gloryKills;
         mobFocus = source.mobFocus;
+        skills = source.skills;
     }
 
     private static HudElementValues mergeElement(HudElementValues loaded, HudElementValues defaults, boolean withFontScale) {
@@ -367,6 +401,25 @@ public final class ClientConfigEditorState {
                 loaded.mobYaw() != null ? loaded.mobYaw() : defaults.mobYaw(),
                 loaded.headYaw() != null ? loaded.headYaw() : defaults.headYaw(),
                 loaded.cameraPitch() != null ? loaded.cameraPitch() : defaults.cameraPitch()
+        );
+    }
+
+    private static SkillsHudValues mergeSkills(SkillsHudValues loaded, SkillsHudValues defaults) {
+        SkillsHudValues fallback = defaults != null
+                ? defaults
+                : new SkillsHudValues(true, "row", "ascending", "after_icon", "top_right", -8, 40, 0.85f);
+        if (loaded == null) {
+            return fallback;
+        }
+        return new SkillsHudValues(
+                loaded.enabled() != null ? loaded.enabled() : fallback.enabled(),
+                loaded.direction() != null ? loaded.direction() : fallback.direction(),
+                loaded.fillSense() != null ? loaded.fillSense() : fallback.fillSense(),
+                loaded.textSense() != null ? loaded.textSense() : fallback.textSense(),
+                loaded.anchor() != null ? loaded.anchor() : fallback.anchor(),
+                loaded.x() != null ? loaded.x() : fallback.x(),
+                loaded.y() != null ? loaded.y() : fallback.y(),
+                loaded.scale() != null ? loaded.scale() : fallback.scale()
         );
     }
 
@@ -488,6 +541,23 @@ public final class ClientConfigEditorState {
         );
     }
 
+    private static SkillsHudValues readSkills(JsonObject hud) {
+        if (!hud.has(KEY_SKILLS) || !hud.get(KEY_SKILLS).isJsonObject()) {
+            return new SkillsHudValues(null, null, null, null, null, null, null, null);
+        }
+        JsonObject element = hud.getAsJsonObject(KEY_SKILLS);
+        return new SkillsHudValues(
+                readOptionalBoolean(element, KEY_ENABLED),
+                readOptionalString(element, KEY_DIRECTION),
+                readOptionalString(element, KEY_FILL_SENSE),
+                readOptionalString(element, KEY_TEXT_SENSE),
+                readOptionalString(element, KEY_ANCHOR),
+                readOptionalInt(element, KEY_X),
+                readOptionalInt(element, KEY_Y),
+                readOptionalFloat(element, KEY_SCALE)
+        );
+    }
+
     private static JsonObject writeElement(HudElementValues values, boolean withFontScale) {
         JsonObject element = new JsonObject();
         element.addProperty(KEY_ANCHOR, values.anchor());
@@ -575,6 +645,19 @@ public final class ClientConfigEditorState {
         element.addProperty(KEY_MOB_YAW, values.mobYaw());
         element.addProperty(KEY_HEAD_YAW, values.headYaw());
         element.addProperty(KEY_CAMERA_PITCH, values.cameraPitch());
+        return element;
+    }
+
+    private static JsonObject writeSkills(SkillsHudValues values) {
+        JsonObject element = new JsonObject();
+        element.addProperty(KEY_ENABLED, values.enabled());
+        element.addProperty(KEY_DIRECTION, values.direction());
+        element.addProperty(KEY_FILL_SENSE, values.fillSense());
+        element.addProperty(KEY_TEXT_SENSE, values.textSense());
+        element.addProperty(KEY_ANCHOR, values.anchor());
+        element.addProperty(KEY_X, values.x());
+        element.addProperty(KEY_Y, values.y());
+        element.addProperty(KEY_SCALE, values.scale());
         return element;
     }
 

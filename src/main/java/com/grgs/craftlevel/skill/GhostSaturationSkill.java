@@ -16,18 +16,28 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Ghost Saturation: mantém saturação (e comida) no máximo por 5s. CD por nível. */
+/** Ghost Saturation: mantém saturação (e comida) no máximo. Duração e CD por nível. */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
 public final class GhostSaturationSkill {
-
-    public static final int DURATION_SECONDS = 5;
-    public static final int DURATION_TICKS = DURATION_SECONDS * 20;
 
     private record ActiveEffect(long untilGameTime, int foodLevel, float saturation, float exhaustion) {}
 
     private static final Map<UUID, ActiveEffect> ACTIVE = new ConcurrentHashMap<>();
 
     private GhostSaturationSkill() {}
+
+    /** Lvl 1: 3s, lvl 2: 4s, lvl 3: 5s. */
+    public static int durationSeconds(int level) {
+        return switch (Math.max(1, level)) {
+            case 1 -> 3;
+            case 2 -> 4;
+            default -> 5;
+        };
+    }
+
+    public static int durationTicks(int level) {
+        return durationSeconds(level) * 20;
+    }
 
     /** Lvl 1: 3 min, lvl 2: 2.5 min, lvl 3: 2 min. */
     public static int cooldownTicks(int level) {
@@ -50,8 +60,9 @@ public final class GhostSaturationSkill {
         float savedSat = existing != null ? existing.saturation() : food.getSaturationLevel();
         float savedExh = existing != null ? existing.exhaustion() : food.getExhaustionLevel();
 
-        long until = player.serverLevel().getGameTime() + DURATION_TICKS;
+        long until = player.serverLevel().getGameTime() + durationTicks(level);
         ACTIVE.put(player.getUUID(), new ActiveEffect(until, savedFood, savedSat, savedExh));
+        ActiveSkillTracker.put(player, SkillCatalog.GHOST_SATURATION, until);
         applyMaxSaturation(player);
         player.serverLevel().playSound(
                 null,
@@ -77,6 +88,9 @@ public final class GhostSaturationSkill {
         if (now >= effect.untilGameTime()) {
             ACTIVE.remove(player.getUUID());
             restore(player, effect);
+            if (player instanceof ServerPlayer serverPlayer) {
+                ActiveSkillTracker.remove(serverPlayer, SkillCatalog.GHOST_SATURATION);
+            }
             return;
         }
         applyMaxSaturation(player);

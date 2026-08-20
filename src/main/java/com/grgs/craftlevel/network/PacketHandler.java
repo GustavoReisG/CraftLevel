@@ -158,6 +158,47 @@ public class PacketHandler {
                 AssignSpellHotbarPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
+
+        CHANNEL.registerMessage(
+                16,
+                SyncActiveSkillsPacket.class,
+                SyncActiveSkillsPacket::encode,
+                SyncActiveSkillsPacket::decode,
+                SyncActiveSkillsPacket::handle
+        );
+
+        CHANNEL.registerMessage(
+                17,
+                SyncSoulRenderMarkPacket.class,
+                SyncSoulRenderMarkPacket::encode,
+                SyncSoulRenderMarkPacket::decode,
+                SyncSoulRenderMarkPacket::handle
+        );
+
+        CHANNEL.registerMessage(
+                18,
+                SyncProspectorHighlightsPacket.class,
+                SyncProspectorHighlightsPacket::encode,
+                SyncProspectorHighlightsPacket::decode,
+                SyncProspectorHighlightsPacket::handle
+        );
+
+        CHANNEL.registerMessage(
+                19,
+                SetMobFocusPacket.class,
+                SetMobFocusPacket::encode,
+                SetMobFocusPacket::decode,
+                SetMobFocusPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        CHANNEL.registerMessage(
+                20,
+                NetherRushDashPacket.class,
+                NetherRushDashPacket::encode,
+                NetherRushDashPacket::decode,
+                NetherRushDashPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

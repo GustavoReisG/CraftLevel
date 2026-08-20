@@ -2,17 +2,20 @@ package com.grgs.craftlevel.client.skill;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.PlayerGlory;
+import com.grgs.craftlevel.client.MobPinHud;
 import com.grgs.craftlevel.client.MobPinKeys;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncPlayerGloryPacket;
 import com.grgs.craftlevel.network.UseSkillPacket;
 import com.grgs.craftlevel.skill.SkillCatalog;
+import com.grgs.craftlevel.skill.SkillCooldowns;
 import com.grgs.craftlevel.skill.SkillDefinition;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -58,7 +61,13 @@ public final class SpellHotbarHud {
         if (skillId == null || skillId.isEmpty()) {
             return;
         }
-        PacketHandler.CHANNEL.sendToServer(new UseSkillPacket(skillId));
+        int targetId = requiresMobFocus(skillId) ? MobPinHud.pinnedEntityId() : -1;
+        PacketHandler.CHANNEL.sendToServer(new UseSkillPacket(skillId, targetId));
+    }
+
+    private static boolean requiresMobFocus(String skillId) {
+        return SkillCatalog.NETHER_ELEVATION.equals(skillId)
+                || SkillCatalog.FROZEN_MIND.equals(skillId);
     }
 
     @SubscribeEvent
@@ -127,7 +136,6 @@ public final class SpellHotbarHud {
     }
 
     private static void renderSlots(GuiGraphics graphics, Minecraft minecraft, int left, int top, String assigningSkillId) {
-        Font font = minecraft.font;
         long gameTime = minecraft.level == null ? 0L : minecraft.level.getGameTime();
 
         RenderSystem.enableBlend();
@@ -146,9 +154,18 @@ public final class SpellHotbarHud {
                 }
                 int remaining = SyncPlayerGloryPacket.ClientGloryState.remainingCooldownTicks(skillId, gameTime);
                 if (remaining > 0) {
-                    int seconds = Math.max(1, (int) Math.ceil(remaining / 20.0));
-                    String text = String.valueOf(seconds);
-                    graphics.drawString(font, text, slotX + 16 - font.width(text), slotY + 8, 0xFFFFFF, true);
+                    int level = Math.max(1, SyncPlayerGloryPacket.ClientGloryState.skillLevel(skillId));
+                    int total = Math.max(1, SkillCooldowns.ticks(skillId, level));
+                    float progress = Math.min(1.0F, remaining / (float) total);
+                    int overlayTop = slotY + Mth.floor(16.0F * (1.0F - progress));
+                    graphics.fill(
+                            RenderType.guiOverlay(),
+                            slotX,
+                            overlayTop,
+                            slotX + 16,
+                            slotY + 16,
+                            Integer.MAX_VALUE
+                    );
                 }
             }
             if (assigningSkillId != null && assigningSkillId.equals(skillId)) {

@@ -93,6 +93,164 @@ public final class SkillsParser {
             };
             return new LevelConfig(1, min);
         }
+        if (SkillCatalog.VAMPIRE_ATTACK.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 20;
+                case 2 -> 25;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.SPIRIT_RETURN.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 18;
+                case 2 -> 24;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.CARNAGE.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 22;
+                case 2 -> 28;
+                default -> 34;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.SUPERNOVA.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 25;
+                case 2 -> 32;
+                default -> 40;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.PROTECTIVE_SHOCKWAVE.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 18;
+                case 2 -> 24;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.SOUL_RENDER.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 20;
+                case 2 -> 26;
+                default -> 32;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.LIGHT_SPEED.equals(skillId)) {
+            int min = Math.max(1, level) >= 2 ? 28 : 20;
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.DARKNESS_LIGHT.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 15;
+                case 2 -> 22;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.MINER_FRENZY.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 18;
+                case 2 -> 24;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.LAST_CHANCE.equals(skillId)) {
+            return new LevelConfig(1, 35);
+        }
+        if (SkillCatalog.REINFORCED_BONES.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 12;
+                case 2 -> 20;
+                default -> 28;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.MIND_FURY.equals(skillId)) {
+            int min = Math.max(1, level) >= 2 ? 28 : 20;
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.NETHER_ELEVATION.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 22;
+                case 2 -> 28;
+                default -> 34;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.NETHER_RUSH.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 22;
+                case 2 -> 28;
+                default -> 34;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.FROZEN_RUSH.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 22;
+                case 2 -> 28;
+                default -> 34;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.PROSPECTOR.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 16;
+                case 2 -> 24;
+                default -> 32;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.FROZEN_MIND.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 20;
+                case 2 -> 26;
+                default -> 32;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.ENDER_BACKPACK.equals(skillId)) {
+            return new LevelConfig(1, 15);
+        }
+        if (SkillCatalog.PORTABLE_CRAFTING.equals(skillId)) {
+            return new LevelConfig(1, 10);
+        }
+        if (SkillCatalog.GOODNIGHT.equals(skillId)) {
+            return new LevelConfig(1, 12);
+        }
+        if (SkillCatalog.RECALL.equals(skillId)) {
+            return new LevelConfig(1, 16);
+        }
+        if (SkillCatalog.VAMPIRE_BLOOD.equals(skillId)) {
+            int min = Math.max(1, level) >= 2 ? 30 : 22;
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.QUICK_SURVIVE.equals(skillId)) {
+            return new LevelConfig(1, 18);
+        }
+        if (SkillCatalog.BLOOD_RUSH.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 18;
+                case 2 -> 24;
+                default -> 30;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.STRENGTH_RECOVERY.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 16;
+                case 2 -> 22;
+                default -> 28;
+            };
+            return new LevelConfig(1, min);
+        }
         return new LevelConfig(1, 1 + Math.max(0, level - 1) * 5);
     }
 

@@ -3,10 +3,14 @@ package com.grgs.craftlevel.events;
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.item.ItemImbue;
+import com.grgs.craftlevel.skill.PlayerAttributedEffects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -74,7 +78,19 @@ public final class ImbueEvents {
                     );
                     target.invulnerableTime = Math.max(invuln, target.invulnerableTime);
                 } else {
-                    target.addEffect(new MobEffectInstance(effect));
+                    MobEffect type = effect.getEffect();
+                    if ((type == MobEffects.WITHER || type == MobEffects.POISON)
+                            && attacker instanceof ServerPlayer serverPlayer) {
+                        PlayerAttributedEffects.applyDoT(
+                                serverPlayer,
+                                target,
+                                type,
+                                effect.getDuration(),
+                                effect.getAmplifier()
+                        );
+                    } else {
+                        target.addEffect(new MobEffectInstance(effect));
+                    }
                 }
             }
             ItemImbue.consume(weapon, ItemImbue.COST_PER_HIT);

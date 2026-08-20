@@ -53,6 +53,13 @@ public class ClientConfigMenuScreen extends Screen {
         ConfigScreenLayout.positionRow(this, 4, gloryKills);
         addRenderableWidget(gloryKills);
 
+        Button skills = Button.builder(Component.literal("Skills"), btn ->
+                minecraft.setScreen(new SkillsHudConfigScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, 5, skills);
+        addRenderableWidget(skills);
+
         addRenderableWidget(ConfigScreenLayout.bottomBack(this, this::onClose));
     }
 

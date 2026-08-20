@@ -54,6 +54,11 @@ public final class SenseOfPreySkill {
                 1.0F,
                 1.1F
         );
+        ActiveSkillTracker.put(
+                player,
+                SkillCatalog.SENSE_OF_PREY,
+                player.serverLevel().getGameTime() + duration
+        );
     }
 
     private static boolean isValidTarget(ServerPlayer caster, LivingEntity target) {

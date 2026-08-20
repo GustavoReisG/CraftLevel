@@ -117,7 +117,8 @@ public class ConfigManager {
           "default": "health"
         },
         "heal": {
-          "default": "health"
+          "default": "health",
+          "craftlevel:vampire_attack": "health"
         }
       }
     """;
@@ -547,6 +548,16 @@ public class ConfigManager {
           "mob_yaw": 0.6,
           "head_yaw": 0.0,
           "camera_pitch": -0.2
+        },
+        "skills": {
+          "enabled": true,
+          "direction": "row",
+          "fill_sense": "ascending",
+          "text_sense": "after_icon",
+          "anchor": "top_right",
+          "x": -8,
+          "y": 40,
+          "scale": 0.85
         }
       }
     }

@@ -63,10 +63,17 @@ public final class SkillService {
             }
             glory.setSkillLevel(skillId, next);
             GloryKillsService.sync(player);
+            if (SkillCatalog.VAMPIRE_BLOOD.equals(skillId)) {
+                VampireBloodSkill.refreshHealthBonus(player);
+            }
         });
     }
 
     public static void useSkill(ServerPlayer player, String skillId) {
+        useSkill(player, skillId, -1);
+    }
+
+    public static void useSkill(ServerPlayer player, String skillId, int targetEntityId) {
         Optional<SkillDefinition> optional = SkillCatalog.byId(skillId);
         if (optional.isEmpty()) {
             return;
@@ -96,6 +103,59 @@ public final class SkillService {
                 SenseOfPreySkill.activate(player, level);
             } else if (SkillCatalog.GHOST_SATURATION.equals(skillId)) {
                 GhostSaturationSkill.activate(player, level);
+            } else if (SkillCatalog.VAMPIRE_ATTACK.equals(skillId)) {
+                VampireAttackSkill.activate(player, level);
+            } else if (SkillCatalog.SPIRIT_RETURN.equals(skillId)) {
+                SpiritReturnSkill.activate(player, level);
+            } else if (SkillCatalog.CARNAGE.equals(skillId)) {
+                if (!CarnageSkill.activate(player, level)) {
+                    return;
+                }
+                // CD começa só após a última carga (ou fim da janela sem cargas).
+                GloryKillsService.sync(player);
+                return;
+            } else if (SkillCatalog.SUPERNOVA.equals(skillId)) {
+                SupernovaSkill.activate(player, level);
+            } else if (SkillCatalog.PROTECTIVE_SHOCKWAVE.equals(skillId)) {
+                ProtectiveShockwaveSkill.activate(player, level);
+            } else if (SkillCatalog.SOUL_RENDER.equals(skillId)) {
+                SoulRenderSkill.activate(player, level);
+            } else if (SkillCatalog.LIGHT_SPEED.equals(skillId)) {
+                LightSpeedSkill.activate(player, level);
+            } else if (SkillCatalog.DARKNESS_LIGHT.equals(skillId)) {
+                DarknessLightSkill.activate(player, level);
+            } else if (SkillCatalog.MINER_FRENZY.equals(skillId)) {
+                MinerFrenzySkill.activate(player, level);
+            } else if (SkillCatalog.MIND_FURY.equals(skillId)) {
+                MindFurySkill.activate(player, level);
+            } else if (SkillCatalog.NETHER_ELEVATION.equals(skillId)) {
+                if (!NetherElevationSkill.activate(player, level, targetEntityId)) {
+                    return;
+                }
+            } else if (SkillCatalog.NETHER_RUSH.equals(skillId)) {
+                NetherRushSkill.activate(player, level);
+            } else if (SkillCatalog.FROZEN_RUSH.equals(skillId)) {
+                FrozenRushSkill.activate(player, level);
+            } else if (SkillCatalog.PROSPECTOR.equals(skillId)) {
+                ProspectorSkill.activate(player, level);
+            } else if (SkillCatalog.FROZEN_MIND.equals(skillId)) {
+                if (!FrozenMindSkill.activate(player, level, targetEntityId)) {
+                    return;
+                }
+            } else if (SkillCatalog.ENDER_BACKPACK.equals(skillId)) {
+                EnderBackpackSkill.activate(player, level);
+            } else if (SkillCatalog.PORTABLE_CRAFTING.equals(skillId)) {
+                PortableCraftingSkill.activate(player, level);
+            } else if (SkillCatalog.GOODNIGHT.equals(skillId)) {
+                if (!GoodnightSkill.activate(player, level)) {
+                    return;
+                }
+            } else if (SkillCatalog.RECALL.equals(skillId)) {
+                if (!RecallSkill.activate(player, level)) {
+                    return;
+                }
+                GloryKillsService.sync(player);
+                return;
             } else {
                 return;
             }

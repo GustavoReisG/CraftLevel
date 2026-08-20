@@ -1,6 +1,7 @@
 package com.grgs.craftlevel.client.skill;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.client.MobPinHud;
 import com.grgs.craftlevel.client.MobPinKeys;
 import com.grgs.craftlevel.config.SkillsParser;
 import com.grgs.craftlevel.network.AssignSpellHotbarPacket;
@@ -8,8 +9,20 @@ import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SpendSkillPointPacket;
 import com.grgs.craftlevel.network.SyncPlayerGloryPacket;
 import com.grgs.craftlevel.network.UseSkillPacket;
+import com.grgs.craftlevel.skill.BloodRushSkill;
+import com.grgs.craftlevel.skill.CarnageSkill;
+import com.grgs.craftlevel.skill.DarknessLightSkill;
+import com.grgs.craftlevel.skill.FrozenMindSkill;
+import com.grgs.craftlevel.skill.FrozenRushSkill;
 import com.grgs.craftlevel.skill.GhostSaturationSkill;
 import com.grgs.craftlevel.skill.ImbueMasterSkill;
+import com.grgs.craftlevel.skill.LastChanceSkill;
+import com.grgs.craftlevel.skill.LightSpeedSkill;
+import com.grgs.craftlevel.skill.MinerFrenzySkill;
+import com.grgs.craftlevel.skill.MindFurySkill;
+import com.grgs.craftlevel.skill.NetherElevationSkill;
+import com.grgs.craftlevel.skill.NetherRushSkill;
+import com.grgs.craftlevel.skill.ProspectorSkill;
 import com.grgs.craftlevel.skill.SenseOfPreySkill;
 import com.grgs.craftlevel.skill.SkillCatalog;
 import com.grgs.craftlevel.skill.SkillCategory;
@@ -17,7 +30,17 @@ import com.grgs.craftlevel.skill.SkillCooldowns;
 import com.grgs.craftlevel.skill.SkillDefinition;
 import com.grgs.craftlevel.skill.SkillKind;
 import com.grgs.craftlevel.skill.SoulAnchorSkill;
+import com.grgs.craftlevel.skill.SoulRenderSkill;
 import com.grgs.craftlevel.skill.SpectralClimbSkill;
+import com.grgs.craftlevel.skill.SpiritReturnSkill;
+import com.grgs.craftlevel.skill.StrengthRecoverySkill;
+import com.grgs.craftlevel.skill.SupernovaSkill;
+import com.grgs.craftlevel.skill.ProtectiveShockwaveSkill;
+import com.grgs.craftlevel.skill.QuickSurviveSkill;
+import com.grgs.craftlevel.skill.RecallSkill;
+import com.grgs.craftlevel.skill.ReinforcedBonesSkill;
+import com.grgs.craftlevel.skill.VampireAttackSkill;
+import com.grgs.craftlevel.skill.VampireBloodSkill;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -42,7 +65,7 @@ public class SkillMenuScreen extends Screen {
     private static final int TAB_W = WINDOW_W / TAB_COUNT;
     private static final int TAB_H = 32;
     private static final int TAB_ICON = 14;
-    private static final int CARD_H = 42;
+    private static final int CARD_H = 52;
     private static final int ICON_SIZE = 24;
     private static final int COL2_W = 28;
     private static final int LOCK_SIZE = 12;
@@ -214,7 +237,11 @@ public class SkillMenuScreen extends Screen {
                 return true;
             }
             if (button == 1 && def.kind() == SkillKind.ACTIVE) {
-                PacketHandler.CHANNEL.sendToServer(new UseSkillPacket(def.id()));
+                int targetId = SkillCatalog.NETHER_ELEVATION.equals(def.id())
+                        || SkillCatalog.FROZEN_MIND.equals(def.id())
+                        ? MobPinHud.pinnedEntityId()
+                        : -1;
+                PacketHandler.CHANNEL.sendToServer(new UseSkillPacket(def.id(), targetId));
                 return true;
             }
         }
@@ -418,7 +445,7 @@ public class SkillMenuScreen extends Screen {
         int descMaxW = Math.max(20, x + width - layout.col3Left - (def.kind() == SkillKind.ACTIVE ? 36 : 6));
         List<FormattedCharSequence> lines = font.split(desc, descMaxW);
         int textY = y + 14;
-        for (int i = 0; i < Math.min(2, lines.size()); i++) {
+        for (int i = 0; i < Math.min(3, lines.size()); i++) {
             graphics.drawString(font, lines.get(i), layout.col3Left, textY, preview ? 0xFFE0E0 : TEXT, false);
             textY += 9;
         }
@@ -493,7 +520,7 @@ public class SkillMenuScreen extends Screen {
             );
         }
         if (SkillCatalog.GHOST_SATURATION.equals(def.id())) {
-            return Component.translatable(def.descKey(), GhostSaturationSkill.DURATION_SECONDS);
+            return Component.translatable(def.descKey(), GhostSaturationSkill.durationSeconds(level));
         }
         if (SkillCatalog.SOUL_ANCHOR.equals(def.id())) {
             return Component.translatable(def.descKey(), SoulAnchorSkill.saveChancePercent(level));
@@ -510,6 +537,153 @@ public class SkillMenuScreen extends Screen {
                     ImbueMasterSkill.bonusPercent(level),
                     ImbueMasterSkill.amountPerPotion(level)
             );
+        }
+        if (SkillCatalog.VAMPIRE_ATTACK.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    (int) (VampireAttackSkill.LIFESTEAL_FRACTION * 100),
+                    VampireAttackSkill.durationSeconds(level)
+            );
+        }
+        if (SkillCatalog.SPIRIT_RETURN.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    SpiritReturnSkill.auraDurationSeconds() / 60
+            );
+        }
+        if (SkillCatalog.CARNAGE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    CarnageSkill.huntDurationSeconds() / 60,
+                    CarnageSkill.bonusPercentPerStack(),
+                    CarnageSkill.maxStacks()
+            );
+        }
+        if (SkillCatalog.SUPERNOVA.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    SupernovaSkill.radiusBlocks(level)
+            );
+        }
+        if (SkillCatalog.PROTECTIVE_SHOCKWAVE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    ProtectiveShockwaveSkill.repulsionLevel(level),
+                    ProtectiveShockwaveSkill.radiusBlocks(),
+                    ProtectiveShockwaveSkill.invulnSeconds()
+            );
+        }
+        if (SkillCatalog.SOUL_RENDER.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    SoulRenderSkill.bonusPercent(level)
+            );
+        }
+        if (SkillCatalog.LIGHT_SPEED.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    LightSpeedSkill.DURATION_SECONDS,
+                    LightSpeedSkill.speedBonusPercent()
+            );
+        }
+        if (SkillCatalog.DARKNESS_LIGHT.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    DarknessLightSkill.LIGHT_LEVEL,
+                    DarknessLightSkill.durationSeconds(level)
+            );
+        }
+        if (SkillCatalog.MINER_FRENZY.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    MinerFrenzySkill.bonusPercent(level),
+                    MinerFrenzySkill.durationSeconds(level)
+            );
+        }
+        if (SkillCatalog.LAST_CHANCE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    LastChanceSkill.cooldownSeconds() / 60
+            );
+        }
+        if (SkillCatalog.REINFORCED_BONES.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    ReinforcedBonesSkill.reductionPercent(level)
+            );
+        }
+        if (SkillCatalog.MIND_FURY.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    MindFurySkill.radiusBlocks(),
+                    MindFurySkill.durationSeconds(),
+                    MindFurySkill.maxMobs(level)
+            );
+        }
+        if (SkillCatalog.NETHER_ELEVATION.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    NetherElevationSkill.witherLevel(),
+                    NetherElevationSkill.durationSeconds(level)
+            );
+        }
+        if (SkillCatalog.NETHER_RUSH.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    NetherRushSkill.dashBlocks(level),
+                    NetherRushSkill.explosionCount(level)
+            );
+        }
+        if (SkillCatalog.PROSPECTOR.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    ProspectorSkill.radiusBlocks(level),
+                    ProspectorSkill.durationMinutes()
+            );
+        }
+        if (SkillCatalog.FROZEN_MIND.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    FrozenMindSkill.durationSeconds(level)
+            );
+        }
+        if (SkillCatalog.FROZEN_RUSH.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    FrozenRushSkill.dashBlocks(level),
+                    FrozenRushSkill.freezeSeconds(),
+                    FrozenRushSkill.radiusBlocks()
+            );
+        }
+        if (SkillCatalog.VAMPIRE_BLOOD.equals(def.id())) {
+            int bonus = VampireBloodSkill.bonusPercent(level);
+            return Component.translatable(def.descKey(), bonus, bonus);
+        }
+        if (SkillCatalog.QUICK_SURVIVE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    QuickSurviveSkill.healthThresholdPercent(),
+                    QuickSurviveSkill.speedBonusPercent()
+            );
+        }
+        if (SkillCatalog.BLOOD_RUSH.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    BloodRushSkill.bonusPercent(level),
+                    BloodRushSkill.BUFF_DURATION_SECONDS,
+                    BloodRushSkill.cooldownSeconds(level)
+            );
+        }
+        if (SkillCatalog.STRENGTH_RECOVERY.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    StrengthRecoverySkill.healthThresholdPercent(level),
+                    StrengthRecoverySkill.absorptionPercent(level),
+                    StrengthRecoverySkill.cooldownSeconds() / 60
+            );
+        }
+        if (SkillCatalog.RECALL.equals(def.id())) {
+            return Component.translatable(def.descKey(), RecallSkill.cooldownMinutes());
         }
         return Component.translatable(def.descKey());
     }

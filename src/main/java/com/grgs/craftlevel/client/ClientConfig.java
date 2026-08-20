@@ -90,6 +90,16 @@ public class ClientConfig {
     public static float hudMobFocusHeadYaw = 0.0f;
     public static float hudMobFocusCameraPitch = -0.2f;
 
+    // HUD de skills ativas (carrossel)
+    public static boolean hudSkillsEnabled = true;
+    public static String hudSkillsDirection = "row";
+    public static String hudSkillsFillSense = "ascending";
+    public static String hudSkillsTextSense = "after_icon";
+    public static String hudSkillsAnchor = "top_right";
+    public static int hudSkillsX = -8;
+    public static int hudSkillsY = 40;
+    public static float hudSkillsScale = 0.85f;
+
     public static final String[] ANCHORS = {
             "top_left",
             "top_center",
@@ -106,6 +116,8 @@ public class ClientConfig {
     /** Ao entrar no mundo: carrega client.json e os JSONs de gameplay para tooltips funcionarem. */
     @SubscribeEvent
     public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+        ClientSoulRender.clear();
+        ClientProspectorHighlights.clear();
         load();
         loadGameConfig();
         CraftLevelTexturesPack.ensurePackSelected(Minecraft.getInstance());
@@ -216,6 +228,16 @@ public class ClientConfig {
         hudMobFocusMobYaw = mobFocus.mobYaw();
         hudMobFocusHeadYaw = mobFocus.headYaw();
         hudMobFocusCameraPitch = mobFocus.cameraPitch();
+
+        ClientConfigEditorState.SkillsHudValues skills = state.resolvedSkills();
+        hudSkillsEnabled = Boolean.TRUE.equals(skills.enabled());
+        hudSkillsDirection = skills.direction();
+        hudSkillsFillSense = skills.fillSense();
+        hudSkillsTextSense = skills.textSense();
+        hudSkillsAnchor = skills.anchor();
+        hudSkillsX = skills.x();
+        hudSkillsY = skills.y();
+        hudSkillsScale = skills.scale();
     }
 
     /** Grava os valores atuais em config/craftlevel/client.json. */
@@ -253,6 +275,10 @@ public class ClientConfig {
                 hudMobFocusAnchor, hudMobFocusX, hudMobFocusY,
                 hudMobFocusScale, hudMobFocusFontScale, hudMobFocusDirection,
                 hudMobFocusMobYaw, hudMobFocusHeadYaw, hudMobFocusCameraPitch
+        ));
+        state.setSkills(new ClientConfigEditorState.SkillsHudValues(
+                hudSkillsEnabled, hudSkillsDirection, hudSkillsFillSense, hudSkillsTextSense,
+                hudSkillsAnchor, hudSkillsX, hudSkillsY, hudSkillsScale
         ));
         try {
             Path file = getConfigPath();

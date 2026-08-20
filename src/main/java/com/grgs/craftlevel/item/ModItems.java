@@ -84,5 +84,10 @@ public final class ModItems {
             () -> new ArcaneShardItem(new Item.Properties())
     );
 
+    public static final RegistryObject<Item> RECALL_RUNE = ITEMS.register(
+            "recall_rune",
+            () -> new RecallRuneItem(new Item.Properties().stacksTo(1))
+    );
+
     private ModItems() {}
 }

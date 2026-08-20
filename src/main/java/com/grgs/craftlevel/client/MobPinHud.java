@@ -4,6 +4,7 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.RequestMobLevelPacket;
+import com.grgs.craftlevel.network.SetMobFocusPacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -73,14 +74,39 @@ public final class MobPinHud {
 
     private MobPinHud() {}
 
+    /** EntityId do mob no Mob Focus, se ainda existir e estiver vivo; senão −1. */
+    public static int pinnedEntityId() {
+        if (pinned == null) {
+            return -1;
+        }
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null) {
+            return -1;
+        }
+        Entity entity = minecraft.level.getEntity(pinned.entityId);
+        if (entity instanceof LivingEntity living && living.isAlive()) {
+            return pinned.entityId;
+        }
+        return -1;
+    }
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || MobPinKeys.PIN_MOB == null) {
+        if (event.phase != TickEvent.Phase.END) {
             return;
         }
 
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null || minecraft.screen != null) {
+        if (minecraft.player == null) {
+            return;
+        }
+
+        // Remove o focus se o mob morreu ou descarregou.
+        if (pinned != null && !isPinnedStillValid(minecraft)) {
+            clearPin();
+        }
+
+        if (MobPinKeys.PIN_MOB == null || minecraft.screen != null) {
             return;
         }
 
@@ -102,6 +128,14 @@ public final class MobPinHud {
 
         pinEntity(minecraft, target);
         minecraft.options.keyInventory.consumeClick();
+    }
+
+    private static boolean isPinnedStillValid(Minecraft minecraft) {
+        if (pinned == null || minecraft.level == null) {
+            return false;
+        }
+        Entity entity = minecraft.level.getEntity(pinned.entityId);
+        return entity instanceof LivingEntity living && living.isAlive();
     }
 
     @SubscribeEvent
@@ -137,6 +171,7 @@ public final class MobPinHud {
                 isHostile(entity),
                 preview
         );
+        PacketHandler.CHANNEL.sendToServer(new SetMobFocusPacket(entity.getId()));
     }
 
     private static int readLevel(LivingEntity entity) {
@@ -387,6 +422,7 @@ public final class MobPinHud {
         if (pinned != null) {
             pinned.release(Minecraft.getInstance());
             pinned = null;
+            PacketHandler.CHANNEL.sendToServer(new SetMobFocusPacket(-1));
         }
     }
 

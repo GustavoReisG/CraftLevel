@@ -12,6 +12,7 @@ import com.grgs.craftlevel.glory.GloryKillsService;
 import com.grgs.craftlevel.config.ConfigParser;
 import com.grgs.craftlevel.damage.DamageClassifier;
 import com.grgs.craftlevel.damage.EventScalingService;
+import com.grgs.craftlevel.damage.HealContext;
 import com.grgs.craftlevel.economy.EconomyService;
 import com.grgs.craftlevel.economy.KillRewardService;
 import com.grgs.craftlevel.network.DamageIndicatorPacket;
@@ -43,6 +44,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -411,10 +413,17 @@ public class CraftLevelEvents {
         }
 
         event.setAmount(scaled);
+    }
 
-        Player attackingPlayer = resolveAttackingPlayer(source);
-        if (attackingPlayer != null && event.getAmount() > 0) {
-            sendDamageIndicator(attackingPlayer, target, event.getAmount());
+    /** Indicator depois de modifiers de skill (ex.: Carnage em LOW). */
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onLivingHurtDamageIndicator(LivingHurtEvent event) {
+        if (event.getEntity().level().isClientSide() || event.getAmount() <= 0) {
+            return;
+        }
+        Player attackingPlayer = resolveAttackingPlayer(event.getSource());
+        if (attackingPlayer != null) {
+            sendDamageIndicator(attackingPlayer, event.getEntity(), event.getAmount());
         }
     }
 
@@ -425,12 +434,14 @@ public class CraftLevelEvents {
 
         LivingEntity entity = event.getEntity();
         float original = event.getAmount();
-        float scaled = EventScalingService.applyHealScaling(entity, ConfigParser.DEFAULT_KEY, original);
+        String healKey = HealContext.takeOrDefault();
+        float scaled = EventScalingService.applyHealScaling(entity, healKey, original);
         event.setAmount(scaled);
 
         DebugLog.info(
-                "Heal: entidade={} original={} final={}",
+                "Heal: entidade={} key={} original={} final={}",
                 describeEntity(entity),
+                healKey,
                 original,
                 scaled
         );
