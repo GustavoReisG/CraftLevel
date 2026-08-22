@@ -118,7 +118,7 @@ public class ConfigManager {
         },
         "heal": {
           "default": "health",
-          "craftlevel:vampire_attack": "health"
+          "craftlevel:vampire_attack_heal": "flat"
         }
       }
     """;

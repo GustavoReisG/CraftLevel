@@ -10,12 +10,15 @@ import com.grgs.craftlevel.network.SpendSkillPointPacket;
 import com.grgs.craftlevel.network.SyncPlayerGloryPacket;
 import com.grgs.craftlevel.network.UseSkillPacket;
 import com.grgs.craftlevel.skill.BloodRushSkill;
+import com.grgs.craftlevel.skill.BlinkStepSkill;
 import com.grgs.craftlevel.skill.CarnageSkill;
+import com.grgs.craftlevel.skill.CripplingAuraSkill;
 import com.grgs.craftlevel.skill.DarknessLightSkill;
 import com.grgs.craftlevel.skill.FrozenMindSkill;
 import com.grgs.craftlevel.skill.FrozenRushSkill;
 import com.grgs.craftlevel.skill.GhostSaturationSkill;
 import com.grgs.craftlevel.skill.ImbueMasterSkill;
+import com.grgs.craftlevel.skill.InfernoBoltSkill;
 import com.grgs.craftlevel.skill.LastChanceSkill;
 import com.grgs.craftlevel.skill.LightSpeedSkill;
 import com.grgs.craftlevel.skill.MinerFrenzySkill;
@@ -30,6 +33,7 @@ import com.grgs.craftlevel.skill.SkillCooldowns;
 import com.grgs.craftlevel.skill.SkillDefinition;
 import com.grgs.craftlevel.skill.SkillKind;
 import com.grgs.craftlevel.skill.SoulAnchorSkill;
+import com.grgs.craftlevel.skill.SoulLanceSkill;
 import com.grgs.craftlevel.skill.SoulRenderSkill;
 import com.grgs.craftlevel.skill.SpectralClimbSkill;
 import com.grgs.craftlevel.skill.SpiritReturnSkill;
@@ -39,6 +43,7 @@ import com.grgs.craftlevel.skill.ProtectiveShockwaveSkill;
 import com.grgs.craftlevel.skill.QuickSurviveSkill;
 import com.grgs.craftlevel.skill.RecallSkill;
 import com.grgs.craftlevel.skill.ReinforcedBonesSkill;
+import com.grgs.craftlevel.skill.TerrorPulseSkill;
 import com.grgs.craftlevel.skill.VampireAttackSkill;
 import com.grgs.craftlevel.skill.VampireBloodSkill;
 import net.minecraft.ChatFormatting;
@@ -53,6 +58,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Menu de skills (tamanho de inventário, sem slots). */
@@ -445,9 +451,17 @@ public class SkillMenuScreen extends Screen {
         int descMaxW = Math.max(20, x + width - layout.col3Left - (def.kind() == SkillKind.ACTIVE ? 36 : 6));
         List<FormattedCharSequence> lines = font.split(desc, descMaxW);
         int textY = y + 14;
-        for (int i = 0; i < Math.min(3, lines.size()); i++) {
+        int shownLines = Math.min(3, lines.size());
+        for (int i = 0; i < shownLines; i++) {
             graphics.drawString(font, lines.get(i), layout.col3Left, textY, preview ? 0xFFE0E0 : TEXT, false);
             textY += 9;
+        }
+
+        int descTop = y + 14;
+        int descH = Math.max(9, shownLines * 9);
+        if (tooltip == null
+                && contains(mouseX, mouseY, layout.col3Left, descTop, descMaxW, descH)) {
+            tooltip = wrapDescriptionTooltip(desc);
         }
 
         int cdSeconds = displayedCooldownSeconds(def, displayLevel);
@@ -462,6 +476,22 @@ public class SkillMenuScreen extends Screen {
             graphics.drawString(font, cdText, textX, hgY, TEXT, false);
         }
         return new CardTooltipResult(tooltip, leftAnchorX, leftAnchorY);
+    }
+
+    private List<Component> wrapDescriptionTooltip(Component desc) {
+        List<Component> out = new ArrayList<>();
+        for (FormattedCharSequence line : font.split(desc, 200)) {
+            StringBuilder sb = new StringBuilder();
+            line.accept((index, style, codePoint) -> {
+                sb.appendCodePoint(codePoint);
+                return true;
+            });
+            out.add(Component.literal(sb.toString()).withStyle(ChatFormatting.GRAY));
+        }
+        if (out.isEmpty()) {
+            out.add(desc.copy().withStyle(ChatFormatting.GRAY));
+        }
+        return out;
     }
 
     private void renderTooltipLeftOf(GuiGraphics graphics, List<Component> lines, int anchorX, int anchorY) {
@@ -534,8 +564,7 @@ public class SkillMenuScreen extends Screen {
         if (SkillCatalog.IMBUE_MASTER.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
-                    ImbueMasterSkill.bonusPercent(level),
-                    ImbueMasterSkill.amountPerPotion(level)
+                    ImbueMasterSkill.bonusPercent(level)
             );
         }
         if (SkillCatalog.VAMPIRE_ATTACK.equals(def.id())) {
@@ -562,13 +591,13 @@ public class SkillMenuScreen extends Screen {
         if (SkillCatalog.SUPERNOVA.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
-                    SupernovaSkill.radiusBlocks(level)
+                    SupernovaSkill.radiusBlocks(level),
+                    SupernovaSkill.pullSeconds(level)
             );
         }
         if (SkillCatalog.PROTECTIVE_SHOCKWAVE.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
-                    ProtectiveShockwaveSkill.repulsionLevel(level),
                     ProtectiveShockwaveSkill.radiusBlocks(),
                     ProtectiveShockwaveSkill.invulnSeconds()
             );
@@ -582,14 +611,13 @@ public class SkillMenuScreen extends Screen {
         if (SkillCatalog.LIGHT_SPEED.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
-                    LightSpeedSkill.DURATION_SECONDS,
-                    LightSpeedSkill.speedBonusPercent()
+                    LightSpeedSkill.speedBonusPercent(),
+                    LightSpeedSkill.DURATION_SECONDS
             );
         }
         if (SkillCatalog.DARKNESS_LIGHT.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
-                    DarknessLightSkill.LIGHT_LEVEL,
                     DarknessLightSkill.durationSeconds(level)
             );
         }
@@ -623,6 +651,7 @@ public class SkillMenuScreen extends Screen {
         if (SkillCatalog.NETHER_ELEVATION.equals(def.id())) {
             return Component.translatable(
                     def.descKey(),
+                    NetherElevationSkill.levitationLevel(),
                     NetherElevationSkill.witherLevel(),
                     NetherElevationSkill.durationSeconds(level)
             );
@@ -684,6 +713,42 @@ public class SkillMenuScreen extends Screen {
         }
         if (SkillCatalog.RECALL.equals(def.id())) {
             return Component.translatable(def.descKey(), RecallSkill.cooldownMinutes());
+        }
+        if (SkillCatalog.SKY_WALKER.equals(def.id())) {
+            return Component.translatable(def.descKey());
+        }
+        if (SkillCatalog.INFERNO_BOLT.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    InfernoBoltSkill.blastRadius(level),
+                    InfernoBoltSkill.boltCount(level)
+            );
+        }
+        if (SkillCatalog.SOUL_LANCE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    (int) (SoulLanceSkill.damageMultiplier(level) * 100),
+                    SoulLanceSkill.lightningCount(level)
+            );
+        }
+        if (SkillCatalog.BLINK_STEP.equals(def.id())) {
+            return Component.translatable(def.descKey(), BlinkStepSkill.distanceBlocks(level));
+        }
+        if (SkillCatalog.CRIPPLING_AURA.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    CripplingAuraSkill.RADIUS_BLOCKS,
+                    CripplingAuraSkill.slownessLevel(level),
+                    CripplingAuraSkill.weaknessLevel(level),
+                    CripplingAuraSkill.DURATION_SECONDS
+            );
+        }
+        if (SkillCatalog.TERROR_PULSE.equals(def.id())) {
+            return Component.translatable(
+                    def.descKey(),
+                    TerrorPulseSkill.RADIUS_BLOCKS,
+                    TerrorPulseSkill.durationSeconds()
+            );
         }
         return Component.translatable(def.descKey());
     }

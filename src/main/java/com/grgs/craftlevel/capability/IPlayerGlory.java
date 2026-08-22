@@ -31,5 +31,8 @@ public interface IPlayerGlory {
 
     void resetSkills();
 
+    /** Zera todos os cooldowns de skills. */
+    void clearCooldowns();
+
     void copyFrom(IPlayerGlory other);
 }

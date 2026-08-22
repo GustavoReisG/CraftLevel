@@ -10,6 +10,7 @@ import com.grgs.craftlevel.capability.IPlayerSouls;
 import com.grgs.craftlevel.capability.IVillagerEconomy;
 import com.grgs.craftlevel.block.ModBlockEntities;
 import com.grgs.craftlevel.block.ModBlocks;
+import com.grgs.craftlevel.entity.ModEntities;
 import com.grgs.craftlevel.item.ModCreativeTabs;
 import com.grgs.craftlevel.item.ModItems;
 import com.grgs.craftlevel.menu.ModMenus;
@@ -47,6 +48,7 @@ public class CraftLevel {
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
+        ModEntities.ENTITY_TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         LOGGER.info("Craft Level initialized!");

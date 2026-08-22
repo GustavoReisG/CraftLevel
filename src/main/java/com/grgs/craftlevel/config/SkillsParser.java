@@ -228,6 +228,45 @@ public final class SkillsParser {
         if (SkillCatalog.RECALL.equals(skillId)) {
             return new LevelConfig(1, 16);
         }
+        if (SkillCatalog.SKY_WALKER.equals(skillId)) {
+            return new LevelConfig(1, 20);
+        }
+        if (SkillCatalog.INFERNO_BOLT.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 20;
+                case 2 -> 26;
+                case 3 -> 32;
+                case 4 -> 38;
+                default -> 45;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.SOUL_LANCE.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 22;
+                case 2 -> 28;
+                default -> 35;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.BLINK_STEP.equals(skillId)) {
+            int min = Math.max(1, level) >= 2 ? 28 : 18;
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.CRIPPLING_AURA.equals(skillId)) {
+            int min = switch (Math.max(1, level)) {
+                case 1 -> 16;
+                case 2 -> 22;
+                case 3 -> 28;
+                case 4 -> 34;
+                default -> 40;
+            };
+            return new LevelConfig(1, min);
+        }
+        if (SkillCatalog.TERROR_PULSE.equals(skillId)) {
+            int min = Math.max(1, level) >= 2 ? 30 : 22;
+            return new LevelConfig(1, min);
+        }
         if (SkillCatalog.VAMPIRE_BLOOD.equals(skillId)) {
             int min = Math.max(1, level) >= 2 ? 30 : 22;
             return new LevelConfig(1, min);

@@ -2,6 +2,7 @@ package com.grgs.craftlevel.skill;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.damage.HealContext;
+import com.grgs.craftlevel.damage.ModHealTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
 public final class VampireAttackSkill {
 
-    public static final String HEAL_KEY = "craftlevel:vampire_attack";
+    public static final String HEAL_KEY = ModHealTypes.VAMPIRE_ATTACK_HEAL;
     public static final float LIFESTEAL_FRACTION = 0.10F;
     public static final int COOLDOWN_TICKS = 60 * 20;
 

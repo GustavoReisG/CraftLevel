@@ -1,6 +1,7 @@
 package com.grgs.craftlevel.skill;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.damage.ModDamageTypes;
 import com.grgs.craftlevel.network.NetherRushDashPacket;
 import com.grgs.craftlevel.network.PacketHandler;
 import net.minecraft.core.particles.ParticleTypes;
@@ -272,6 +273,8 @@ public final class NetherRushSkill {
         );
         world.explode(
                 player,
+                ModDamageTypes.netherRushDamage(world, player),
+                null,
                 x,
                 y,
                 z,

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "COC",
+    "ONO",
+    "COC"
+  ],
+  "key": {
+    "C": {
+      "tag": "minecraft:candles"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    }
+  },
+  "result": {
+    "item": "craftlevel:altar_of_death"
+  }
+}

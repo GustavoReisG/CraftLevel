@@ -2,8 +2,11 @@ package com.grgs.craftlevel.skill;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.damage.DamageClassifier;
+import com.grgs.craftlevel.damage.ModDamageTypes;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -29,10 +32,12 @@ public final class PlayerAttributedEffects {
     private static final class Attribution {
         final UUID playerId;
         final long expireAtGameTime;
+        final ResourceKey<DamageType> damageType;
 
-        Attribution(UUID playerId, long expireAtGameTime) {
+        Attribution(UUID playerId, long expireAtGameTime, ResourceKey<DamageType> damageType) {
             this.playerId = playerId;
             this.expireAtGameTime = expireAtGameTime;
+            this.damageType = damageType;
         }
     }
 
@@ -47,7 +52,17 @@ public final class PlayerAttributedEffects {
             int durationTicks,
             int amplifier
     ) {
-        applyDoT(player, target, MobEffects.WITHER, durationTicks, amplifier);
+        applyWither(player, target, durationTicks, amplifier, ModDamageTypes.NETHER_ELEVATION_DAMAGE);
+    }
+
+    public static void applyWither(
+            ServerPlayer player,
+            LivingEntity target,
+            int durationTicks,
+            int amplifier,
+            ResourceKey<DamageType> damageType
+    ) {
+        applyDoT(player, target, MobEffects.WITHER, durationTicks, amplifier, damageType);
     }
 
     public static void applyPoison(
@@ -56,7 +71,7 @@ public final class PlayerAttributedEffects {
             int durationTicks,
             int amplifier
     ) {
-        applyDoT(player, target, MobEffects.POISON, durationTicks, amplifier);
+        applyDoT(player, target, MobEffects.POISON, durationTicks, amplifier, null);
     }
 
     public static void applyDoT(
@@ -66,8 +81,19 @@ public final class PlayerAttributedEffects {
             int durationTicks,
             int amplifier
     ) {
+        applyDoT(player, target, effect, durationTicks, amplifier, null);
+    }
+
+    public static void applyDoT(
+            ServerPlayer player,
+            LivingEntity target,
+            MobEffect effect,
+            int durationTicks,
+            int amplifier,
+            ResourceKey<DamageType> damageType
+    ) {
         long expireAt = player.serverLevel().getGameTime() + Math.max(1, durationTicks);
-        BY_TARGET.put(target.getUUID(), new Attribution(player.getUUID(), expireAt));
+        BY_TARGET.put(target.getUUID(), new Attribution(player.getUUID(), expireAt, damageType));
         target.addEffect(new MobEffectInstance(
                 effect,
                 durationTicks,
@@ -122,8 +148,12 @@ public final class PlayerAttributedEffects {
         try {
             int invuln = target.invulnerableTime;
             target.invulnerableTime = 0;
-            // indirect_magic → spell_power no wiring do player (scaling pelo level do player).
-            target.hurt(player.damageSources().indirectMagic(player, player), amount);
+            if (attribution.damageType != null) {
+                target.hurt(ModDamageTypes.create(player.level(), attribution.damageType, player), amount);
+            } else {
+                // Fallback: indirect_magic → spell_power no wiring do player.
+                target.hurt(player.damageSources().indirectMagic(player, player), amount);
+            }
             target.invulnerableTime = Math.max(invuln, target.invulnerableTime);
         } finally {
             REDIRECTING.set(false);

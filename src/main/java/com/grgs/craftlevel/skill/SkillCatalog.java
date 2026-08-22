@@ -39,6 +39,12 @@ public final class SkillCatalog {
     public static final String PORTABLE_CRAFTING = "portable_crafting";
     public static final String GOODNIGHT = "goodnight";
     public static final String RECALL = "recall";
+    public static final String SKY_WALKER = "sky_walker";
+    public static final String INFERNO_BOLT = "inferno_bolt";
+    public static final String SOUL_LANCE = "soul_lance";
+    public static final String BLINK_STEP = "blink_step";
+    public static final String CRIPPLING_AURA = "crippling_aura";
+    public static final String TERROR_PULSE = "terror_pulse";
 
     public static final SkillDefinition SENSE_OF_PREY_DEF = new SkillDefinition(
             SENSE_OF_PREY,
@@ -370,6 +376,72 @@ public final class SkillCatalog {
             "gui.craftlevel.skill.recall.desc"
     );
 
+    public static final SkillDefinition SKY_WALKER_DEF = new SkillDefinition(
+            SKY_WALKER,
+            SkillKind.ACTIVE,
+            SkillCategory.UTILITY,
+            1,
+            SkyWalkerSkill.COOLDOWN_TICKS,
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/sky_walker.png"),
+            "gui.craftlevel.skill.sky_walker",
+            "gui.craftlevel.skill.sky_walker.desc"
+    );
+
+    public static final SkillDefinition INFERNO_BOLT_DEF = new SkillDefinition(
+            INFERNO_BOLT,
+            SkillKind.ACTIVE,
+            SkillCategory.DAMAGE,
+            5,
+            InfernoBoltSkill.COOLDOWN_TICKS,
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/inferno_bolt.png"),
+            "gui.craftlevel.skill.inferno_bolt",
+            "gui.craftlevel.skill.inferno_bolt.desc"
+    );
+
+    public static final SkillDefinition SOUL_LANCE_DEF = new SkillDefinition(
+            SOUL_LANCE,
+            SkillKind.ACTIVE,
+            SkillCategory.DAMAGE,
+            3,
+            SoulLanceSkill.COOLDOWN_TICKS,
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/soul_lance.png"),
+            "gui.craftlevel.skill.soul_lance",
+            "gui.craftlevel.skill.soul_lance.desc"
+    );
+
+    public static final SkillDefinition BLINK_STEP_DEF = new SkillDefinition(
+            BLINK_STEP,
+            SkillKind.ACTIVE,
+            SkillCategory.DEFENSE,
+            2,
+            BlinkStepSkill.COOLDOWN_TICKS,
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/blink_step.png"),
+            "gui.craftlevel.skill.blink_step",
+            "gui.craftlevel.skill.blink_step.desc"
+    );
+
+    public static final SkillDefinition CRIPPLING_AURA_DEF = new SkillDefinition(
+            CRIPPLING_AURA,
+            SkillKind.ACTIVE,
+            SkillCategory.DEFENSE,
+            5,
+            CripplingAuraSkill.COOLDOWN_TICKS,
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/crippling_aura.png"),
+            "gui.craftlevel.skill.crippling_aura",
+            "gui.craftlevel.skill.crippling_aura.desc"
+    );
+
+    public static final SkillDefinition TERROR_PULSE_DEF = new SkillDefinition(
+            TERROR_PULSE,
+            SkillKind.ACTIVE,
+            SkillCategory.DEFENSE,
+            2,
+            TerrorPulseSkill.cooldownTicks(1),
+            new ResourceLocation(CraftLevel.MODID, "textures/gui/skills/terror_pulse.png"),
+            "gui.craftlevel.skill.terror_pulse",
+            "gui.craftlevel.skill.terror_pulse.desc"
+    );
+
     private static final List<SkillDefinition> ALL = List.of(
             SENSE_OF_PREY_DEF,
             GHOST_SATURATION_DEF,
@@ -400,7 +472,13 @@ public final class SkillCatalog {
             STRENGTH_RECOVERY_DEF,
             PORTABLE_CRAFTING_DEF,
             GOODNIGHT_DEF,
-            RECALL_DEF
+            RECALL_DEF,
+            SKY_WALKER_DEF,
+            INFERNO_BOLT_DEF,
+            SOUL_LANCE_DEF,
+            BLINK_STEP_DEF,
+            CRIPPLING_AURA_DEF,
+            TERROR_PULSE_DEF
     );
 
     private SkillCatalog() {}

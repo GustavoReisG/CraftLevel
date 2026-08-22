@@ -111,6 +111,11 @@ public class PlayerGlory implements IPlayerGlory {
     }
 
     @Override
+    public void clearCooldowns() {
+        cooldownReadyAt.clear();
+    }
+
+    @Override
     public void copyFrom(IPlayerGlory other) {
         setGloryKills(other.getGloryKills());
         setSkillPoints(other.getSkillPoints());

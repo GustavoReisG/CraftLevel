@@ -22,6 +22,7 @@ import com.grgs.craftlevel.network.SyncEmeraldBankPacket;
 import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import com.grgs.craftlevel.network.SyncPlayerLevelPacket;
 import com.grgs.craftlevel.scaling.StatRefreshService;
+import com.grgs.craftlevel.skill.ActiveSkillTracker;
 import com.grgs.craftlevel.souls.SoulsEvents;
 import com.grgs.craftlevel.util.DebugLog;
 import com.grgs.craftlevel.villager.VillagerTradeService;
@@ -44,7 +45,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.io.IOException;
 
-/** Comandos admin: /craftlevel lp|level|souls|emerald_bag|emerald_bank|glory_kills|skill_points|reset_skills|reload (OP 2). */
+/** Comandos admin: /craftlevel lp|level|souls|emerald_bag|emerald_bank|glory_kills|skill_points|reset_skills|cooldown_reset|reload (OP 2). */
 @Mod.EventBusSubscriber(modid = CraftLevel.MODID)
 public class CraftLevelCommands {
 
@@ -71,6 +72,16 @@ public class CraftLevelCommands {
                         .then(Commands.literal("reset_skills")
                                 .then(Commands.argument("target", EntityArgument.entity())
                                         .executes(ctx -> resetSkills(
+                                                ctx.getSource(),
+                                                EntityArgument.getEntity(ctx, "target")
+                                        ))))
+                        .then(Commands.literal("cooldown_reset")
+                                .executes(ctx -> resetCooldowns(
+                                        ctx.getSource(),
+                                        ctx.getSource().getPlayerOrException()
+                                ))
+                                .then(Commands.argument("target", EntityArgument.entity())
+                                        .executes(ctx -> resetCooldowns(
                                                 ctx.getSource(),
                                                 EntityArgument.getEntity(ctx, "target")
                                         ))))
@@ -335,6 +346,26 @@ public class CraftLevelCommands {
 
         DebugLog.info("Comando reset_skills: {}", player.getGameProfile().getName());
         return success(source, "Skills de " + player.getGameProfile().getName() + " resetadas.");
+    }
+
+    private static int resetCooldowns(CommandSourceStack source, Entity target) {
+        ServerPlayer player = requirePlayer(source, target, "Cooldown reset");
+        if (player == null) {
+            return 0;
+        }
+
+        IPlayerGlory glory = player.getCapability(PlayerGloryProvider.PLAYER_GLORY).orElse(null);
+        if (glory == null) {
+            source.sendFailure(Component.literal("[CraftLevel] Capability de glory não encontrada."));
+            return 0;
+        }
+
+        glory.clearCooldowns();
+        ActiveSkillTracker.clearAndSync(player);
+        GloryKillsService.sync(player);
+
+        DebugLog.info("Comando cooldown_reset: {}", player.getGameProfile().getName());
+        return success(source, "Cooldowns de " + player.getGameProfile().getName() + " resetados.");
     }
 
     private static ServerPlayer requirePlayer(CommandSourceStack source, Entity target, String label) {

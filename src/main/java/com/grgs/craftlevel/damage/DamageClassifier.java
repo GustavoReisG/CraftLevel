@@ -23,6 +23,17 @@ public final class DamageClassifier {
     public static final String INDIRECT_MAGIC = "minecraft:indirect_magic";
     public static final String WITHER = "minecraft:wither";
     public static final String POISON = "minecraft:poison";
+    public static final String SUPERNOVA_DAMAGE = "craftlevel:supernova_damage";
+    public static final String NETHER_RUSH_DAMAGE = "craftlevel:nether_rush_damage";
+    public static final String NETHER_ELEVATION_DAMAGE = "craftlevel:nether_elevation_damage";
+    public static final String INFERNO_BOLT_DAMAGE = "craftlevel:inferno_bolt_damage";
+    public static final String SOUL_LANCE_DAMAGE = "craftlevel:soul_lance_damage";
+    /** @deprecated use {@link #INFERNO_BOLT_DAMAGE} */
+    @Deprecated
+    public static final String INFERNO_BOLT = INFERNO_BOLT_DAMAGE;
+    /** @deprecated use {@link #SOUL_LANCE_DAMAGE} */
+    @Deprecated
+    public static final String SOUL_LANCE = SOUL_LANCE_DAMAGE;
 
     private DamageClassifier() {}
 

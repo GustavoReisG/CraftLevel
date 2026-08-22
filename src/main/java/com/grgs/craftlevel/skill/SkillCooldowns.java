@@ -27,6 +27,9 @@ public final class SkillCooldowns {
         if (SkillCatalog.BLOOD_RUSH.equals(skillId)) {
             return BloodRushSkill.cooldownTicks(level);
         }
+        if (SkillCatalog.TERROR_PULSE.equals(skillId)) {
+            return TerrorPulseSkill.cooldownTicks(level);
+        }
         return SkillCatalog.byId(skillId)
                 .map(SkillDefinition::cooldownTicks)
                 .orElse(20);

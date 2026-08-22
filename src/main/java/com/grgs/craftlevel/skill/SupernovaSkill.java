@@ -1,6 +1,7 @@
 package com.grgs.craftlevel.skill;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.damage.ModDamageTypes;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -241,8 +242,11 @@ public final class SupernovaSkill {
                 0.0D
         );
         // Potência de creeper normal; NONE = só entidades, sem blocos.
+        // Damage type: Supernova Damage.
         level.explode(
                 player,
+                ModDamageTypes.supernovaDamage(level, player),
+                null,
                 player.getX(),
                 player.getY() + 0.5D,
                 player.getZ(),

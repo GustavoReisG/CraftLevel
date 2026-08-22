@@ -156,6 +156,20 @@ public final class SkillService {
                 }
                 GloryKillsService.sync(player);
                 return;
+            } else if (SkillCatalog.SKY_WALKER.equals(skillId)) {
+                SkyWalkerSkill.activate(player, level);
+            } else if (SkillCatalog.INFERNO_BOLT.equals(skillId)) {
+                InfernoBoltSkill.activate(player, level);
+            } else if (SkillCatalog.SOUL_LANCE.equals(skillId)) {
+                SoulLanceSkill.activate(player, level);
+            } else if (SkillCatalog.BLINK_STEP.equals(skillId)) {
+                if (!BlinkStepSkill.activate(player, level)) {
+                    return;
+                }
+            } else if (SkillCatalog.CRIPPLING_AURA.equals(skillId)) {
+                CripplingAuraSkill.activate(player, level);
+            } else if (SkillCatalog.TERROR_PULSE.equals(skillId)) {
+                TerrorPulseSkill.activate(player, level);
             } else {
                 return;
             }
