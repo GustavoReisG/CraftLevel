@@ -1,22 +1,29 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "COC",
-    "ONO",
-    "COC"
+    "CWC",
+    "BOB",
+    "ONO"
   ],
   "key": {
     "C": {
-      "tag": "minecraft:candles"
+      "item": "minecraft:candle"
+    },
+    "W": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    "B": {
+      "item": "minecraft:polished_blackstone"
     },
     "O": {
-      "item": "minecraft:obsidian"
+      "item": "minecraft:crying_obsidian"
     },
     "N": {
       "item": "minecraft:netherite_block"
     }
   },
   "result": {
-    "item": "craftlevel:altar_of_death"
+    "item": "craftlevel:altar_of_death",
+    "count": 1
   }
 }

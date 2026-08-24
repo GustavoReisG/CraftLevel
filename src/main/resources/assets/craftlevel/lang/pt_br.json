@@ -82,7 +82,7 @@
   "block.craftlevel.compressed_emerald_block": "Bloco de Esmeralda Comprimido",
   "block.craftlevel.player_gravestone": "Lápide",
   "block.craftlevel.altar_of_death": "Altar da Morte",
-  "block.craftlevel.altar_of_death.need_night": "O altar só acende à noite.",
+  "block.craftlevel.altar_of_death.need_night": "A troca só funciona à noite.",
   "block.craftlevel.altar_of_death.need_kills": "Precisa de %s Glory Kills (tem %s).",
   "container.craftlevel.emerald_wallet": "Bolsa de Esmeraldas",
   "gui.craftlevel.emerald_wallet.balance": "Saldo: %s",

@@ -20,6 +20,8 @@ public final class ModClientModels {
             new ModelResourceLocation(new ResourceLocation(CraftLevel.MODID, "imbue_potion"), "inventory");
     private static final ModelResourceLocation IMBUE_FLASK =
             new ModelResourceLocation(new ResourceLocation(CraftLevel.MODID, "imbue_flask"), "inventory");
+    private static final ModelResourceLocation ALTAR_OF_DEATH =
+            new ModelResourceLocation(new ResourceLocation(CraftLevel.MODID, "altar_of_death"), "inventory");
 
     private ModClientModels() {}
 
@@ -27,6 +29,7 @@ public final class ModClientModels {
     public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
         wrapTranslucent(event, IMBUE_POTION);
         wrapTranslucent(event, IMBUE_FLASK);
+        wrapTranslucent(event, ALTAR_OF_DEATH);
     }
 
     private static void wrapTranslucent(ModelEvent.ModifyBakingResult event, ModelResourceLocation id) {

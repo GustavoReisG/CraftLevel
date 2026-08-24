@@ -82,7 +82,7 @@
   "block.craftlevel.compressed_emerald_block": "Compressed Emerald Block",
   "block.craftlevel.player_gravestone": "Gravestone",
   "block.craftlevel.altar_of_death": "Altar of Death",
-  "block.craftlevel.altar_of_death.need_night": "The altar only lights at night.",
+  "block.craftlevel.altar_of_death.need_night": "Exchange only works at night.",
   "block.craftlevel.altar_of_death.need_kills": "Need %s Glory Kills (have %s).",
   "container.craftlevel.emerald_wallet": "Emerald Bag",
   "gui.craftlevel.emerald_wallet.balance": "Balance: %s",
