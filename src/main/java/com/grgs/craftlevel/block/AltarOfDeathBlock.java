@@ -3,7 +3,6 @@ package com.grgs.craftlevel.block;
 import com.grgs.craftlevel.capability.PlayerGloryProvider;
 import com.grgs.craftlevel.config.GloryKillsParser;
 import com.grgs.craftlevel.glory.GloryKillsService;
-import com.grgs.craftlevel.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -456,13 +455,13 @@ public class AltarOfDeathBlock extends BaseEntityBlock {
             if (level.isClientSide()) {
                 return InteractionResult.SUCCESS;
             }
-            return tryCraftShard(player, stack, level, masterPos);
+            return tryExchangeAmethyst(player, stack, level, masterPos);
         }
 
         return InteractionResult.PASS;
     }
 
-    private InteractionResult tryCraftShard(Player player, ItemStack amethyst, Level level, BlockPos pos) {
+    private InteractionResult tryExchangeAmethyst(Player player, ItemStack amethyst, Level level, BlockPos pos) {
         if (level.isDay()) {
             player.displayClientMessage(
                     Component.translatable("block.craftlevel.altar_of_death.need_night"),
@@ -473,36 +472,57 @@ public class AltarOfDeathBlock extends BaseEntityBlock {
 
         return player.getCapability(PlayerGloryProvider.PLAYER_GLORY).map(glory -> {
             int required = GloryKillsParser.killsPerShard;
-            if (glory.getGloryKills() < required) {
+            int gloryKills = glory.getGloryKills();
+            int maxByKills = gloryKills / required;
+            if (maxByKills <= 0) {
                 player.displayClientMessage(
                         Component.translatable(
                                 "block.craftlevel.altar_of_death.need_kills",
                                 required,
-                                glory.getGloryKills()
+                                gloryKills
                         ),
                         true
                 );
                 return InteractionResult.FAIL;
             }
 
-            glory.setGloryKills(glory.getGloryKills() - required);
-            if (!player.getAbilities().instabuild) {
-                amethyst.shrink(1);
-            }
+            int conversions = player.isShiftKeyDown()
+                    ? Math.min(amethyst.getCount(), maxByKills)
+                    : 1;
 
-            ItemStack shard = new ItemStack(ModItems.ARCANE_SHARD.get());
-            if (!player.getInventory().add(shard)) {
-                player.drop(shard, false);
+            glory.setGloryKills(gloryKills - required * conversions);
+            glory.setSkillPoints(glory.getSkillPoints() + conversions);
+            if (!player.getAbilities().instabuild) {
+                amethyst.shrink(conversions);
             }
 
             if (player instanceof ServerPlayer serverPlayer) {
                 GloryKillsService.sync(serverPlayer);
+                Component message = conversions == 1
+                        ? Component.translatable(
+                                "block.craftlevel.altar_of_death.skill_point_gained",
+                                glory.getSkillPoints()
+                        )
+                        : Component.translatable(
+                                "block.craftlevel.altar_of_death.skill_points_gained",
+                                conversions,
+                                glory.getSkillPoints()
+                        );
+                serverPlayer.displayClientMessage(message, true);
             }
 
             AltarOfDeathBlockEntity.applyExchangeDarkness(level, pos);
 
             level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0F, 0.8F);
             level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.7F, 1.2F);
+            level.playSound(
+                    null,
+                    pos,
+                    SoundEvents.EXPERIENCE_ORB_PICKUP,
+                    SoundSource.BLOCKS,
+                    0.8F,
+                    1.0F + conversions * 0.05F
+            );
             return InteractionResult.SUCCESS;
         }).orElse(InteractionResult.FAIL);
     }

@@ -79,11 +79,6 @@ public final class ModItems {
             () -> new BlockItem(ModBlocks.ALTAR_OF_DEATH.get(), new Item.Properties())
     );
 
-    public static final RegistryObject<Item> ARCANE_SHARD = ITEMS.register(
-            "arcane_shard",
-            () -> new ArcaneShardItem(new Item.Properties())
-    );
-
     public static final RegistryObject<Item> RECALL_RUNE = ITEMS.register(
             "recall_rune",
             () -> new RecallRuneItem(new Item.Properties().stacksTo(1))
