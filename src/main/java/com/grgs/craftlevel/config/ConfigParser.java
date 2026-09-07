@@ -66,6 +66,7 @@ public class ConfigParser {
     }
 
     public static boolean debug = false;
+    public static boolean anvilUncappedCost = true;
     public static int mobLevelVariation = 10;
     public static int maxLevel = 200;
 
@@ -76,6 +77,12 @@ public class ConfigParser {
 
     public static void parseConfig(JsonObject json) {
         debug = readBoolean(json, "debug", false, "debug");
+
+        if (json.has("anvil") && json.get("anvil").isJsonObject()) {
+            anvilUncappedCost = readBoolean(json.getAsJsonObject("anvil"), "uncapped_cost", true);
+        } else {
+            anvilUncappedCost = true;
+        }
 
         JsonObject lpScaling = json.has("lp_scaling") && json.get("lp_scaling").isJsonObject()
                 ? json.getAsJsonObject("lp_scaling")

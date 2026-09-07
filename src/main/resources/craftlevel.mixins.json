@@ -4,14 +4,20 @@
   "package": "com.grgs.craftlevel.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "craftlevel.refmap.json",
-    "mixins": [
+  "mixins": [
     "AbstractVillagerMixin",
+    "AnvilMenuMixin",
+    "EnchantmentMixin",
     "InventoryMixin",
     "LivingEntityMixin",
     "MerchantContainerMixin",
     "MerchantMenuMixin",
     "MerchantResultSlotMixin",
-    "MerchantTradeSlotMixin"
+    "MerchantTradeSlotMixin",
+    "PotionUtilsMixin"
+  ],
+  "client": [
+    "AnvilScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

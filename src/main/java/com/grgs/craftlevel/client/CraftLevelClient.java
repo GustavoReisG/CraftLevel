@@ -45,5 +45,6 @@ public class CraftLevelClient {
 
     private static void registerScreens() {
         MenuScreens.register(ModMenus.EMERALD_WALLET.get(), EmeraldWalletScreen::new);
+        MenuScreens.register(ModMenus.ALTAR_OF_DEATH.get(), AltarOfDeathScreen::new);
     }
 }

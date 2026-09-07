@@ -18,5 +18,10 @@ public final class ModMenus {
             () -> IForgeMenuType.create((id, inv, data) -> new EmeraldWalletMenu(id, inv))
     );
 
+    public static final RegistryObject<MenuType<AltarOfDeathMenu>> ALTAR_OF_DEATH = MENUS.register(
+            "altar_of_death",
+            () -> IForgeMenuType.create((id, inv, data) -> new AltarOfDeathMenu(id, inv, data.readBlockPos()))
+    );
+
     private ModMenus() {}
 }

@@ -42,6 +42,9 @@ public class ConfigManager {
     private static final String DEFAULT_CONFIG = """
     {
       "debug": true,
+      "anvil": {
+        "uncapped_cost": true
+      },
       "lp_scaling": {
         "mob_level_variation": 10,
         "lvl_max": 200,
@@ -659,6 +662,46 @@ public class ConfigManager {
     }
     """;
 
+    private static final String DEFAULT_ALTAR_CONVERSION = """
+    {
+      "conversions": [
+        { "item": "minecraft:coal", "count": 1, "glory_cost": 200, "skill_points": 1 },
+        { "item": "minecraft:copper_ingot", "count": 1, "glory_cost": 175, "skill_points": 1 },
+        { "item": "minecraft:iron_ingot", "count": 1, "glory_cost": 150, "skill_points": 1 },
+        { "item": "minecraft:gold_ingot", "count": 1, "glory_cost": 125, "skill_points": 1 },
+        { "item": "minecraft:amethyst_shard", "count": 1, "glory_cost": 100, "skill_points": 1 },
+        { "item": "minecraft:diamond", "count": 1, "glory_cost": 80, "skill_points": 1 }
+      ]
+    }
+    """;
+
+    public static final String DEFAULT_ALTAR_OF_DEATH = """
+    {
+      "potion": {
+        "glory_cost_time": 10,
+        "glory_cost_strength": 10,
+        "max_upgrades_time": 5,
+        "max_upgrades_strength": 5,
+        "effect_limits": {}
+      },
+      "improvement": {
+        "glory_cost": 20,
+        "generic_enchantment_limit": 50,
+        "enchantment_limits": {
+          "minecraft:aqua_affinity": 1,
+          "minecraft:binding_curse": 1,
+          "minecraft:channeling": 1,
+          "minecraft:flame": 1,
+          "minecraft:infinity": 1,
+          "minecraft:mending": 1,
+          "minecraft:multishot": 1,
+          "minecraft:silk_touch": 1,
+          "minecraft:vanishing_curse": 1
+        }
+      }
+    }
+    """;
+
     // =========================================================
     // VALORES CARREGADOS
     // =========================================================
@@ -672,6 +715,8 @@ public class ConfigManager {
     public static JsonObject villager = new JsonObject();
     public static JsonObject souls = new JsonObject();
     public static JsonObject gloryKills = new JsonObject();
+    public static JsonObject altarConversion = new JsonObject();
+    public static JsonObject altarOfDeath = new JsonObject();
     public static JsonObject skills = new JsonObject();
 
     // =========================================================
@@ -700,6 +745,8 @@ public class ConfigManager {
         loadEconomy();
         loadSouls();
         loadGloryKills();
+        loadAltarConversion();
+        loadAltarOfDeath();
         loadSkills();
         loadVillager();
 
@@ -711,6 +758,9 @@ public class ConfigManager {
         EconomyParser.parseEconomy(economy);
         SoulsParser.parse(souls);
         GloryKillsParser.parse(gloryKills);
+        AltarConversionParser.parse(altarConversion);
+        AltarPotionParser.parse(altarOfDeath);
+        AltarImprovementParser.parse(altarOfDeath);
         SkillsParser.parse(skills);
         VillagerTradeCatalog.load(villager);
         VillagerTradeService.onReload();
@@ -767,6 +817,14 @@ public class ConfigManager {
 
     private static void loadGloryKills() throws IOException {
         gloryKills = loadOrCreate("glory_kills.json", DEFAULT_GLORY_KILLS);
+    }
+
+    private static void loadAltarConversion() throws IOException {
+        altarConversion = loadOrCreate("altar_conversion.json", DEFAULT_ALTAR_CONVERSION);
+    }
+
+    private static void loadAltarOfDeath() throws IOException {
+        altarOfDeath = loadOrCreate("altar_of_death.json", DEFAULT_ALTAR_OF_DEATH);
     }
 
     private static void loadSkills() throws IOException {

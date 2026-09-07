@@ -199,6 +199,15 @@ public class PacketHandler {
                 NetherRushDashPacket::decode,
                 NetherRushDashPacket::handle
         );
+
+        CHANNEL.registerMessage(
+                21,
+                AltarActionPacket.class,
+                AltarActionPacket::encode,
+                AltarActionPacket::decode,
+                AltarActionPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

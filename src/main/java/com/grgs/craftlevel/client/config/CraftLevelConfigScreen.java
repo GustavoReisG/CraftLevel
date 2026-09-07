@@ -58,6 +58,16 @@ public class CraftLevelConfigScreen extends Screen {
         addRenderableWidget(gloryKills);
         categoryButtons.add(gloryKills);
 
+        Button altar = Button.builder(Component.literal("Altar Of Death"), btn -> {
+                        AltarOfDeathPersistence.beginEditing(minecraft);
+                        minecraft.setScreen(new AltarOfDeathConfigMenuScreen(this));
+                    })
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, row++, altar);
+        addRenderableWidget(altar);
+        categoryButtons.add(altar);
+
         Button skills = Button.builder(Component.literal("Skills"), btn ->
                         minecraft.setScreen(new SkillsConfigListScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)
