@@ -237,8 +237,16 @@ public class CraftLevelEvents {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (!(event.getEntity() instanceof Mob mob)) return;
 
-        KillRewardService.rewardKill(player, mob);
+        boolean arena = com.grgs.craftlevel.arena.ArenaService.locks(mob.level());
+        if (!arena) {
+            KillRewardService.rewardKill(player, mob);
+        } else {
+            KillRewardService.rewardArenaKill(player);
+        }
         GloryKillsService.rewardKill(player, mob);
+        if (arena) {
+            return;
+        }
 
         player.getCapability(PlayerLevelProvider.PLAYER_LEVEL).ifPresent(playerCap -> {
             int lp = Math.max(1, (int) mob.getMaxHealth());

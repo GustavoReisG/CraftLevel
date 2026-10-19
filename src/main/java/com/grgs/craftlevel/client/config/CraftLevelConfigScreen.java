@@ -68,6 +68,14 @@ public class CraftLevelConfigScreen extends Screen {
         addRenderableWidget(altar);
         categoryButtons.add(altar);
 
+        Button arena = Button.builder(Component.literal("Arena"), btn ->
+                        minecraft.setScreen(new ArenaConfigMenuScreen(this)))
+                .width(ConfigScreenLayout.BUTTON_WIDTH)
+                .build();
+        ConfigScreenLayout.positionRow(this, row++, arena);
+        addRenderableWidget(arena);
+        categoryButtons.add(arena);
+
         Button skills = Button.builder(Component.literal("Skills"), btn ->
                         minecraft.setScreen(new SkillsConfigListScreen(this)))
                 .width(ConfigScreenLayout.BUTTON_WIDTH)

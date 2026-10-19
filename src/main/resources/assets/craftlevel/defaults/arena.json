@@ -1,0 +1,356 @@
+{
+  "hordes": [
+    {
+      "name": "default_horde",
+      "waves": [
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:wooden_sword",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:wooden_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "12",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "12",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "12",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "schematics": [
+    {
+      "file": "wood_arena.schem",
+      "biome": "minecraft:jungle",
+      "hordes": []
+    }
+  ]
+}

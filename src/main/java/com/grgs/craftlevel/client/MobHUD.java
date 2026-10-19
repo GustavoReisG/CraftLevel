@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
@@ -66,9 +67,9 @@ public class MobHUD {
                 levelColor = 0xFFFFFF;
             }
 
-            float health    = mob.getHealth();
-            float maxHealth = mob.getMaxHealth();
-            float progress  = health / maxHealth;
+            float maxHealth = Math.max(mob.getMaxHealth(), 0.01F);
+            float health = Math.min(mob.getHealth(), maxHealth);
+            float progress = Mth.clamp(health / maxHealth, 0.0F, 1.0F);
 
             float yOffset = event.getContent() != null ? 0.3f : 0.0f;
 

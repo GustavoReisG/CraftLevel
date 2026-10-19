@@ -14,8 +14,8 @@ public class AltarPotionConfigScreen extends Screen {
 
     private static final int ROW_TIME = 0;
     private static final int ROW_STRENGTH = 1;
-    private static final int ROW_MAX_TIME = 2;
-    private static final int ROW_MAX_STRENGTH = 3;
+    private static final int ROW_MAX_DURATION = 2;
+    private static final int ROW_MAX_LEVEL = 3;
     private static final int ROW_LIST = 4;
     private static final int DOTS_WIDTH = 28;
 
@@ -23,8 +23,8 @@ public class AltarPotionConfigScreen extends Screen {
 
     private EditBox gloryTimeField;
     private EditBox gloryStrengthField;
-    private EditBox maxTimeField;
-    private EditBox maxStrengthField;
+    private EditBox maxDurationField;
+    private EditBox maxLevelField;
 
     public AltarPotionConfigScreen(Screen parent) {
         super(Component.literal("CraftLevel - Altar Potion"));
@@ -44,13 +44,13 @@ public class AltarPotionConfigScreen extends Screen {
         ConfigScreenLayout.positionField(this, ROW_STRENGTH, gloryStrengthField);
         addRenderableWidget(gloryStrengthField);
 
-        maxTimeField = numericField(String.valueOf(state.maxUpgradesTime()));
-        ConfigScreenLayout.positionField(this, ROW_MAX_TIME, maxTimeField);
-        addRenderableWidget(maxTimeField);
+        maxDurationField = numericField(String.valueOf(state.maxDurationSeconds()));
+        ConfigScreenLayout.positionField(this, ROW_MAX_DURATION, maxDurationField);
+        addRenderableWidget(maxDurationField);
 
-        maxStrengthField = numericField(String.valueOf(state.maxUpgradesStrength()));
-        ConfigScreenLayout.positionField(this, ROW_MAX_STRENGTH, maxStrengthField);
-        addRenderableWidget(maxStrengthField);
+        maxLevelField = numericField(String.valueOf(state.maxLevel()));
+        ConfigScreenLayout.positionField(this, ROW_MAX_LEVEL, maxLevelField);
+        addRenderableWidget(maxLevelField);
 
         Button listButton = Button.builder(Component.literal("..."), btn -> openList())
                 .bounds(0, 0, DOTS_WIDTH, 20)
@@ -72,8 +72,8 @@ public class AltarPotionConfigScreen extends Screen {
         AltarOfDeathEditorState state = AltarOfDeathPersistence.session();
         state.setGloryCostTime(parseInt(gloryTimeField.getValue(), state.gloryCostTime()));
         state.setGloryCostStrength(parseInt(gloryStrengthField.getValue(), state.gloryCostStrength()));
-        state.setMaxUpgradesTime(parseInt(maxTimeField.getValue(), state.maxUpgradesTime()));
-        state.setMaxUpgradesStrength(parseInt(maxStrengthField.getValue(), state.maxUpgradesStrength()));
+        state.setMaxDurationSeconds(parseInt(maxDurationField.getValue(), state.maxDurationSeconds()));
+        state.setMaxLevel(parseInt(maxLevelField.getValue(), state.maxLevel()));
     }
 
     private void save() {
@@ -108,8 +108,8 @@ public class AltarPotionConfigScreen extends Screen {
         graphics.drawCenteredString(font, title, width / 2, 16, 0xFFFFFF);
         ConfigScreenLayout.renderLabel(this, graphics, ROW_TIME, "Glory Cost (Time)");
         ConfigScreenLayout.renderLabel(this, graphics, ROW_STRENGTH, "Glory Cost (Strength)");
-        ConfigScreenLayout.renderLabel(this, graphics, ROW_MAX_TIME, "Max Time Upgrades");
-        ConfigScreenLayout.renderLabel(this, graphics, ROW_MAX_STRENGTH, "Max Strength Upgrades");
+        ConfigScreenLayout.renderLabel(this, graphics, ROW_MAX_DURATION, "Max Duration (seconds)");
+        ConfigScreenLayout.renderLabel(this, graphics, ROW_MAX_LEVEL, "Max Level");
         ConfigScreenLayout.renderLabel(this, graphics, ROW_LIST, "Potions List");
         super.render(graphics, mouseX, mouseY, partialTick);
     }

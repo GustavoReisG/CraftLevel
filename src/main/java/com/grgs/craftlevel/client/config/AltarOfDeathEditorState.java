@@ -16,8 +16,8 @@ final class AltarOfDeathEditorState {
 
     private int gloryCostTime = 10;
     private int gloryCostStrength = 10;
-    private int maxUpgradesTime = 5;
-    private int maxUpgradesStrength = 5;
+    private int maxDurationSeconds = AltarPotionParser.DEFAULT_MAX_DURATION_SECONDS;
+    private int maxLevel = AltarPotionParser.DEFAULT_MAX_LEVEL;
     private int improvementGloryCost = 20;
     private int genericEnchantmentLimit = 50;
     private final LinkedHashMap<String, Integer> enchantmentLimits = new LinkedHashMap<>();
@@ -34,17 +34,11 @@ final class AltarOfDeathEditorState {
                 JsonObject potion = json.getAsJsonObject("potion");
                 state.gloryCostTime = Math.max(1, readInt(potion, "glory_cost_time", 10));
                 state.gloryCostStrength = Math.max(1, readInt(potion, "glory_cost_strength", 10));
-                if (potion.has("max_upgrades_time") || potion.has("max_upgrades_strength")) {
-                    state.maxUpgradesTime = Math.max(1, readInt(potion, "max_upgrades_time", 5));
-                    state.maxUpgradesStrength = Math.max(1, readInt(potion, "max_upgrades_strength", 5));
-                } else if (potion.has("max_upgrades")) {
-                    int total = Math.max(2, readInt(potion, "max_upgrades", 10));
-                    state.maxUpgradesTime = Math.max(1, total / 2);
-                    state.maxUpgradesStrength = Math.max(1, total - state.maxUpgradesTime);
-                }
+                state.maxDurationSeconds = AltarPotionParser.readMaxDurationSeconds(potion);
+                state.maxLevel = AltarPotionParser.readMaxLevel(potion);
                 state.effectLimits.clear();
                 if (potion.has("effect_limits") && potion.get("effect_limits").isJsonObject()) {
-                    readEffectLimits(potion.getAsJsonObject("effect_limits"), state.effectLimits, state.maxUpgradesTime);
+                    readEffectLimits(potion.getAsJsonObject("effect_limits"), state.effectLimits, state.maxDurationSeconds);
                 }
             }
             if (json.has("improvement") && json.get("improvement").isJsonObject()) {
@@ -67,8 +61,8 @@ final class AltarOfDeathEditorState {
         JsonObject potion = new JsonObject();
         potion.addProperty("glory_cost_time", Math.max(1, gloryCostTime));
         potion.addProperty("glory_cost_strength", Math.max(1, gloryCostStrength));
-        potion.addProperty("max_upgrades_time", Math.max(1, maxUpgradesTime));
-        potion.addProperty("max_upgrades_strength", Math.max(1, maxUpgradesStrength));
+        potion.addProperty("max_duration_seconds", Math.max(1, maxDurationSeconds));
+        potion.addProperty("max_level", Math.max(1, maxLevel));
         potion.add("effect_limits", writeEffectLimits(effectLimits));
         root.add("potion", potion);
 
@@ -96,20 +90,20 @@ final class AltarOfDeathEditorState {
         gloryCostStrength = Math.max(1, value);
     }
 
-    int maxUpgradesTime() {
-        return maxUpgradesTime;
+    int maxDurationSeconds() {
+        return maxDurationSeconds;
     }
 
-    void setMaxUpgradesTime(int value) {
-        maxUpgradesTime = Math.max(1, value);
+    void setMaxDurationSeconds(int value) {
+        maxDurationSeconds = Math.max(1, value);
     }
 
-    int maxUpgradesStrength() {
-        return maxUpgradesStrength;
+    int maxLevel() {
+        return maxLevel;
     }
 
-    void setMaxUpgradesStrength(int value) {
-        maxUpgradesStrength = Math.max(1, value);
+    void setMaxLevel(int value) {
+        maxLevel = Math.max(1, value);
     }
 
     int improvementGloryCost() {

@@ -32,6 +32,10 @@ public final class SoulsEvents {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
+        if (com.grgs.craftlevel.arena.ArenaService.locks(player)) {
+            DeathLossService.keepEverything(player);
+            return;
+        }
         ensureInitialized(player);
         DeathLossService.onPlayerDeathStart(player);
     }
@@ -68,7 +72,7 @@ public final class SoulsEvents {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
             return;
@@ -78,6 +82,10 @@ public final class SoulsEvents {
             return;
         }
         ensureInitialized(player);
+        if (com.grgs.craftlevel.arena.ArenaService.pendingExit(player)) {
+            sync(player);
+            return;
+        }
         if (SoulAnchorSkill.trySaveSoul(player)) {
             player.displayClientMessage(Component.translatable("gui.craftlevel.skill.soul_anchor.saved"), true);
         } else {

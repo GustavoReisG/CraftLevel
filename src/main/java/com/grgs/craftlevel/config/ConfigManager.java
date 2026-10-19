@@ -2,6 +2,7 @@ package com.grgs.craftlevel.config;
 
 import com.google.gson.*;
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.arena.ArenaSettings;
 import com.grgs.craftlevel.util.DebugLog;
 import com.grgs.craftlevel.villager.ProfessionLanguages;
 import com.grgs.craftlevel.villager.VillagerTradeCatalog;
@@ -680,9 +681,26 @@ public class ConfigManager {
       "potion": {
         "glory_cost_time": 10,
         "glory_cost_strength": 10,
-        "max_upgrades_time": 5,
-        "max_upgrades_strength": 5,
-        "effect_limits": {}
+        "max_duration_seconds": 600,
+        "max_level": 10,
+        "effect_limits": {
+          "minecraft:regeneration": {
+            "time": 600,
+            "level": 3
+          },
+          "minecraft:instant_health": {
+            "time": 1,
+            "level": 5
+          },
+          "minecraft:instant_damage": {
+            "time": 1,
+            "level": 5
+          },
+          "irons_spellbooks:instant_mana": {
+            "time": 1,
+            "level": 5
+          }
+        }
       },
       "improvement": {
         "glory_cost": 20,
@@ -749,6 +767,7 @@ public class ConfigManager {
         loadAltarOfDeath();
         loadSkills();
         loadVillager();
+        loadArena();
 
         ConfigParser.parseConfig(config);
         ConfigParser.parsePlayerStats(playerStats);
@@ -829,6 +848,10 @@ public class ConfigManager {
 
     private static void loadSkills() throws IOException {
         skills = loadOrCreate("skills.json", toPrettyJson(SkillsParser.toDefaultJson()));
+    }
+
+    private static void loadArena() {
+        ArenaSettings.load(configDir.resolve("arena.json"), java.util.List.of());
     }
 
     private static void loadVillager() {

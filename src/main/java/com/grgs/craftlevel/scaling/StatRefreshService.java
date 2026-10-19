@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
@@ -131,7 +132,30 @@ public final class StatRefreshService {
     }
 
     public static void refreshMob(Mob mob, int level, boolean silent) {
+        normalizeSlime(mob);
         refresh(mob, level, true, silent);
+    }
+
+    /**
+     * Slime pequeno usa size² de vida. Enquanto o tamanho não entra, a base continua 20
+     * e a vida sincronizada fica maior que o máximo.
+     */
+    public static void normalizeSlime(Mob mob) {
+        if (!(mob instanceof Slime slime)) {
+            return;
+        }
+        var health = slime.getAttribute(Attributes.MAX_HEALTH);
+        if (health == null) {
+            return;
+        }
+        health.removeModifier(MODIFIER_UUID);
+        double expected = slime.getSize() * (double) slime.getSize();
+        if (health.getBaseValue() != expected) {
+            health.setBaseValue(expected);
+        }
+        if (slime.getHealth() > slime.getMaxHealth()) {
+            slime.setHealth(slime.getMaxHealth());
+        }
     }
 
     /** Player usa player_stats; mob usa override isolado ou mob_stats default. */

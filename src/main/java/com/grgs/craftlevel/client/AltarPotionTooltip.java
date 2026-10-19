@@ -30,24 +30,27 @@ public final class AltarPotionTooltip {
             }
         }
 
-        if (!AltarPotionService.isPotionItem(stack)) {
+        if (!AltarPotionService.isPotionItem(stack) || !AltarPotionService.hasEffects(stack)) {
             return;
         }
-        int time = AltarPotionService.getTimeUpgradeCount(stack);
-        int strength = AltarPotionService.getStrengthUpgradeCount(stack);
-        if (time <= 0 && strength <= 0) {
-            return;
+
+        int durationTicks = AltarPotionService.currentMaxDurationTicks(stack);
+        if (durationTicks > 0) {
+            tooltip.add(Component.translatable(
+                    "gui.craftlevel.altar.potion.limit_duration",
+                    AltarPotionService.formatDuration(durationTicks / 20),
+                    AltarPotionService.formatDuration(AltarPotionService.maxDurationSeconds(stack))
+            ));
         }
-        tooltip.add(Component.translatable(
-                "gui.craftlevel.altar.potion.upgrades_time",
-                time,
-                AltarPotionService.maxTimeUpgrades(stack)
-        ));
-        tooltip.add(Component.translatable(
-                "gui.craftlevel.altar.potion.upgrades_strength",
-                strength,
-                AltarPotionService.maxStrengthUpgrades(stack)
-        ));
+
+        int level = AltarPotionService.currentMaxLevel(stack);
+        if (level > 0) {
+            tooltip.add(Component.translatable(
+                    "gui.craftlevel.altar.potion.limit_level",
+                    level,
+                    AltarPotionService.maxLevel(stack)
+            ));
+        }
     }
 
     private static boolean hasPotionEffects(ItemStack stack) {

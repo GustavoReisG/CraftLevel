@@ -31,9 +31,9 @@ public final class AltarPotionService {
     public static final int DURATION_BONUS_SECONDS = 30;
     public static final int DURATION_BONUS_TICKS = DURATION_BONUS_SECONDS * 20;
 
+    /** Tags antigas (contador de upgrades) — removidas ao modificar a poção. */
     private static final String TIME_UPGRADES_TAG = "CraftLevelAltarTimeUpgrades";
     private static final String STRENGTH_UPGRADES_TAG = "CraftLevelAltarStrengthUpgrades";
-    /** Tag antiga (contador único) — lida só para compatibilidade. */
     private static final String LEGACY_UPGRADES_TAG = "CraftLevelAltarUpgrades";
 
     /** Efeitos de poção vanilla sem variante de amplifier (só duração / únicos). */
@@ -62,36 +62,44 @@ public final class AltarPotionService {
         return AltarPotionParser.gloryCostStrength;
     }
 
-    /** Limites gerais (poções sem entrada na lista). */
-    public static int maxTimeUpgrades() {
-        return AltarPotionParser.maxUpgradesTime;
+    /** Limite geral de duração (segundos), para poções sem entrada na lista. */
+    public static int maxDurationSeconds() {
+        return AltarPotionParser.maxDurationSeconds;
     }
 
-    /** Limites gerais (poções sem entrada na lista). */
-    public static int maxStrengthUpgrades() {
-        return AltarPotionParser.maxUpgradesStrength;
+    /** Limite geral de nível, para poções sem entrada na lista. */
+    public static int maxLevel() {
+        return AltarPotionParser.maxLevel;
+    }
+
+    public static int maxDurationSeconds(MobEffect effect) {
+        return AltarPotionParser.maxDurationSeconds(effect);
+    }
+
+    public static int maxDurationTicks(MobEffect effect) {
+        return maxDurationSeconds(effect) * 20;
+    }
+
+    public static int maxLevel(MobEffect effect) {
+        return AltarPotionParser.maxLevel(effect);
     }
 
     /**
-     * Max time upgrades da poção: se algum efeito está na lista, usa o menor {@code time}
-     * dessas entradas; senão, o valor geral.
+     * Menor duração máxima (segundos) entre os efeitos listados da poção;
+     * se nenhum estiver na lista, usa o limite geral.
      */
-    public static int maxTimeUpgrades(ItemStack stack) {
+    public static int maxDurationSeconds(ItemStack stack) {
         AltarPotionParser.EffectLimit limit = resolveListedLimit(stack);
-        return limit != null ? limit.time() : maxTimeUpgrades();
+        return limit != null ? limit.time() : maxDurationSeconds();
     }
 
     /**
-     * Max strength upgrades da poção: se algum efeito está na lista, usa o menor {@code level}
-     * dessas entradas; senão, o valor geral.
+     * Menor nível máximo entre os efeitos listados da poção;
+     * se nenhum estiver na lista, usa o limite geral.
      */
-    public static int maxStrengthUpgrades(ItemStack stack) {
+    public static int maxLevel(ItemStack stack) {
         AltarPotionParser.EffectLimit limit = resolveListedLimit(stack);
-        return limit != null ? limit.level() : maxStrengthUpgrades();
-    }
-
-    public static int maxUpgradesTotal() {
-        return maxTimeUpgrades() + maxStrengthUpgrades();
+        return limit != null ? limit.level() : maxLevel();
     }
 
     /** Menor limite listado entre os efeitos da poção, ou null se nenhum estiver na lista. */
@@ -128,24 +136,65 @@ public final class AltarPotionService {
         return isPotionItem(stack) && !PotionUtils.getMobEffects(stack).isEmpty();
     }
 
-    public static int getTimeUpgradeCount(ItemStack stack) {
-        return readUpgradeCount(stack, TIME_UPGRADES_TAG);
+    /** Maior duração (ticks) entre efeitos não-instantâneos; 0 se não houver. */
+    public static int currentMaxDurationTicks(ItemStack stack) {
+        int max = 0;
+        if (!hasEffects(stack)) {
+            return 0;
+        }
+        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
+            if (isInstant(effect)) {
+                continue;
+            }
+            max = Math.max(max, effect.getDuration());
+        }
+        return max;
     }
 
-    public static int getStrengthUpgradeCount(ItemStack stack) {
-        return readUpgradeCount(stack, STRENGTH_UPGRADES_TAG);
+    /** Maior nível (amplifier + 1) entre efeitos que aceitam upgrade de amplifier. */
+    public static int currentMaxLevel(ItemStack stack) {
+        int max = 0;
+        if (!hasEffects(stack)) {
+            return 0;
+        }
+        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
+            if (!supportsAmplifierUpgrade(effect.getEffect())) {
+                continue;
+            }
+            max = Math.max(max, effect.getAmplifier() + 1);
+        }
+        return max;
     }
 
-    public static int getUpgradeCount(ItemStack stack) {
-        return getTimeUpgradeCount(stack) + getStrengthUpgradeCount(stack);
+    public static boolean hasDurationRemaining(ItemStack stack) {
+        if (!hasEffects(stack) || isInstantOnlyPotion(stack)) {
+            return false;
+        }
+        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
+            if (isInstant(effect)) {
+                continue;
+            }
+            if (effect.getDuration() < maxDurationTicks(effect.getEffect())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static boolean hasTimeUpgradesRemaining(ItemStack stack) {
-        return getTimeUpgradeCount(stack) < maxTimeUpgrades(stack);
-    }
-
-    public static boolean hasStrengthUpgradesRemaining(ItemStack stack) {
-        return getStrengthUpgradeCount(stack) < maxStrengthUpgrades(stack);
+    public static boolean hasLevelRemaining(ItemStack stack) {
+        if (!hasEffects(stack) || !hasAmplifierUpgradeableEffects(stack)) {
+            return false;
+        }
+        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
+            if (!supportsAmplifierUpgrade(effect.getEffect())) {
+                continue;
+            }
+            int level = effect.getAmplifier() + 1;
+            if (level < maxLevel(effect.getEffect())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Poção cujos efeitos são todos instantâneos (cura, dano, etc.). */
@@ -162,15 +211,7 @@ public final class AltarPotionService {
     }
 
     public static boolean canExtendDuration(ItemStack stack) {
-        if (!hasEffects(stack) || !hasTimeUpgradesRemaining(stack) || isInstantOnlyPotion(stack)) {
-            return false;
-        }
-        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
-            if (!isInstant(effect)) {
-                return true;
-            }
-        }
-        return false;
+        return hasEffects(stack) && hasDurationRemaining(stack);
     }
 
     /** True se a poção tem ao menos um efeito que aceita upgrade de amplifier. */
@@ -191,21 +232,7 @@ public final class AltarPotionService {
     }
 
     public static boolean canUpgradeEffect(ItemStack stack) {
-        if (!hasEffects(stack)
-                || !hasStrengthUpgradesRemaining(stack)
-                || !hasAmplifierUpgradeableEffects(stack)) {
-            return false;
-        }
-        for (MobEffectInstance effect : PotionUtils.getMobEffects(stack)) {
-            if (!supportsAmplifierUpgrade(effect.getEffect())) {
-                continue;
-            }
-            int level = effect.getAmplifier() + 1;
-            if (level < AltarPotionParser.maxLevel(effect.getEffect())) {
-                return true;
-            }
-        }
-        return false;
+        return hasEffects(stack) && hasLevelRemaining(stack);
     }
 
     public static boolean tryExtendDuration(
@@ -256,37 +283,32 @@ public final class AltarPotionService {
         }
 
         if (extendDuration) {
-            if (!hasTimeUpgradesRemaining(input)) {
-                player.displayClientMessage(
-                        Component.translatable(
-                                "gui.craftlevel.altar.potion.max_upgrades_time",
-                                maxTimeUpgrades(input)
-                        ),
-                        true
-                );
-                return false;
-            }
-            if (!canExtendDuration(input)) {
+            if (isInstantOnlyPotion(input)) {
                 player.displayClientMessage(
                         Component.translatable("gui.craftlevel.altar.potion.instant"),
                         true
                 );
                 return false;
             }
-        } else {
-            if (!hasStrengthUpgradesRemaining(input)) {
+            if (!hasDurationRemaining(input)) {
                 player.displayClientMessage(
                         Component.translatable(
-                                "gui.craftlevel.altar.potion.max_upgrades_strength",
-                                maxStrengthUpgrades(input)
+                                "gui.craftlevel.altar.potion.max_duration",
+                                formatDuration(maxDurationSeconds(input))
                         ),
                         true
                 );
                 return false;
             }
-            if (!canUpgradeEffect(input)) {
-                return false;
-            }
+        } else if (!canUpgradeEffect(input)) {
+            player.displayClientMessage(
+                    Component.translatable(
+                            "gui.craftlevel.altar.potion.max_level",
+                            maxLevel(input)
+                    ),
+                    true
+            );
+            return false;
         }
 
         int cost = extendDuration ? gloryCostTime() : gloryCostStrength();
@@ -326,9 +348,11 @@ public final class AltarPotionService {
             if (isInstant(effect)) {
                 modified.add(copyEffect(effect));
             } else {
+                int cap = maxDurationTicks(effect.getEffect());
+                int next = Math.min(cap, effect.getDuration() + DURATION_BONUS_TICKS);
                 modified.add(new MobEffectInstance(
                         effect.getEffect(),
-                        effect.getDuration() + DURATION_BONUS_TICKS,
+                        next,
                         effect.getAmplifier(),
                         effect.isAmbient(),
                         effect.isVisible(),
@@ -336,7 +360,7 @@ public final class AltarPotionService {
                 ));
             }
         }
-        return finalizeResult(input, modified, true);
+        return finalizeResult(input, modified);
     }
 
     private static ItemStack applyEffectUpgrade(ItemStack input) {
@@ -346,7 +370,7 @@ public final class AltarPotionService {
                 modified.add(copyEffect(effect));
                 continue;
             }
-            int maxAmplifier = Math.max(0, AltarPotionParser.maxLevel(effect.getEffect()) - 1);
+            int maxAmplifier = Math.max(0, maxLevel(effect.getEffect()) - 1);
             int amplifier = Math.min(255, Math.min(maxAmplifier, effect.getAmplifier() + 1));
             modified.add(new MobEffectInstance(
                     effect.getEffect(),
@@ -357,35 +381,18 @@ public final class AltarPotionService {
                     effect.showIcon()
             ));
         }
-        return finalizeResult(input, modified, false);
+        return finalizeResult(input, modified);
     }
 
-    private static ItemStack finalizeResult(ItemStack input, List<MobEffectInstance> effects, boolean timeUpgrade) {
+    private static ItemStack finalizeResult(ItemStack input, List<MobEffectInstance> effects) {
         ItemStack result = input.copyWithCount(1);
         PotionUtils.setPotion(result, Potions.AWKWARD);
         PotionUtils.setCustomEffects(result, effects);
         CompoundTag tag = result.getOrCreateTag();
         tag.remove(LEGACY_UPGRADES_TAG);
-        if (timeUpgrade) {
-            tag.putInt(TIME_UPGRADES_TAG, getTimeUpgradeCount(input) + 1);
-            tag.putInt(STRENGTH_UPGRADES_TAG, getStrengthUpgradeCount(input));
-        } else {
-            tag.putInt(TIME_UPGRADES_TAG, getTimeUpgradeCount(input));
-            tag.putInt(STRENGTH_UPGRADES_TAG, getStrengthUpgradeCount(input) + 1);
-        }
+        tag.remove(TIME_UPGRADES_TAG);
+        tag.remove(STRENGTH_UPGRADES_TAG);
         return result;
-    }
-
-    private static int readUpgradeCount(ItemStack stack, String key) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null) {
-            return 0;
-        }
-        if (tag.contains(key)) {
-            return Math.max(0, tag.getInt(key));
-        }
-        // Poções antigas: contador único — não conta em nenhum dos dois (começa limpo).
-        return 0;
     }
 
     private static MobEffectInstance copyEffect(MobEffectInstance effect) {
@@ -401,6 +408,19 @@ public final class AltarPotionService {
 
     private static boolean isInstant(MobEffectInstance effect) {
         return effect.getEffect().isInstantenous();
+    }
+
+    public static String formatDuration(int totalSeconds) {
+        int seconds = Math.max(0, totalSeconds);
+        int minutes = seconds / 60;
+        int rem = seconds % 60;
+        if (minutes <= 0) {
+            return rem + "s";
+        }
+        if (rem == 0) {
+            return minutes + "m";
+        }
+        return minutes + "m " + rem + "s";
     }
 
     private static void applyEffects(Level level, BlockPos pos) {

@@ -48,8 +48,8 @@ public class AltarPotionEffectLimitListScreen extends Screen {
 
         int listBottom = ConfigScreenLayout.contentBottom(this);
         limitList = new LimitList(this, tableWidth, listBottom - LIST_TOP, LIST_TOP, listBottom);
-        int defaultTime = AltarOfDeathPersistence.session().maxUpgradesTime();
-        int defaultLevel = AltarOfDeathPersistence.session().maxUpgradesStrength();
+        int defaultTime = AltarOfDeathPersistence.session().maxDurationSeconds();
+        int defaultLevel = AltarOfDeathPersistence.session().maxLevel();
         for (Map.Entry<String, AltarPotionParser.EffectLimit> entry
                 : AltarOfDeathPersistence.session().effectLimits().entrySet()) {
             AltarPotionParser.EffectLimit limit = entry.getValue();
@@ -124,7 +124,7 @@ public class AltarPotionEffectLimitListScreen extends Screen {
         int x = tableLeft;
         graphics.drawCenteredString(font, "Potion", x + colPotionW / 2, HEADER_Y + 6, 0xFFFFFF);
         x += colPotionW;
-        graphics.drawCenteredString(font, "Time", x + colTimeW / 2, HEADER_Y + 6, 0xFFFFFF);
+        graphics.drawCenteredString(font, "Time (s)", x + colTimeW / 2, HEADER_Y + 6, 0xFFFFFF);
         x += colTimeW;
         graphics.drawCenteredString(font, "Level", x + colLevelW / 2, HEADER_Y + 6, 0xFFFFFF);
 

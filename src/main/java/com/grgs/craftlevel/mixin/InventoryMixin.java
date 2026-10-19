@@ -1,12 +1,12 @@
 package com.grgs.craftlevel.mixin;
 
+import com.grgs.craftlevel.arena.ArenaDimension;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/** Força 1 ponto de durabilidade por peça, ignorando o cálculo vanilla (dano ÷ 4). */
+/** Força 1 ponto de durabilidade por peça, ignorando o cálculo vanilla (dano ÷ 4). Na arena, zero. */
 @Mixin(Inventory.class)
 public abstract class InventoryMixin {
 
@@ -19,6 +19,10 @@ public abstract class InventoryMixin {
             index = 0
     )
     private int craftlevel$fixedArmorBreak(int amount) {
+        Inventory inventory = (Inventory) (Object) this;
+        if (inventory.player.level().dimension().equals(ArenaDimension.LEVEL)) {
+            return 0;
+        }
         return 1;
     }
 }

@@ -63,6 +63,25 @@ public final class KillRewardService {
         });
     }
 
+    /** Arena: 1 a 3 esmeraldas por mob, sem o cálculo de nível. */
+    public static void rewardArenaKill(Player player) {
+        if (player.level().isClientSide()) {
+            return;
+        }
+        long amount = 1L + player.getRandom().nextInt(3);
+        EconomyService.ensurePlayerEconomy(player);
+        player.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(wallet -> {
+            wallet.addEmeralds(amount);
+            if (player instanceof ServerPlayer serverPlayer) {
+                PacketHandler.sendToPlayer(
+                        serverPlayer,
+                        new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(player))
+                );
+            }
+            DebugLog.info("Arena reward +{}e → wallet {}", amount, wallet.getBalance());
+        });
+    }
+
     static long calculateReward(int playerLevel, int mobLevel, String entityId) {
         int gap = Math.max(1, EconomyParser.killLevelGap);
         int diff = mobLevel - playerLevel;

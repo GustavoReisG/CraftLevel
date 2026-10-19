@@ -28,6 +28,7 @@ public final class ModCreativeTabs {
                         output.accept(ModBlocks.COMPRESSED_EMERALD_BLOCK.get());
                         output.accept(ModBlocks.PLAYER_GRAVESTONE.get());
                         output.accept(ModBlocks.ALTAR_OF_DEATH.get());
+                        output.accept(ModBlocks.ARENA_PORTAL.get());
                     })
                     .build()
     );

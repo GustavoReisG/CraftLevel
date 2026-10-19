@@ -79,6 +79,11 @@ public final class ModItems {
             () -> new BlockItem(ModBlocks.ALTAR_OF_DEATH.get(), new Item.Properties())
     );
 
+    public static final RegistryObject<Item> ARENA_PORTAL = ITEMS.register(
+            "arena_portal",
+            () -> new BlockItem(ModBlocks.ARENA_PORTAL.get(), new Item.Properties())
+    );
+
     public static final RegistryObject<Item> RECALL_RUNE = ITEMS.register(
             "recall_rune",
             () -> new RecallRuneItem(new Item.Properties().stacksTo(1))

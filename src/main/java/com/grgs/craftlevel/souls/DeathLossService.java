@@ -51,6 +51,16 @@ public final class DeathLossService {
         KEEP_INVENTORY_RULE
     }
 
+    /** Morte na arena: devolve inventário e XP, sem perda. */
+    public static void keepEverything(ServerPlayer player) {
+        KEPT_XP.put(player.getUUID(), new XpSnapshot(
+                player.experienceLevel,
+                player.experienceProgress,
+                player.totalExperience
+        ));
+        PLANS.put(player.getUUID(), DeathPlan.KEEP_ALL);
+    }
+
     /** Chamado no LivingDeathEvent — inventário ainda intacto. */
     public static void onPlayerDeathStart(ServerPlayer player) {
         int souls = player.getCapability(PlayerSoulsProvider.PLAYER_SOULS)

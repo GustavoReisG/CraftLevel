@@ -4,7 +4,7 @@
   "package": "com.grgs.craftlevel.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "craftlevel.refmap.json",
-  "mixins": [
+    "mixins": [
     "AbstractVillagerMixin",
     "AnvilMenuMixin",
     "EnchantmentMixin",

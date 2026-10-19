@@ -24,6 +24,23 @@
     },
     "com/grgs/craftlevel/mixin/MerchantContainerMixin": {
       "updateSellItem()V": "Lnet/minecraft/world/inventory/MerchantContainer;m_40024_()V"
+    },
+    "com/grgs/craftlevel/mixin/EnchantmentMixin": {
+      "getFullname": "Lnet/minecraft/world/item/enchantment/Enchantment;m_44700_(I)Lnet/minecraft/network/chat/Component;",
+      "getFullname(I)Lnet/minecraft/network/chat/Component;": "Lnet/minecraft/world/item/enchantment/Enchantment;m_44700_(I)Lnet/minecraft/network/chat/Component;"
+    },
+    "com/grgs/craftlevel/mixin/AnvilMenuMixin": {
+      "createResult": "Lnet/minecraft/world/inventory/AnvilMenu;m_6640_()V",
+      "createResult()V": "Lnet/minecraft/world/inventory/AnvilMenu;m_6640_()V"
+    },
+    "com/grgs/craftlevel/mixin/AnvilScreenMixin": {
+      "renderErrorIcon": "Lnet/minecraft/client/gui/screens/inventory/AnvilScreen;m_266390_(Lnet/minecraft/client/gui/GuiGraphics;II)V",
+      "renderErrorIcon(Lnet/minecraft/client/gui/GuiGraphics;II)V": "Lnet/minecraft/client/gui/screens/inventory/AnvilScreen;m_266390_(Lnet/minecraft/client/gui/GuiGraphics;II)V"
+    },
+    "com/grgs/craftlevel/mixin/PotionUtilsMixin": {
+      "addPotionTooltip(Ljava/util/List;Ljava/util/List;F)V": "Lnet/minecraft/world/item/alchemy/PotionUtils;m_257410_(Ljava/util/List;Ljava/util/List;F)V",
+      "addPotionTooltip(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;F)V": "Lnet/minecraft/world/item/alchemy/PotionUtils;m_43555_(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;F)V",
+      "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;": "Lnet/minecraft/network/chat/Component;m_237115_(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"
     }
   },
   "data": {
@@ -52,6 +69,23 @@
       },
       "com/grgs/craftlevel/mixin/MerchantContainerMixin": {
         "updateSellItem()V": "Lnet/minecraft/world/inventory/MerchantContainer;m_40024_()V"
+      },
+      "com/grgs/craftlevel/mixin/EnchantmentMixin": {
+        "getFullname": "Lnet/minecraft/world/item/enchantment/Enchantment;m_44700_(I)Lnet/minecraft/network/chat/Component;",
+        "getFullname(I)Lnet/minecraft/network/chat/Component;": "Lnet/minecraft/world/item/enchantment/Enchantment;m_44700_(I)Lnet/minecraft/network/chat/Component;"
+      },
+      "com/grgs/craftlevel/mixin/AnvilMenuMixin": {
+        "createResult": "Lnet/minecraft/world/inventory/AnvilMenu;m_6640_()V",
+        "createResult()V": "Lnet/minecraft/world/inventory/AnvilMenu;m_6640_()V"
+      },
+      "com/grgs/craftlevel/mixin/AnvilScreenMixin": {
+        "renderErrorIcon": "Lnet/minecraft/client/gui/screens/inventory/AnvilScreen;m_266390_(Lnet/minecraft/client/gui/GuiGraphics;II)V",
+        "renderErrorIcon(Lnet/minecraft/client/gui/GuiGraphics;II)V": "Lnet/minecraft/client/gui/screens/inventory/AnvilScreen;m_266390_(Lnet/minecraft/client/gui/GuiGraphics;II)V"
+      },
+      "com/grgs/craftlevel/mixin/PotionUtilsMixin": {
+        "addPotionTooltip(Ljava/util/List;Ljava/util/List;F)V": "Lnet/minecraft/world/item/alchemy/PotionUtils;m_257410_(Ljava/util/List;Ljava/util/List;F)V",
+        "addPotionTooltip(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;F)V": "Lnet/minecraft/world/item/alchemy/PotionUtils;m_43555_(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;F)V",
+        "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;": "Lnet/minecraft/network/chat/Component;m_237115_(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"
       }
     }
   }

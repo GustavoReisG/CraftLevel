@@ -40,7 +40,7 @@ public final class GloryKillsService {
         if (mobLevel <= 0) {
             return;
         }
-        if (mobLevel < playerLevel - GloryKillsParser.minLevelGap) {
+        if (mobLevel < playerLevel + GloryKillsParser.minLevelGap) {
             return;
         }
 
