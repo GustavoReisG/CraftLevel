@@ -344,13 +344,1229 @@
           ]
         }
       ]
+    },
+    {
+      "name": "jungle_swarm_horde",
+      "waves": [
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:spider",
+              "count": "10",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:spider",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:zombie",
+              "count": "4",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:wooden_sword",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "1",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "6",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "1",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:pillager",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:witch",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:witch",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:witch",
+              "count": "1",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": "minecraft:health_boost:2,minecraft:resistance:0"
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cave_sculk_horde",
+      "waves": [
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:silverfish",
+              "count": "12",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:silverfish",
+              "count": "10",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:endermite",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:zombie",
+              "count": "6",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:enderman",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:phantom",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:enderman",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:enderman",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:ravager",
+              "count": "1",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:enderman",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cave_undead_horde",
+      "waves": [
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "10",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:wooden_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "4",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:leather_helmet",
+              "chestplate": "minecraft:leather_chestplate",
+              "leggings": "minecraft:leather_leggings",
+              "boots": "minecraft:leather_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:zombie",
+              "count": "8",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:chainmail_helmet",
+              "chestplate": "minecraft:chainmail_chestplate",
+              "leggings": "minecraft:chainmail_leggings",
+              "boots": "minecraft:chainmail_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:cave_spider",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:zombie",
+              "count": "6",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:silverfish",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:stone_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "8",
+              "helmet": "minecraft:iron_helmet",
+              "chestplate": "minecraft:iron_chestplate",
+              "leggings": "minecraft:iron_leggings",
+              "boots": "minecraft:iron_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:phantom",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:skeleton",
+              "count": "6",
+              "helmet": "minecraft:diamond_helmet",
+              "chestplate": "minecraft:diamond_chestplate",
+              "leggings": "minecraft:diamond_leggings",
+              "boots": "minecraft:diamond_boots",
+              "hand": "minecraft:bow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:enderman",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "5",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:pillager",
+              "count": "8",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:crossbow",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "4",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "mobs": [
+            {
+              "mob": "minecraft:ravager",
+              "count": "2",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:evoker",
+              "count": "3",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:wither_skeleton",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:diamond_sword",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:vindicator",
+              "count": "6",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "minecraft:iron_axe",
+              "effect": ""
+            },
+            {
+              "mob": "minecraft:creeper",
+              "count": "5",
+              "helmet": "",
+              "chestplate": "",
+              "leggings": "",
+              "boots": "",
+              "hand": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "schematics": [
     {
       "file": "wood_arena.schem",
       "biome": "minecraft:jungle",
-      "hordes": []
+      "hordes": [
+        "default_horde",
+        "jungle_swarm_horde"
+      ]
+    },
+    {
+      "file": "deep_dark_cave.schem",
+      "biome": "minecraft:deep_dark",
+      "hordes": [
+        "cave_sculk_horde",
+        "cave_undead_horde"
+      ]
     }
   ]
 }

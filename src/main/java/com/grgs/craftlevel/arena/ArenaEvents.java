@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
@@ -105,8 +106,12 @@ public final class ArenaEvents {
 
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Detonate event) {
-        if (ArenaService.locks(event.getLevel())) {
-            event.getAffectedBlocks().clear();
+        if (!ArenaService.locks(event.getLevel())) {
+            return;
+        }
+        event.getAffectedBlocks().clear();
+        if (event.getExplosion().getDirectSourceEntity() instanceof Creeper) {
+            event.getAffectedEntities().removeIf(entity -> !(entity instanceof Player));
         }
     }
 

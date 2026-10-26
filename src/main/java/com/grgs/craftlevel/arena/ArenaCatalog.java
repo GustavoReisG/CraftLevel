@@ -14,7 +14,8 @@ public final class ArenaCatalog {
     public record Entry(String id, String resource, ResourceKey<Biome> biome) {}
 
     private static final List<Entry> ENTRIES = List.of(
-            new Entry("wood", "/data/craftlevel/arena/wood_arena.schem", biome("minecraft:jungle"))
+            new Entry("wood", "/data/craftlevel/arena/wood_arena.schem", biome("minecraft:jungle")),
+            new Entry("deepdark", "/data/craftlevel/arena/deep_dark_cave.schem", biome("minecraft:deep_dark"))
     );
 
     private ArenaCatalog() {}

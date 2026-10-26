@@ -128,6 +128,9 @@ public final class ArenaSettings {
         if (name.startsWith("wood_arena")) {
             return "minecraft:jungle";
         }
+        if (name.startsWith("deep_dark") || name.startsWith("deepdark")) {
+            return "minecraft:deep_dark";
+        }
         return "minecraft:plains";
     }
 

@@ -34,7 +34,7 @@ public final class ModBlocks {
             AltarOfDeathBlock::new
     );
 
-    /** Portal da arena. Modelo provisório: sino. */
+    /** Portal da arena (multibloco 1×1×2). */
     public static final RegistryObject<Block> ARENA_PORTAL = BLOCKS.register(
             "arena_portal",
             ArenaPortalBlock::new

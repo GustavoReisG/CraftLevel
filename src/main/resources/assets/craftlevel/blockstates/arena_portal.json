@@ -1,7 +1,31 @@
 {
   "variants": {
-    "": {
-      "model": "minecraft:block/bell_floor"
+    "facing=north,index=0": {
+      "model": "craftlevel:block/arena_portal"
+    },
+    "facing=south,index=0": {
+      "model": "craftlevel:block/arena_portal",
+      "y": 180
+    },
+    "facing=west,index=0": {
+      "model": "craftlevel:block/arena_portal",
+      "y": 270
+    },
+    "facing=east,index=0": {
+      "model": "craftlevel:block/arena_portal",
+      "y": 90
+    },
+    "facing=north,index=1": {
+      "model": "craftlevel:block/arena_portal_part"
+    },
+    "facing=south,index=1": {
+      "model": "craftlevel:block/arena_portal_part"
+    },
+    "facing=west,index=1": {
+      "model": "craftlevel:block/arena_portal_part"
+    },
+    "facing=east,index=1": {
+      "model": "craftlevel:block/arena_portal_part"
     }
   }
 }

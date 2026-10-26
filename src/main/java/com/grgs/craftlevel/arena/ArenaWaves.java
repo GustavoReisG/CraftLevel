@@ -432,16 +432,46 @@ final class ArenaWaves {
         mob.setDropChance(slot, 0.0F);
     }
 
+    /** Um ou mais efeitos: {@code id} ou {@code id:amplifier}, separados por vírgula. */
     private static void effect(Mob mob, String raw) {
-        ResourceLocation id = location(raw);
-        if (id == null) {
+        if (raw == null || raw.isBlank()) {
             return;
         }
-        MobEffect effect = BuiltInRegistries.MOB_EFFECT.getOptional(id).orElse(null);
-        if (effect == null) {
-            return;
+        boolean heal = false;
+        for (String part : raw.split("[,;]")) {
+            String token = part.trim();
+            if (token.isEmpty()) {
+                continue;
+            }
+            int amplifier = 0;
+            String idRaw = token;
+            int first = token.indexOf(':');
+            int second = first < 0 ? -1 : token.indexOf(':', first + 1);
+            if (second > 0) {
+                try {
+                    amplifier = Math.max(0, Integer.parseInt(token.substring(second + 1).trim()));
+                    idRaw = token.substring(0, second);
+                } catch (NumberFormatException ignored) {
+                    idRaw = token;
+                    amplifier = 0;
+                }
+            }
+            ResourceLocation id = location(idRaw);
+            if (id == null) {
+                continue;
+            }
+            MobEffect effect = BuiltInRegistries.MOB_EFFECT.getOptional(id).orElse(null);
+            if (effect == null) {
+                continue;
+            }
+            mob.addEffect(new MobEffectInstance(effect, MobEffectInstance.INFINITE_DURATION, amplifier));
+            if ("health_boost".equals(id.getPath()) || "absorption".equals(id.getPath())) {
+                heal = true;
+            }
         }
-        mob.addEffect(new MobEffectInstance(effect, MobEffectInstance.INFINITE_DURATION, 0));
+        if (heal) {
+            mob.setHealth(mob.getMaxHealth());
+        }
     }
 
     private static ItemStack item(String raw) {
