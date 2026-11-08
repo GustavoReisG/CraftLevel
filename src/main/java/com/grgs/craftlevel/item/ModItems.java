@@ -2,6 +2,7 @@ package com.grgs.craftlevel.item;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.block.ModBlocks;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -87,6 +88,26 @@ public final class ModItems {
     public static final RegistryObject<Item> RECALL_RUNE = ITEMS.register(
             "recall_rune",
             () -> new RecallRuneItem(new Item.Properties().stacksTo(1))
+    );
+
+    public static final RegistryObject<Item> ARENA_HELMET = ITEMS.register(
+            "arena_helmet",
+            () -> new ArenaGeoArmorItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant())
+    );
+
+    public static final RegistryObject<Item> ARENA_CHESTPLATE = ITEMS.register(
+            "arena_chestplate",
+            () -> new ArenaGeoArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant())
+    );
+
+    public static final RegistryObject<Item> ARENA_LEGGINGS = ITEMS.register(
+            "arena_leggings",
+            () -> new ArenaGeoArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant())
+    );
+
+    public static final RegistryObject<Item> ARENA_BOOTS = ITEMS.register(
+            "arena_boots",
+            () -> new ArenaGeoArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().fireResistant())
     );
 
     private ModItems() {}

@@ -716,6 +716,31 @@ public class ConfigManager {
           "minecraft:silk_touch": 1,
           "minecraft:vanishing_curse": 1
         }
+      },
+      "trade": {
+        "offers": [
+          { "item": "minecraft:enchanted_golden_apple", "glory_cost": 50 },
+          { "item": "minecraft:totem_of_undying", "glory_cost": 100 },
+          { "item": "craftlevel:arena_helmet", "glory_cost": 550 },
+          { "item": "craftlevel:arena_boots", "glory_cost": 750 },
+          { "item": "craftlevel:arena_leggings", "glory_cost": 1200 },
+          { "item": "craftlevel:arena_chestplate", "glory_cost": 1500 },
+          { "item": "minecraft:stone", "glory_cost": 1 },
+          { "item": "minecraft:cobblestone", "glory_cost": 1 },
+          { "item": "minecraft:dirt", "glory_cost": 1 },
+          { "item": "minecraft:oak_planks", "glory_cost": 1 },
+          { "item": "minecraft:sand", "glory_cost": 1 },
+          { "item": "minecraft:gravel", "glory_cost": 1 },
+          { "item": "minecraft:glass", "glory_cost": 1 },
+          { "item": "minecraft:bricks", "glory_cost": 1 },
+          { "item": "minecraft:oak_log", "glory_cost": 1 },
+          { "item": "minecraft:cobbled_deepslate", "glory_cost": 1 },
+          { "item": "minecraft:calcite", "glory_cost": 1 },
+          { "item": "minecraft:tuff", "glory_cost": 1 },
+          { "item": "minecraft:amethyst_block", "glory_cost": 1 },
+          { "item": "minecraft:copper_block", "glory_cost": 1 },
+          { "item": "minecraft:iron_block", "glory_cost": 1 }
+        ]
       }
     }
     """;
@@ -780,6 +805,7 @@ public class ConfigManager {
         AltarConversionParser.parse(altarConversion);
         AltarPotionParser.parse(altarOfDeath);
         AltarImprovementParser.parse(altarOfDeath);
+        AltarTradeParser.parse(altarOfDeath);
         SkillsParser.parse(skills);
         VillagerTradeCatalog.load(villager);
         VillagerTradeService.onReload();

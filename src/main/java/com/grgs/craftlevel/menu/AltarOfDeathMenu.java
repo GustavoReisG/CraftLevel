@@ -87,8 +87,33 @@ public class AltarOfDeathMenu extends AbstractContainerMenu {
     public static final int IMPROVE_COST_W = AltarChestGrid.spanWidth(3) - 2;
     public static final int IMPROVE_COST_H = SLOT_SIZE;
 
-    public static final int TRADE_BTN_X = 8;
-    public static final int TRADE_BTN_Y = 40;
+    /**
+     * Trade — malha do baú: ofertas cols 5–9 / fileiras A–B;
+     * botão col 4 / fileira C; glory cols 7–9 / fileira C.
+     */
+    public static final int TRADE_OFFER_COLS = 5;
+    public static final int TRADE_OFFER_ROWS = 2;
+    public static final int TRADE_OFFER_COUNT = TRADE_OFFER_COLS * TRADE_OFFER_ROWS;
+    /** Top-left do 1º slot de oferta em {@code altar_trade_gui.png}. */
+    public static final int TRADE_OFFER_SLOT_X0 = 80;
+    public static final int TRADE_OFFER_SLOT_Y0 = 9;
+
+    /** Botão: slot 4 da 3ª fileira (+9px à direita). */
+    public static final int TRADE_BTN_X = AltarChestGrid.buttonX(4) + 9;
+    public static final int TRADE_BTN_Y = AltarChestGrid.buttonY('C');
+
+    public static final int TRADE_COST_X = AltarChestGrid.columnX(7) - 2;
+    public static final int TRADE_COST_Y = AltarChestGrid.slotY('C');
+    public static final int TRADE_COST_W = AltarChestGrid.spanWidth(3) - 2;
+    public static final int TRADE_COST_H = SLOT_SIZE;
+
+    public static int tradeOfferSlotX(int index) {
+        return TRADE_OFFER_SLOT_X0 + (index % TRADE_OFFER_COLS) * SLOT_STEP;
+    }
+
+    public static int tradeOfferSlotY(int index) {
+        return TRADE_OFFER_SLOT_Y0 + (index / TRADE_OFFER_COLS) * SLOT_STEP;
+    }
 
     private static final int ALTAR_SLOT_COUNT = 4;
     private static final int CONVERSION_SLOT = 0;

@@ -29,6 +29,10 @@ public final class ModCreativeTabs {
                         output.accept(ModBlocks.PLAYER_GRAVESTONE.get());
                         output.accept(ModBlocks.ALTAR_OF_DEATH.get());
                         output.accept(ModBlocks.ARENA_PORTAL.get());
+                        output.accept(ModItems.ARENA_HELMET.get());
+                        output.accept(ModItems.ARENA_CHESTPLATE.get());
+                        output.accept(ModItems.ARENA_LEGGINGS.get());
+                        output.accept(ModItems.ARENA_BOOTS.get());
                     })
                     .build()
     );

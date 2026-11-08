@@ -69,6 +69,13 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="geckolib"
+    mandatory=true
+    versionRange="[4.8.4,5.0)"
+    ordering="NONE"
+    side="BOTH"
+
 # [[dependencies.${mod_id}]]
     # modId="attributefix"
     # mandatory=true

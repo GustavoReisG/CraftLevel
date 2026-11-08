@@ -4,14 +4,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grgs.craftlevel.config.AltarPotionParser;
+import com.grgs.craftlevel.config.AltarTradeParser;
 
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-/** Estado editável de altar_of_death.json (potion + improvement). */
+/** Estado editável de altar_of_death.json (potion + improvement + trade). */
 final class AltarOfDeathEditorState {
 
     private int gloryCostTime = 10;
@@ -22,6 +25,7 @@ final class AltarOfDeathEditorState {
     private int genericEnchantmentLimit = 50;
     private final LinkedHashMap<String, Integer> enchantmentLimits = new LinkedHashMap<>();
     private final LinkedHashMap<String, AltarPotionParser.EffectLimit> effectLimits = new LinkedHashMap<>();
+    private final List<AltarTradeParser.TradeEntry> tradeOffers = new ArrayList<>(AltarTradeParser.defaultEntries());
 
     static AltarOfDeathEditorState loadFrom(Path file) {
         AltarOfDeathEditorState state = new AltarOfDeathEditorState();
@@ -50,6 +54,28 @@ final class AltarOfDeathEditorState {
                     readIntLimits(improvement.getAsJsonObject("enchantment_limits"), state.enchantmentLimits);
                 }
             }
+            state.tradeOffers.clear();
+            if (json.has("trade") && json.get("trade").isJsonObject()) {
+                JsonObject trade = json.getAsJsonObject("trade");
+                if (trade.has("offers") && trade.get("offers").isJsonArray()) {
+                    for (JsonElement element : trade.getAsJsonArray("offers")) {
+                        if (!element.isJsonObject()) {
+                            continue;
+                        }
+                        JsonObject obj = element.getAsJsonObject();
+                        String itemId = readString(obj, "item", "");
+                        if (itemId.isEmpty()) {
+                            continue;
+                        }
+                        int glory = Math.max(0, readInt(obj, "glory_cost", 1));
+                        int count = Math.max(1, readInt(obj, "count", 1));
+                        state.tradeOffers.add(new AltarTradeParser.TradeEntry(itemId, glory, count));
+                    }
+                }
+            }
+            if (state.tradeOffers.isEmpty()) {
+                state.tradeOffers.addAll(AltarTradeParser.defaultEntries());
+            }
         } catch (Exception ignored) {
         }
         return state;
@@ -71,6 +97,10 @@ final class AltarOfDeathEditorState {
         improvement.addProperty("generic_enchantment_limit", Math.max(1, genericEnchantmentLimit));
         improvement.add("enchantment_limits", writeIntLimits(enchantmentLimits));
         root.add("improvement", improvement);
+
+        JsonObject trade = new JsonObject();
+        trade.add("offers", AltarTradeParser.writeOffers(tradeOffers));
+        root.add("trade", trade);
         return root;
     }
 
@@ -152,6 +182,23 @@ final class AltarOfDeathEditorState {
         }
     }
 
+    List<AltarTradeParser.TradeEntry> tradeOffers() {
+        return tradeOffers;
+    }
+
+    void setTradeOffers(List<AltarTradeParser.TradeEntry> next) {
+        tradeOffers.clear();
+        if (next == null) {
+            return;
+        }
+        for (AltarTradeParser.TradeEntry entry : next) {
+            if (entry == null || entry.itemId().isEmpty()) {
+                continue;
+            }
+            tradeOffers.add(entry);
+        }
+    }
+
     private static void readEffectLimits(
             JsonObject source,
             LinkedHashMap<String, AltarPotionParser.EffectLimit> target,
@@ -212,6 +259,14 @@ final class AltarOfDeathEditorState {
     private static int readInt(JsonObject json, String key, int fallback) {
         try {
             return json.get(key).getAsInt();
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
+    private static String readString(JsonObject json, String key, String fallback) {
+        try {
+            return json.get(key).getAsString();
         } catch (Exception e) {
             return fallback;
         }

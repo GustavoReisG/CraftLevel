@@ -3,10 +3,10 @@ package com.grgs.craftlevel.network;
 import com.grgs.craftlevel.altar.AltarConversionService;
 import com.grgs.craftlevel.altar.AltarImprovementService;
 import com.grgs.craftlevel.altar.AltarPotionService;
+import com.grgs.craftlevel.altar.AltarTradeService;
 import com.grgs.craftlevel.menu.AltarOfDeathMenu;
 import com.grgs.craftlevel.menu.AltarTab;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
@@ -93,9 +93,12 @@ public class AltarActionPacket {
                         altarMenu.getAltarPos(),
                         packet.data
                 );
-                case TRADE_BUY -> player.displayClientMessage(
-                        Component.translatable("gui.craftlevel.altar.coming_soon"),
-                        true
+                case TRADE_BUY -> AltarTradeService.tryBuy(
+                        player,
+                        altarMenu,
+                        altarMenu.getAltarPos(),
+                        packet.data,
+                        packet.shift
                 );
             }
         });

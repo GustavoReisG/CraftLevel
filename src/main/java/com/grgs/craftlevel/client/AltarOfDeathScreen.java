@@ -4,6 +4,8 @@ import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.altar.AltarImprovementService;
 import com.grgs.craftlevel.altar.AltarImprovementService.EnchantEntry;
 import com.grgs.craftlevel.altar.AltarPotionService;
+import com.grgs.craftlevel.altar.AltarTradeOffer;
+import com.grgs.craftlevel.altar.AltarTradeService;
 import com.grgs.craftlevel.config.AltarConversionParser;
 import com.grgs.craftlevel.client.AltarGuiIcons.Icon;
 import com.grgs.craftlevel.menu.AltarOfDeathMenu;
@@ -39,16 +41,23 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
     private static final int IMPROVE_ITEM_DIM = 0x80000000;
     private static final float IMPROVE_LIST_FONT_SCALE = 0.75f;
 
+    /** Overlay nos slots de oferta: hover clareia, seleção escurece. */
+    private static final int TRADE_HOVER_BG = 0x66FFFFFF;
+    private static final int TRADE_SELECTED_BG = 0x88000000;
+
     private AltarTab lastTab = AltarTab.CONVERSION;
     private AltarTab hoveredTab;
     private Button convertButton;
     private Button potionTimeButton;
     private Button potionEffectButton;
     private Button improveButton;
+    private Button tradeBuyButton;
 
     private int improveSelectedIndex = -1;
     private int improveScroll;
     private ItemStack lastImproveStack = ItemStack.EMPTY;
+    private int tradeSelectedIndex = -1;
+    private int tradeScroll;
 
     public AltarOfDeathScreen(AltarOfDeathMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -71,6 +80,7 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
         potionTimeButton = null;
         potionEffectButton = null;
         improveButton = null;
+        tradeBuyButton = null;
 
         AltarTab tab = menu.getActiveTab();
         switch (tab) {
@@ -110,11 +120,16 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
                 addRenderableWidget(improveButton);
                 updateImproveButton();
             }
-            case TRADE -> addRenderableWidget(altarIconButton(
-                    leftPos + AltarOfDeathMenu.TRADE_BTN_X,
-                    topPos + AltarOfDeathMenu.TRADE_BTN_Y,
-                    () -> sendAction(AltarActionPacket.Action.TRADE_BUY),
-                    null));
+            case TRADE -> {
+                tradeBuyButton = altarIconButton(
+                        leftPos + AltarOfDeathMenu.TRADE_BTN_X,
+                        topPos + AltarOfDeathMenu.TRADE_BTN_Y,
+                        () -> sendAction(AltarActionPacket.Action.TRADE_BUY, tradeSelectedIndex),
+                        null
+                );
+                addRenderableWidget(tradeBuyButton);
+                updateTradeBuyButton();
+            }
         }
     }
 
@@ -185,6 +200,8 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
             improveSelectedIndex = -1;
             improveScroll = 0;
             lastImproveStack = ItemStack.EMPTY;
+            tradeSelectedIndex = -1;
+            tradeScroll = 0;
             rebuildAltarWidgets();
         } else if (current == AltarTab.CONVERSION) {
             updateConvertButton();
@@ -193,7 +210,46 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
         } else if (current == AltarTab.IMPROVEMENT) {
             syncImproveSelection();
             updateImproveButton();
+        } else if (current == AltarTab.TRADE) {
+            syncTradeSelection();
+            updateTradeBuyButton();
         }
+    }
+
+    private void syncTradeSelection() {
+        int count = AltarTradeService.offerCount();
+        tradeScroll = Mth.clamp(tradeScroll, 0, maxTradeScroll(count));
+        if (tradeSelectedIndex >= count) {
+            tradeSelectedIndex = -1;
+        }
+    }
+
+    private void updateTradeBuyButton() {
+        if (tradeBuyButton == null) {
+            return;
+        }
+        AltarTradeOffer offer = AltarTradeService.offerAt(tradeSelectedIndex);
+        if (offer == null) {
+            tradeBuyButton.active = false;
+            return;
+        }
+        int glory = SyncPlayerGloryPacket.ClientGloryState.gloryKills;
+        if (glory < offer.gloryCost()) {
+            tradeBuyButton.active = false;
+            return;
+        }
+        if (hasShiftDown()) {
+            tradeBuyButton.active = true;
+            return;
+        }
+        ItemStack carried = menu.getCarried();
+        tradeBuyButton.active = carried.isEmpty()
+                || (ItemStack.isSameItemSameTags(carried, offer.result())
+                && carried.getCount() < carried.getMaxStackSize());
+    }
+
+    private static int maxTradeScroll(int offerCount) {
+        return Math.max(0, offerCount - AltarOfDeathMenu.TRADE_OFFER_COUNT);
     }
 
     private void updateConvertButton() {
@@ -288,7 +344,56 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
         if (menu.getActiveTab() == AltarTab.IMPROVEMENT && button == 0 && clickImproveList(mouseX, mouseY)) {
             return true;
         }
+        if (menu.getActiveTab() == AltarTab.TRADE && button == 0 && clickTradeOffer(mouseX, mouseY)) {
+            return true;
+        }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private boolean clickTradeOffer(double mouseX, double mouseY) {
+        int slot = tradeOfferSlotAt(mouseX, mouseY);
+        if (slot < 0) {
+            return false;
+        }
+        int index = slot + tradeScroll;
+        if (AltarTradeService.offerAt(index) == null) {
+            return true;
+        }
+        tradeSelectedIndex = index;
+        updateTradeBuyButton();
+        return true;
+    }
+
+    /** Índice do slot visual (0–9), ou -1. */
+    private int tradeOfferSlotAt(double mouseX, double mouseY) {
+        if (menu.getActiveTab() != AltarTab.TRADE) {
+            return -1;
+        }
+        for (int i = 0; i < AltarOfDeathMenu.TRADE_OFFER_COUNT; i++) {
+            int x = leftPos + AltarOfDeathMenu.tradeOfferSlotX(i);
+            int y = topPos + AltarOfDeathMenu.tradeOfferSlotY(i);
+            if (mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** Índice absoluto da oferta sob o mouse, ou -1. */
+    private int tradeOfferIndexAt(double mouseX, double mouseY) {
+        int slot = tradeOfferSlotAt(mouseX, mouseY);
+        return slot < 0 ? -1 : slot + tradeScroll;
+    }
+
+    private boolean isInsideTradeOfferGrid(double mouseX, double mouseY) {
+        if (menu.getActiveTab() != AltarTab.TRADE) {
+            return false;
+        }
+        int x0 = leftPos + AltarOfDeathMenu.TRADE_OFFER_SLOT_X0;
+        int y0 = topPos + AltarOfDeathMenu.TRADE_OFFER_SLOT_Y0;
+        int x1 = x0 + AltarOfDeathMenu.TRADE_OFFER_COLS * AltarOfDeathMenu.SLOT_STEP;
+        int y1 = y0 + AltarOfDeathMenu.TRADE_OFFER_ROWS * AltarOfDeathMenu.SLOT_STEP;
+        return mouseX >= x0 && mouseX < x1 && mouseY >= y0 && mouseY < y1;
     }
 
     @Override
@@ -298,6 +403,13 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
             int max = maxImproveScroll(entries.size());
             if (max > 0) {
                 improveScroll = Mth.clamp(improveScroll - (int) Math.signum(delta), 0, max);
+                return true;
+            }
+        }
+        if (menu.getActiveTab() == AltarTab.TRADE && isInsideTradeOfferGrid(mouseX, mouseY)) {
+            int max = maxTradeScroll(AltarTradeService.offerCount());
+            if (max > 0) {
+                tradeScroll = Mth.clamp(tradeScroll - (int) Math.signum(delta), 0, max);
                 return true;
             }
         }
@@ -372,11 +484,13 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
         renderImprovementGloryCost(graphics);
         renderImprovementList(graphics, mouseX, mouseY);
         renderImprovementItemDim(graphics);
-        renderTradeStub(graphics);
+        renderTradeOffers(graphics, mouseX, mouseY);
+        renderTradeGloryCost(graphics);
         AltarGloryOverlay.renderTopRight(graphics, font, width);
         renderTabTooltip(graphics);
         renderTooltip(graphics, mouseX, mouseY);
         renderImprovementEnchantTooltip(graphics, mouseX, mouseY);
+        renderTradeOfferTooltip(graphics, mouseX, mouseY);
     }
 
     private void drawTabButtons(GuiGraphics graphics) {
@@ -629,12 +743,58 @@ public class AltarOfDeathScreen extends AbstractContainerScreen<AltarOfDeathMenu
         graphics.fill(x, y, x + 16, y + 16, IMPROVE_ITEM_DIM);
     }
 
-    private void renderTradeStub(GuiGraphics graphics) {
+    private void renderTradeOffers(GuiGraphics graphics, int mouseX, int mouseY) {
         if (menu.getActiveTab() != AltarTab.TRADE) {
             return;
         }
-        graphics.drawString(font, Component.translatable("gui.craftlevel.altar.trade.list_stub"),
-                leftPos + 28, topPos + 36, 0x808080, false);
+        int hovered = tradeOfferIndexAt(mouseX, mouseY);
+        for (int slot = 0; slot < AltarOfDeathMenu.TRADE_OFFER_COUNT; slot++) {
+            int index = slot + tradeScroll;
+            AltarTradeOffer offer = AltarTradeService.offerAt(index);
+            int x = leftPos + AltarOfDeathMenu.tradeOfferSlotX(slot);
+            int y = topPos + AltarOfDeathMenu.tradeOfferSlotY(slot);
+            if (offer != null) {
+                graphics.renderItem(offer.result(), x, y);
+                graphics.renderItemDecorations(font, offer.result(), x, y);
+            }
+            if (index == tradeSelectedIndex) {
+                graphics.fill(x, y, x + 16, y + 16, TRADE_SELECTED_BG);
+            } else if (index == hovered && offer != null) {
+                graphics.fill(x, y, x + 16, y + 16, TRADE_HOVER_BG);
+            }
+        }
+    }
+
+    private void renderTradeGloryCost(GuiGraphics graphics) {
+        if (menu.getActiveTab() != AltarTab.TRADE) {
+            return;
+        }
+        AltarTradeOffer offer = AltarTradeService.offerAt(tradeSelectedIndex);
+        if (offer == null) {
+            return;
+        }
+        int cost = offer.gloryCost();
+        Component label = cost > 999
+                ? Component.literal(String.valueOf(cost))
+                : Component.translatable("gui.craftlevel.altar.glory_cost", cost);
+        drawCenteredGloryCost(
+                graphics,
+                label,
+                leftPos + AltarOfDeathMenu.TRADE_COST_X,
+                topPos + AltarOfDeathMenu.TRADE_COST_Y,
+                AltarOfDeathMenu.TRADE_COST_W,
+                AltarOfDeathMenu.TRADE_COST_H,
+                0xFFFFFF
+        );
+    }
+
+    private void renderTradeOfferTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        int index = tradeOfferIndexAt(mouseX, mouseY);
+        AltarTradeOffer offer = AltarTradeService.offerAt(index);
+        if (offer == null) {
+            return;
+        }
+        graphics.renderTooltip(font, offer.result(), mouseX, mouseY);
     }
 
     private void renderActionIcons(GuiGraphics graphics) {
