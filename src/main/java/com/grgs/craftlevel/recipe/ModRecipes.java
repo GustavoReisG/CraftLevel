@@ -19,5 +19,8 @@ public final class ModRecipes {
                     () -> new SimpleCraftingRecipeSerializer<>(ImbuePotionRecipe::new)
             );
 
+    public static final RegistryObject<RecipeSerializer<RuneSmithingRecipe>> RUNE_SMITHING =
+            SERIALIZERS.register("rune_smithing", RuneSmithingRecipe.Serializer::new);
+
     private ModRecipes() {}
 }

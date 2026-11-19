@@ -4,6 +4,7 @@ import com.grgs.craftlevel.capability.MobLevelProvider;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerLevelProvider;
 import com.grgs.craftlevel.config.EconomyParser;
+import com.grgs.craftlevel.item.ItemRunes;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import com.grgs.craftlevel.util.DebugLog;
@@ -38,29 +39,13 @@ public final class KillRewardService {
             return;
         }
 
-        long amount = calculateReward(playerLevel, mobLevel, id);
+        long amount = applyFortune(player, calculateReward(playerLevel, mobLevel, id));
         if (amount <= 0L) {
             return;
         }
 
-        EconomyService.ensurePlayerEconomy(player);
-        player.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(wallet -> {
-            wallet.addEmeralds(amount);
-            if (player instanceof ServerPlayer serverPlayer) {
-                PacketHandler.sendToPlayer(
-                        serverPlayer,
-                        new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(player))
-                );
-            }
-            DebugLog.info(
-                    "Kill reward +{}e (playerLvl={} mobLvl={} {}) → wallet {}",
-                    amount,
-                    playerLevel,
-                    mobLevel,
-                    id,
-                    wallet.getBalance()
-            );
-        });
+        creditWallet(player, amount, "Kill reward +{}e (playerLvl={} mobLvl={} {}) → wallet {}",
+                amount, playerLevel, mobLevel, id);
     }
 
     /** Arena: 1 a 3 esmeraldas por mob, sem o cálculo de nível. */
@@ -68,7 +53,23 @@ public final class KillRewardService {
         if (player.level().isClientSide()) {
             return;
         }
-        long amount = 1L + player.getRandom().nextInt(3);
+        long amount = applyFortune(player, 1L + player.getRandom().nextInt(3));
+        creditWallet(player, amount, "Arena reward +{}e → wallet {}", amount);
+    }
+
+    /** +5% esmeraldas por peça com Rune of Fortune (arredonda para cima se bônus &gt; 0). */
+    private static long applyFortune(Player player, long base) {
+        if (base <= 0L) {
+            return 0L;
+        }
+        float bonus = ItemRunes.fortuneBonus(player);
+        if (bonus <= 0.0F) {
+            return base;
+        }
+        return Math.max(base, (long) Math.ceil(base * (1.0D + bonus)));
+    }
+
+    private static void creditWallet(Player player, long amount, String logFmt, Object... logArgs) {
         EconomyService.ensurePlayerEconomy(player);
         player.getCapability(PlayerEmeraldWalletProvider.EMERALD_WALLET).ifPresent(wallet -> {
             wallet.addEmeralds(amount);
@@ -78,7 +79,10 @@ public final class KillRewardService {
                         new SyncEmeraldWalletPacket(EconomyService.getWalletBalance(player))
                 );
             }
-            DebugLog.info("Arena reward +{}e → wallet {}", amount, wallet.getBalance());
+            Object[] args = new Object[logArgs.length + 1];
+            System.arraycopy(logArgs, 0, args, 0, logArgs.length);
+            args[logArgs.length] = wallet.getBalance();
+            DebugLog.info(logFmt, args);
         });
     }
 

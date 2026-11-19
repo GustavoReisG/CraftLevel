@@ -1,6 +1,7 @@
 package com.grgs.craftlevel.arena;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.item.ArenaTotemItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -133,7 +134,7 @@ public final class ArenaEvents {
         }
     }
 
-    /** Comida, poção, arco, besta, escudo e tridente continuam usáveis. */
+    /** Comida, poção, arco, besta, escudo, tridente e totens da arena continuam usáveis. */
     private static boolean keptItem(ItemStack stack) {
         Item item = stack.getItem();
         return stack.isEdible()
@@ -141,7 +142,8 @@ public final class ArenaEvents {
                 || item instanceof BowItem
                 || item instanceof CrossbowItem
                 || item instanceof ShieldItem
-                || item instanceof TridentItem;
+                || item instanceof TridentItem
+                || item instanceof ArenaTotemItem;
     }
 
     @SubscribeEvent

@@ -208,6 +208,14 @@ public class PacketHandler {
                 AltarActionPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
+
+        CHANNEL.registerMessage(
+                22,
+                PlayTotemAnimationPacket.class,
+                PlayTotemAnimationPacket::encode,
+                PlayTotemAnimationPacket::decode,
+                PlayTotemAnimationPacket::handle
+        );
     }
 
     /** Envia pacote do servidor para um jogador específico. */

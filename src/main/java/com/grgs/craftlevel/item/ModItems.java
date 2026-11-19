@@ -2,7 +2,6 @@ package com.grgs.craftlevel.item;
 
 import com.grgs.craftlevel.CraftLevel;
 import com.grgs.craftlevel.block.ModBlocks;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -90,24 +89,49 @@ public final class ModItems {
             () -> new RecallRuneItem(new Item.Properties().stacksTo(1))
     );
 
-    public static final RegistryObject<Item> ARENA_HELMET = ITEMS.register(
-            "arena_helmet",
-            () -> new ArenaGeoArmorItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant())
+    public static final RegistryObject<Item> TOTEM_OF_VITALITY = ITEMS.register(
+            "totem_of_vitality",
+            () -> new ArenaTotemItem(ArenaTotemItem.Kind.VITALITY, new Item.Properties().stacksTo(1))
     );
 
-    public static final RegistryObject<Item> ARENA_CHESTPLATE = ITEMS.register(
-            "arena_chestplate",
-            () -> new ArenaGeoArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant())
+    public static final RegistryObject<Item> TOTEM_OF_OVERCHARGE = ITEMS.register(
+            "totem_of_overcharge",
+            () -> new ArenaTotemItem(ArenaTotemItem.Kind.OVERCHARGE, new Item.Properties().stacksTo(1))
     );
 
-    public static final RegistryObject<Item> ARENA_LEGGINGS = ITEMS.register(
-            "arena_leggings",
-            () -> new ArenaGeoArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant())
+    public static final RegistryObject<Item> TOTEM_OF_BLESSING = ITEMS.register(
+            "totem_of_blessing",
+            () -> new ArenaTotemItem(ArenaTotemItem.Kind.BLESSING, new Item.Properties().stacksTo(1))
     );
 
-    public static final RegistryObject<Item> ARENA_BOOTS = ITEMS.register(
-            "arena_boots",
-            () -> new ArenaGeoArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().fireResistant())
+    public static final RegistryObject<Item> RUNE_OF_UNBREAKABLE = ITEMS.register(
+            "rune_of_unbreakable",
+            () -> new RuneItem(RuneKind.UNBREAKABLE, new Item.Properties().stacksTo(16))
+    );
+
+    public static final RegistryObject<Item> RUNE_OF_VELOCE = ITEMS.register(
+            "rune_of_veloce",
+            () -> new RuneItem(RuneKind.VELOCE, new Item.Properties().stacksTo(16))
+    );
+
+    public static final RegistryObject<Item> RUNE_OF_REACH = ITEMS.register(
+            "rune_of_reach",
+            () -> new RuneItem(RuneKind.REACH, new Item.Properties().stacksTo(16))
+    );
+
+    public static final RegistryObject<Item> RUNE_OF_FORTUNE = ITEMS.register(
+            "rune_of_fortune",
+            () -> new RuneItem(RuneKind.FORTUNE, new Item.Properties().stacksTo(16))
+    );
+
+    public static final RegistryObject<Item> RUNE_OF_RETURN = ITEMS.register(
+            "rune_of_return",
+            () -> new RuneItem(RuneKind.RETURN, new Item.Properties().stacksTo(16))
+    );
+
+    public static final RegistryObject<Item> RUNE_OF_SOULBOUND = ITEMS.register(
+            "rune_of_soulbound",
+            () -> new RuneItem(RuneKind.SOULBOUND, new Item.Properties().stacksTo(16))
     );
 
     private ModItems() {}

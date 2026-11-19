@@ -9,6 +9,7 @@
     "AnvilMenuMixin",
     "EnchantmentMixin",
     "InventoryMixin",
+    "ItemStackMixin",
     "LivingEntityMixin",
     "MerchantContainerMixin",
     "MerchantMenuMixin",

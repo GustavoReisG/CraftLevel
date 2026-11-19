@@ -6,6 +6,7 @@ import com.grgs.craftlevel.block.PlayerGravestoneBlockEntity;
 import com.grgs.craftlevel.capability.PlayerEmeraldWalletProvider;
 import com.grgs.craftlevel.capability.PlayerSoulsProvider;
 import com.grgs.craftlevel.config.SoulsParser;
+import com.grgs.craftlevel.item.ItemRunes;
 import com.grgs.craftlevel.network.PacketHandler;
 import com.grgs.craftlevel.network.SyncEmeraldWalletPacket;
 import net.minecraft.core.BlockPos;
@@ -101,6 +102,7 @@ public final class DeathLossService {
         List<ItemStack> lost = new ArrayList<>();
         List<ItemStack> kept = new ArrayList<>();
         splitInventory(player, mode, lost, kept);
+        keepSoulbound(lost, kept);
         clearPlayerInventory(player);
         PENDING_LOST.put(player.getUUID(), lost);
         KEPT_ITEMS.put(player.getUUID(), kept);
@@ -121,6 +123,11 @@ public final class DeathLossService {
             case KEEP_INVENTORY_RULE -> event.getDrops().clear();
             case VANILLA_DROPS -> {
                 List<ItemStack> lost = drainDrops(event);
+                List<ItemStack> soulbound = new ArrayList<>();
+                keepSoulbound(lost, soulbound);
+                if (!soulbound.isEmpty()) {
+                    KEPT_ITEMS.merge(player.getUUID(), soulbound, DeathLossService::mergeLists);
+                }
                 deliverLostItems(player, event, lost);
             }
             case CUSTOM_LOST -> {
@@ -128,8 +135,28 @@ public final class DeathLossService {
                 event.getDrops().clear();
                 List<ItemStack> lost = PENDING_LOST.remove(player.getUUID());
                 if (lost != null) {
+                    List<ItemStack> soulbound = new ArrayList<>();
+                    keepSoulbound(lost, soulbound);
+                    if (!soulbound.isEmpty()) {
+                        KEPT_ITEMS.merge(player.getUUID(), soulbound, DeathLossService::mergeLists);
+                    }
                     deliverLostItems(player, event, lost);
                 }
+            }
+        }
+    }
+
+    /** Move itens com Rune of Soulbound de {@code lost} para {@code kept}. */
+    private static void keepSoulbound(List<ItemStack> lost, List<ItemStack> kept) {
+        if (lost == null || lost.isEmpty()) {
+            return;
+        }
+        Iterator<ItemStack> it = lost.iterator();
+        while (it.hasNext()) {
+            ItemStack stack = it.next();
+            if (ItemRunes.isSoulbound(stack)) {
+                kept.add(stack);
+                it.remove();
             }
         }
     }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "craftlevel:item/arena_leggings"
+    "layer0": "craftlevel:item/rune_of_unbreakable"
   }
 }

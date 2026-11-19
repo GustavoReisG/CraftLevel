@@ -18,6 +18,8 @@ public final class ModDamageTypes {
     public static final ResourceKey<DamageType> NETHER_ELEVATION_DAMAGE = key("nether_elevation_damage");
     public static final ResourceKey<DamageType> INFERNO_BOLT_DAMAGE = key("inferno_bolt_damage");
     public static final ResourceKey<DamageType> SOUL_LANCE_DAMAGE = key("soul_lance_damage");
+    public static final ResourceKey<DamageType> OVERCHARGE_DAMAGE = key("overcharge_damage");
+    public static final ResourceKey<DamageType> RETURN_DAMAGE = key("return_damage");
 
     /** @deprecated use {@link #INFERNO_BOLT_DAMAGE} */
     @Deprecated
@@ -46,6 +48,14 @@ public final class ModDamageTypes {
 
     public static DamageSource soulLanceDamage(Level level, Entity attacker) {
         return create(level, SOUL_LANCE_DAMAGE, attacker);
+    }
+
+    public static DamageSource overchargeDamage(Level level, Entity attacker) {
+        return create(level, OVERCHARGE_DAMAGE, attacker);
+    }
+
+    public static DamageSource returnDamage(Level level, Entity attacker) {
+        return create(level, RETURN_DAMAGE, attacker);
     }
 
     /** @deprecated use {@link #infernoBoltDamage} */

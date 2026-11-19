@@ -119,15 +119,10 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
-    maven {
-        name = 'GeckoLib'
-        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}";
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.20.1:${geckolib_version}")
     //implementation fg.deobf("curse.maven:attributefix-280510:4911084")
 }
 

@@ -56,29 +56,16 @@ public final class AltarTradeParser {
 
     public static List<TradeEntry> defaultEntries() {
         List<TradeEntry> list = new ArrayList<>();
-        list.add(new TradeEntry("minecraft:enchanted_golden_apple", 50, 1));
         list.add(new TradeEntry("minecraft:totem_of_undying", 100, 1));
-        // Arena set = 4000 glory total (conquistável, não uniforme)
-        list.add(new TradeEntry("craftlevel:arena_helmet", 550, 1));
-        list.add(new TradeEntry("craftlevel:arena_boots", 750, 1));
-        list.add(new TradeEntry("craftlevel:arena_leggings", 1200, 1));
-        list.add(new TradeEntry("craftlevel:arena_chestplate", 1500, 1));
-        // Blocos de teste (1 glory) — scroll da grade
-        list.add(new TradeEntry("minecraft:stone", 1, 1));
-        list.add(new TradeEntry("minecraft:cobblestone", 1, 1));
-        list.add(new TradeEntry("minecraft:dirt", 1, 1));
-        list.add(new TradeEntry("minecraft:oak_planks", 1, 1));
-        list.add(new TradeEntry("minecraft:sand", 1, 1));
-        list.add(new TradeEntry("minecraft:gravel", 1, 1));
-        list.add(new TradeEntry("minecraft:glass", 1, 1));
-        list.add(new TradeEntry("minecraft:bricks", 1, 1));
-        list.add(new TradeEntry("minecraft:oak_log", 1, 1));
-        list.add(new TradeEntry("minecraft:cobbled_deepslate", 1, 1));
-        list.add(new TradeEntry("minecraft:calcite", 1, 1));
-        list.add(new TradeEntry("minecraft:tuff", 1, 1));
-        list.add(new TradeEntry("minecraft:amethyst_block", 1, 1));
-        list.add(new TradeEntry("minecraft:copper_block", 1, 1));
-        list.add(new TradeEntry("minecraft:iron_block", 1, 1));
+        list.add(new TradeEntry("craftlevel:totem_of_vitality", 200, 1));
+        list.add(new TradeEntry("craftlevel:totem_of_overcharge", 200, 1));
+        list.add(new TradeEntry("craftlevel:totem_of_blessing", 200, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_unbreakable", 500, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_veloce", 500, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_reach", 500, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_fortune", 500, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_return", 500, 1));
+        list.add(new TradeEntry("craftlevel:rune_of_soulbound", 500, 1));
         return list;
     }
 
