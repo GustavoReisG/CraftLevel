@@ -226,6 +226,101 @@ Teclas do Craft Level (em Controles):
 
 ---
 
+## Como configurar os JSONs do mod
+
+Você **não precisa** editar código. Quase tudo do Craft Level é ajustável em arquivos de texto na pasta do jogo.
+
+### Onde ficam os arquivos
+
+Depois de abrir o mundo / servidor pelo menos uma vez com o mod:
+
+`minecraft/config/craftlevel/`
+
+(ou, em singleplayer: `.minecraft/config/craftlevel/`)
+
+Na primeira vez o mod **cria** esses arquivos com valores padrão.  
+Se você apagar um arquivo e reiniciar, ele nasce de novo com o padrão.
+
+### Formas de editar
+
+1. **Pelo jogo (mais fácil)**  
+   Menu **Mods → Craft Level → Config**.  
+   Dá para mexer em HUD, progressão, stats, altar, skills, arena, trades, etc., e salvar.
+
+2. **Pelo bloco de notas / editor**  
+   Abra o `.json` em qualquer editor de texto (Bloco de Notas, VS Code, Notepad++).  
+   Salve em UTF-8. Cuidado com vírgulas e aspas — JSON quebrado faz o mod ignorar ou falhar o carregamento.
+
+3. **Aplicar mudanças**  
+   - Em muitos casos: reinicie o mundo / servidor.  
+   - Se você for OP: o comando `/craftlevel reload` recarrega as configs sem fechar o jogo (útil em singleplayer/servidor).
+
+### O que cada arquivo controla
+
+| Arquivo | Para que serve |
+|---------|----------------|
+| `client.json` | Posição e escala do HUD (só no seu cliente) |
+| `config.json` | Level máximo, quanto LP precisa para upar, quão forte o scaling fica, debug |
+| `player_stats.json` | Como **seu** personagem escala vida/dano/cura |
+| `mob_stats.json` | Scaling padrão de **todos** os mobs |
+| `mob_overrides.json` | Exceções por mob (ex.: bosses mais tanky ou imunes a certos danos) |
+| `mob_levels.json` | Nível mínimo e máximo que cada mob pode nascer |
+| `economy.json` | Esmeraldas por kill, lista de bosses, saldo de villagers |
+| `souls.json` | Quantas Souls, tempo para recuperar, perda na morte, lápide |
+| `glory_kills.json` | Diferença de nível para contar Glory e ritmo de progressão |
+| `altar_conversion.json` | Quais itens o Altar troca por Skill Points e o custo em Glory |
+| `altar_of_death.json` | Limites de poção/encantamento e a loja Trade do Altar |
+| `skills.json` | Custo em Skill Points e nível mínimo de cada skill |
+| `villager.json` | Profissões (Banqueiro, Mercador da Morte, etc.) e todas as trocas |
+| `arena.json` | Hordes, ondas e mapas da Arena |
+
+### Dicas práticas (sem medo)
+
+**Quero o jogo mais fácil / mais difícil**  
+- Em `config.json`, o bloco de progressão de LP: subir o fator de crescimento deixa upar **mais lento**.  
+- Os “escaladores” no mesmo arquivo controlam quanto vida/dano cresce por nível. Valores perto de `1.0` = crescimento suave; mais altos = explosão de poder.
+
+**Quero bosses sempre altos**  
+- Em `mob_levels.json`, coloque o boss com `lvl_min` alto (ex.: 100) e `lvl_max` no teto que você usa.
+
+**Quero mudar o que o Mercador da Morte vende**  
+- Em `villager.json`, procure a profissão do Death Merchant.  
+- Cada troca tem o que ele **cobra** (Marcas das Trevas, com mínimo e máximo) e o que ele **entrega**.  
+- Algumas ofertas sorteiam entre uma lista (ovos, spawners).
+
+**Quero mudar preços do Altar**  
+- Conversão de Skill Points → `altar_conversion.json`  
+- Poções, encantamentos e loja de totens/runas → `altar_of_death.json`
+
+**Quero mais ou menos Souls**  
+- `souls.json`: quantidade máxima, tempo de regeneração, se perde esmeraldas/itens e se gera lápide.
+
+**Quero rebalancear skills**  
+- `skills.json`: para cada nível da skill, custo em pontos e nível de personagem exigido.
+
+**Quero outra Arena**  
+- `arena.json`: listas de ondas (quais mobs, quantos) e schematics.  
+- Menos ondas = menos Marcas das Trevas por run (a recompensa acompanha as ondas concluídas).
+
+**Quero só mexer no HUD**  
+- `client.json` (ou tela Client no menu do mod): âncora na tela, X/Y, escala.  
+- Isso não afeta o servidor — cada jogador tem o seu.
+
+### Cuidados importantes
+
+- Faça **backup** da pasta `config/craftlevel` antes de experimentar.  
+- Não misture vírgula a mais/a menos no JSON.  
+- Em multiplayer, quem manda nas regras de combate/economia/altar/arena é o **servidor**. O cliente só manda no HUD.  
+- Se algo “não mudou”, confira se salvou o arquivo certo, se o servidor reiniciou / deu reload, e se não há outro arquivo sobrescrevendo.
+
+### Resetar para o padrão
+
+1. Saia do mundo / pare o servidor.  
+2. Apague o arquivo que quer resetar (ou a pasta inteira).  
+3. Entre de novo — o mod recria com os defaults oficiais.
+
+---
+
 ## Compatibilidade
 
 - Minecraft **1.20.1** + **Forge**  
