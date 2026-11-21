@@ -8,8 +8,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -162,13 +167,34 @@ public class ArenaPortalBlock extends Block {
 
     public ArenaPortalBlock() {
         super(BlockBehaviour.Properties.of()
-                .mapColor(MapColor.STONE)
-                .strength(5.0F, 6.0F)
-                .sound(SoundType.STONE)
+                .mapColor(MapColor.COLOR_BLACK)
+                .strength(3.0F, 6.0F) // ardosia: quebra relativamente rápido com a ferramenta certa
+                .requiresCorrectToolForDrops()
+                .sound(SoundType.DEEPSLATE)
                 .noOcclusion());
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(INDEX, MASTER_INDEX));
+    }
+
+    /** Só netherite (ou tier ≥ netherite) consegue minerar. */
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        if (!isNetheriteTierTool(player.getMainHandItem(), state)) {
+            return 0.0F;
+        }
+        return super.getDestroyProgress(state, player, level, pos);
+    }
+
+    private static boolean isNetheriteTierTool(ItemStack stack, BlockState state) {
+        if (stack.isEmpty() || !(stack.getItem() instanceof DiggerItem digger)) {
+            return false;
+        }
+        if (!stack.isCorrectToolForDrops(state)) {
+            return false;
+        }
+        Tier tier = digger.getTier();
+        return tier.getLevel() >= Tiers.NETHERITE.getLevel();
     }
 
     private static VoxelShape buildSolidNorth() {
@@ -351,11 +377,15 @@ public class ArenaPortalBlock extends Block {
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-        // Como a porta: a metade que o jogador quebrou dropa o item; as outras saem sem loot.
+        // Como a porta: só a peça quebrada pelo jogador pode dropar; exige Silk Touch.
         if (clearingStructure) {
             return Collections.emptyList();
         }
-        return super.getDrops(state, params);
+        ItemStack tool = params.getOptionalParameter(LootContextParams.TOOL);
+        if (tool != null && !tool.isEmpty() && EnchantmentHelper.hasSilkTouch(tool)) {
+            return List.of(new ItemStack(ModBlocks.ARENA_PORTAL.get()));
+        }
+        return Collections.emptyList();
     }
 
     @Override

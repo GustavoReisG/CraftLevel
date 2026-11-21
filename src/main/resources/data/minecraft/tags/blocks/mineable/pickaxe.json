@@ -3,6 +3,7 @@
   "values": [
     "craftlevel:compressed_emerald_block",
     "craftlevel:player_gravestone",
-    "craftlevel:altar_of_death"
+    "craftlevel:altar_of_death",
+    "craftlevel:arena_portal"
   ]
 }

@@ -1,6 +1,7 @@
 package com.grgs.craftlevel.arena;
 
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.item.ModItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
@@ -150,6 +152,10 @@ public final class ArenaService {
             return;
         }
 
+        if (session.victorious) {
+            grantDarknessMarks(player, session.waves.size());
+        }
+
         if (exit == Exit.ENTRY) {
             teleportToEntry(player, session);
         } else if (exit == Exit.SPAWNPOINT) {
@@ -162,6 +168,19 @@ public final class ArenaService {
             sweepEntities(arena, session.bounds);
             ArenaBiomes.fill(arena, session.bounds, Biomes.THE_VOID);
         }
+    }
+
+    /** 1 Darkness Mark por wave/nível da horda ao completar a arena. */
+    private static void grantDarknessMarks(ServerPlayer player, int waveCount) {
+        int amount = Math.max(0, waveCount);
+        if (amount <= 0) {
+            return;
+        }
+        player.getInventory().placeItemBackInInventory(new ItemStack(ModItems.DARKNESS_MARK.get(), amount));
+        player.displayClientMessage(
+                Component.translatable("message.craftlevel.arena.darkness_mark", amount),
+                false
+        );
     }
 
     private static void teleportToEntry(ServerPlayer player, Session session) {

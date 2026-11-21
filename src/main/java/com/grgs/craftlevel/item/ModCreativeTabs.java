@@ -29,6 +29,7 @@ public final class ModCreativeTabs {
                         output.accept(ModBlocks.PLAYER_GRAVESTONE.get());
                         output.accept(ModBlocks.ALTAR_OF_DEATH.get());
                         output.accept(ModBlocks.ARENA_PORTAL.get());
+                        output.accept(ModItems.DARKNESS_MARK.get());
                         output.accept(ModItems.TOTEM_OF_VITALITY.get());
                         output.accept(ModItems.TOTEM_OF_OVERCHARGE.get());
                         output.accept(ModItems.TOTEM_OF_BLESSING.get());

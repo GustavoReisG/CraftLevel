@@ -134,5 +134,11 @@ public final class ModItems {
             () -> new RuneItem(RuneKind.SOULBOUND, new Item.Properties().stacksTo(16))
     );
 
+    /** Moeda da vitória completa na Arena — troca no Death Merchant. */
+    public static final RegistryObject<Item> DARKNESS_MARK = ITEMS.register(
+            "darkness_mark",
+            DarknessMarkItem::new
+    );
+
     private ModItems() {}
 }
