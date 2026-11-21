@@ -15,21 +15,21 @@ import java.util.function.Consumer;
 /**
  * Rune of Unbreakable: ao quebrar, trava em 1 de durabilidade e marca broken
  * (sem stats) em vez de destruir o item.
+ * <p>
+ * Mira {@code hurtAndBreak} (dev) e {@code m_41622_} (SRG em produção): o AP do
+ * projeto não emite entrada de refmap para este mixin.
  */
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
     @Inject(
-            method = "hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V",
+            method = {"hurtAndBreak", "m_41622_"},
             at = @At("HEAD"),
-            cancellable = true
+            cancellable = true,
+            require = 0,
+            expect = 1
     )
-    private <T extends LivingEntity> void craftlevel$unbreakable(
-            int amount,
-            T entity,
-            Consumer<T> onBroken,
-            CallbackInfo ci
-    ) {
+    private void craftlevel$unbreakable(int amount, LivingEntity entity, Consumer<LivingEntity> onBroken, CallbackInfo ci) {
         ItemStack self = (ItemStack) (Object) this;
         if (amount <= 0 || !self.isDamageableItem() || !ItemRunes.has(self, RuneKind.UNBREAKABLE)) {
             return;
