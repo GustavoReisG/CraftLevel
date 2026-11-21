@@ -12,19 +12,19 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Clone congelado do mob para desenhar busto no card.
  * Mob no quadrado esquerdo {@link #PORTRAIT_SIZE}px; card {@link #CARD_WIDTH}x{@link #CARD_HEIGHT}.
  */
 @OnlyIn(Dist.CLIENT)
-final class MobPortraitCapturer {
+public final class MobPortraitCapturer {
 
     /** Área circular esquerda do card (e tamanho do círculo de level do jogador). */
     static final int FRAME_SIZE = 292;
@@ -53,7 +53,8 @@ final class MobPortraitCapturer {
         this.entityHeight = entityHeight;
     }
 
-    static boolean isPortraitPreview(LivingEntity entity) {
+    /** {@code true} para clones do card — usado p.ex. para forçar render vanilla (Epic Fight). */
+    public static boolean isPortraitPreview(LivingEntity entity) {
         return PORTRAIT_PREVIEWS.contains(entity);
     }
 
@@ -106,15 +107,25 @@ final class MobPortraitCapturer {
         graphics.pose().pushPose();
         graphics.pose().translate(x, y, 0);
         graphics.pose().scale(hudScale, hudScale, 1f);
-        beginCircularStencil(graphics);
-        if (capturer != null) {
-            capturer.renderMobLayer(graphics);
-        } else {
-            renderPlaceholderMob(graphics);
-        }
-        endCircularStencil();
-        graphics.pose().popPose();
 
+        // Stencil conflita com Oculus/Iris — scissor + moldura do card bastam.
+        boolean useStencil = !ShaderCompat.avoidStencil();
+        if (useStencil) {
+            beginCircularStencil(graphics);
+        }
+        try {
+            if (capturer != null) {
+                capturer.renderMobLayer(graphics);
+            } else {
+                renderPlaceholderMob(graphics);
+            }
+        } finally {
+            if (useStencil) {
+                endCircularStencil();
+            }
+        }
+
+        graphics.pose().popPose();
         graphics.disableScissor();
     }
 
@@ -172,7 +183,6 @@ final class MobPortraitCapturer {
                 ClientConfig.hudMobFocusCameraPitch,
                 preview
         );
-
     }
 
     private static void renderPlaceholderMob(GuiGraphics graphics) {

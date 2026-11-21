@@ -4,7 +4,8 @@
   "package": "com.grgs.craftlevel.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "craftlevel.refmap.json",
-    "mixins": [
+  "plugin": "com.grgs.craftlevel.mixin.CraftLevelMixinPlugin",
+  "mixins": [
     "AbstractVillagerMixin",
     "AnvilMenuMixin",
     "EnchantmentMixin",
@@ -18,7 +19,9 @@
     "PotionUtilsMixin"
   ],
   "client": [
-    "AnvilScreenMixin"
+    "AnvilScreenMixin",
+    "EpicFightPortraitMixin",
+    "EpicFightPortraitRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
