@@ -1,0 +1,18 @@
+CraftLevel License
+Copyright (c) grgs. All Rights Reserved.
+
+You may:
+- Download and play with this mod for personal use
+- Include this mod in any Minecraft modpack
+
+You may NOT:
+- Reupload or redistribute this mod on its own (CurseForge, Modrinth, other sites, mirrors, Discord files, etc.)
+- Claim this mod as your own
+- Copy, modify, or redistribute the source code or assets without permission from the author
+- Sell this mod
+
+Modpacks:
+Including CraftLevel in a modpack is allowed. Prefer that the pack downloads the mod from the official CurseForge (or Modrinth) project page rather than bundling a redistributed copy when the platform supports it.
+
+Third-party libraries (Minecraft Forge, GeckoLib, etc.) remain under their own licenses.
+See LICENSE-Forge-MDK.txt for the Forge MDK license notice shipped with the project template.
