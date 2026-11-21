@@ -1,0 +1,14 @@
+{
+  "attribute": {
+    "minecraft:generic.max_health": "mob_health"
+  },
+  "hurt": {
+    "default": "health"
+  },
+  "hurt_self": {
+    "default": "mob_health"
+  },
+  "heal": {
+    "default": "mob_health"
+  }
+}

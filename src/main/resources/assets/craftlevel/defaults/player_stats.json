@@ -1,0 +1,24 @@
+{
+  "attribute": {
+    "minecraft:generic.max_health": "health"
+  },
+  "hurt": {
+    "default": "health",
+    "minecraft:player_attack": "melee_power",
+    "minecraft:arrow": "melee_power",
+    "minecraft:trident": "melee_power",
+    "minecraft:magic": "spell_power",
+    "minecraft:indirect_magic": "spell_power",
+    "attributeslib:current_hp_damage": "flat",
+    "*irons_spellbooks*": "spell_power",
+    "cataclysm:lightning": "flat",
+    "minecraft:mob_projectile": "flat"
+  },
+  "hurt_self": {
+    "default": "health"
+  },
+  "heal": {
+    "default": "health",
+    "craftlevel:vampire_attack_heal": "flat"
+  }
+}

@@ -2,7 +2,7 @@ package com.grgs.craftlevel.client.config;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.grgs.craftlevel.config.ConfigManager;
+import com.grgs.craftlevel.config.ConfigDefaults;
 
 import java.io.Reader;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.nio.file.Path;
 
 /**
  * Estado editável de client.json na UI.
- * Defaults em {@link ConfigManager#DEFAULT_CLIENT}.
+ * Defaults em {@code assets/craftlevel/defaults/client.json}.
  */
 public final class ClientConfigEditorState {
 
@@ -274,7 +274,10 @@ public final class ClientConfigEditorState {
     private static ClientConfigEditorState parseDefaultTemplate() {
         ClientConfigEditorState state = new ClientConfigEditorState(false);
         try {
-            JsonObject json = JsonParser.parseString(ConfigManager.DEFAULT_CLIENT).getAsJsonObject();
+            JsonObject json = ConfigDefaults.readJson("client.json");
+            if (json == null) {
+                throw new IllegalStateException("missing client.json default");
+            }
             state.importFrom(json);
         } catch (Exception ignored) {
             state.lpBar = new HudElementValues("bottom_left", 2, -2, 0.11f, 0.6f, null);

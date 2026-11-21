@@ -4,13 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.grgs.craftlevel.config.ConfigDefaults;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,14 +61,7 @@ public final class ArenaSettings {
 
     private static void copyDefault(Path file) {
         try {
-            Files.createDirectories(file.getParent());
-            try (InputStream stream = ArenaSettings.class.getClassLoader()
-                    .getResourceAsStream("assets/craftlevel/defaults/arena.json")) {
-                if (stream == null) {
-                    return;
-                }
-                Files.copy(stream, file, StandardCopyOption.REPLACE_EXISTING);
-            }
+            ConfigDefaults.copyIfMissing("arena.json", file);
         } catch (IOException ignored) {
         }
     }

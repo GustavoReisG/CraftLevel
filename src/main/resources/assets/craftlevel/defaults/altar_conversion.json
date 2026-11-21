@@ -1,0 +1,40 @@
+{
+  "conversions": [
+    {
+      "item": "minecraft:coal",
+      "count": 1,
+      "glory_cost": 200,
+      "skill_points": 1
+    },
+    {
+      "item": "minecraft:copper_ingot",
+      "count": 1,
+      "glory_cost": 175,
+      "skill_points": 1
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 1,
+      "glory_cost": 150,
+      "skill_points": 1
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "count": 1,
+      "glory_cost": 125,
+      "skill_points": 1
+    },
+    {
+      "item": "minecraft:amethyst_shard",
+      "count": 1,
+      "glory_cost": 100,
+      "skill_points": 1
+    },
+    {
+      "item": "minecraft:diamond",
+      "count": 1,
+      "glory_cost": 80,
+      "skill_points": 1
+    }
+  ]
+}

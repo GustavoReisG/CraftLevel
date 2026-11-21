@@ -3,6 +3,7 @@ package com.grgs.craftlevel.client.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grgs.craftlevel.CraftLevel;
+import com.grgs.craftlevel.config.ConfigDefaults;
 import com.grgs.craftlevel.config.ConfigManager;
 import com.grgs.craftlevel.economy.EconomyService;
 import net.minecraft.client.Minecraft;
@@ -61,13 +62,18 @@ final class KillRewardsPersistence {
 
     private static JsonObject loadRoot(Path file) throws IOException {
         if (!Files.exists(file)) {
-            return JsonParser.parseString(ConfigManager.DEFAULT_ECONOMY).getAsJsonObject();
+            return economyDefault();
         }
         try (Reader reader = Files.newBufferedReader(file)) {
             return JsonParser.parseReader(reader).getAsJsonObject();
         } catch (Exception e) {
-            return JsonParser.parseString(ConfigManager.DEFAULT_ECONOMY).getAsJsonObject();
+            return economyDefault();
         }
+    }
+
+    private static JsonObject economyDefault() {
+        JsonObject json = ConfigDefaults.readJson("economy.json");
+        return json != null ? json : new JsonObject();
     }
 
     private static Path configDir(Minecraft minecraft) {

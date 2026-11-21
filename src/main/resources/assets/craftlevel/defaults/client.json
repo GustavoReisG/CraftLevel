@@ -1,0 +1,86 @@
+{
+  "hud": {
+    "lp_bar": {
+      "anchor": "bottom_left",
+      "x": 2,
+      "y": -2,
+      "scale": 0.11,
+      "font_scale": 0.7
+    },
+    "level_circle": {
+      "anchor": "top_left",
+      "x": 2,
+      "y": 2,
+      "scale": 0.15,
+      "font_scale": 1.4,
+      "font_y_offset": -0.0
+    },
+    "health_bar": {
+      "enabled": true,
+      "anchor": "bottom_center",
+      "x": -62,
+      "y": -31,
+      "scale": 0.1,
+      "font_scale": 0.6,
+      "armor_margin": 10
+    },
+    "hunger_bar": {
+      "enabled": true,
+      "anchor": "bottom_center",
+      "x": 60,
+      "y": -31,
+      "scale": 0.1,
+      "font_scale": 0.6,
+      "breath_margin": 10,
+      "mount_health_margin": 0
+    },
+    "emeralds": {
+      "enabled": true,
+      "anchor": "bottom_left",
+      "x": 2,
+      "y": -20,
+      "scale": 0.7,
+      "font_scale": 1.0,
+      "icon_side": "left"
+    },
+    "souls": {
+      "enabled": true,
+      "anchor": "top_left",
+      "x": 2,
+      "y": 50,
+      "scale": 0.7,
+      "font_scale": 1.0,
+      "icon_side": "left"
+    },
+    "glory_kills": {
+      "enabled": true,
+      "anchor": "top_left",
+      "x": 2,
+      "y": 70,
+      "scale": 0.7,
+      "font_scale": 1.0,
+      "icon_side": "left"
+    },
+    "mob_focus": {
+      "anchor": "top_left",
+      "x": 50,
+      "y": 2,
+      "scale": 0.15,
+      "font_scale": 4.0,
+      "direction": "portrait_first",
+      "mob_yaw": 0.6,
+      "head_yaw": 0.0,
+      "camera_pitch": -0.2
+    },
+    "skills": {
+      "enabled": true,
+      "direction": "row",
+      "fill_sense": "ascending",
+      "text_sense": "after_icon",
+      "anchor": "top_right",
+      "x": -8,
+      "y": 40,
+      "scale": 0.85
+    }
+  }
+}

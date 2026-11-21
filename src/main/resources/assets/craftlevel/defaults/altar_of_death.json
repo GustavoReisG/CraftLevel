@@ -1,0 +1,85 @@
+{
+  "potion": {
+    "glory_cost_time": 10,
+    "glory_cost_strength": 10,
+    "max_duration_seconds": 600,
+    "max_level": 10,
+    "effect_limits": {
+      "minecraft:regeneration": {
+        "time": 600,
+        "level": 3
+      },
+      "minecraft:instant_health": {
+        "time": 1,
+        "level": 5
+      },
+      "minecraft:instant_damage": {
+        "time": 1,
+        "level": 5
+      },
+      "irons_spellbooks:instant_mana": {
+        "time": 1,
+        "level": 5
+      }
+    }
+  },
+  "improvement": {
+    "glory_cost": 20,
+    "generic_enchantment_limit": 50,
+    "enchantment_limits": {
+      "minecraft:aqua_affinity": 1,
+      "minecraft:binding_curse": 1,
+      "minecraft:channeling": 1,
+      "minecraft:flame": 1,
+      "minecraft:infinity": 1,
+      "minecraft:mending": 1,
+      "minecraft:multishot": 1,
+      "minecraft:silk_touch": 1,
+      "minecraft:vanishing_curse": 1
+    }
+  },
+  "trade": {
+    "offers": [
+      {
+        "item": "minecraft:totem_of_undying",
+        "glory_cost": 100
+      },
+      {
+        "item": "craftlevel:totem_of_vitality",
+        "glory_cost": 200
+      },
+      {
+        "item": "craftlevel:totem_of_overcharge",
+        "glory_cost": 200
+      },
+      {
+        "item": "craftlevel:totem_of_blessing",
+        "glory_cost": 200
+      },
+      {
+        "item": "craftlevel:rune_of_unbreakable",
+        "glory_cost": 500
+      },
+      {
+        "item": "craftlevel:rune_of_veloce",
+        "glory_cost": 500
+      },
+      {
+        "item": "craftlevel:rune_of_reach",
+        "glory_cost": 500
+      },
+      {
+        "item": "craftlevel:rune_of_fortune",
+        "glory_cost": 500
+      },
+      {
+        "item": "craftlevel:rune_of_return",
+        "glory_cost": 500
+      },
+      {
+        "item": "craftlevel:rune_of_soulbound",
+        "glory_cost": 500
+      }
+    ]
+  }
+}

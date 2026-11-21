@@ -1,0 +1,57 @@
+{
+  "debug": true,
+  "anvil": {
+    "uncapped_cost": true
+  },
+  "lp_scaling": {
+    "mob_level_variation": 10,
+    "lvl_max": 200,
+    "base_value": 200.0,
+    "scaling": 1.06,
+    "scaling_mode": "power"
+  },
+  "scaling": {
+    "spell_power": {
+      "base_value": 1.0,
+      "scaling": 1.045,
+      "scaling_mode": "power",
+      "apply_mode": "multiply",
+      "include_modifiers": false
+    },
+    "mob_health": {
+      "base_value": 1.0,
+      "scaling": 1.05,
+      "scaling_mode": "power",
+      "apply_mode": "multiply",
+      "include_modifiers": false
+    },
+    "flat": {
+      "base_value": 1.0,
+      "scaling": 1.0,
+      "scaling_mode": "power",
+      "apply_mode": "multiply",
+      "include_modifiers": false
+    },
+    "health": {
+      "base_value": 1.0,
+      "scaling": 1.045,
+      "scaling_mode": "power",
+      "apply_mode": "multiply",
+      "include_modifiers": true
+    },
+    "melee_power": {
+      "base_value": 1.0,
+      "scaling": 1.045,
+      "scaling_mode": "power",
+      "apply_mode": "multiply",
+      "include_modifiers": false
+    },
+    "none": {
+      "base_value": 0.0,
+      "scaling": 0.0,
+      "scaling_mode": "linear",
+      "apply_mode": "overwrite",
+      "include_modifiers": false
+    }
+  }
+}

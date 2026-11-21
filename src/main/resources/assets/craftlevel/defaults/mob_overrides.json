@@ -1,0 +1,137 @@
+{
+  "cataclysm:ancient_remnant": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:maledictus": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:ender_guardian": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:ignis": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:scylla": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:netherite_monstrosity": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:the_harbinger": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "cataclysm:the_leviathan": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  },
+  "irons_spellbooks:dead_king": {
+    "attribute": {
+      "minecraft:generic.max_health": "mob_health"
+    },
+    "hurt": {
+      "default": "health"
+    },
+    "hurt_self": {
+      "default": "mob_health",
+      "attributeslib:current_hp_damage": "none"
+    },
+    "heal": {
+      "default": "mob_health"
+    }
+  }
+}

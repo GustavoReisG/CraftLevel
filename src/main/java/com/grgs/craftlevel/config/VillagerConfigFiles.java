@@ -1,18 +1,13 @@
 package com.grgs.craftlevel.config;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grgs.craftlevel.CraftLevel;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 /** Leitura de villager.json da pasta config (disponível no boot do mod). */
 public final class VillagerConfigFiles {
@@ -53,7 +48,7 @@ public final class VillagerConfigFiles {
 
     /** Garante Death Merchant em installs antigas que já tinham villager.json. */
     private static boolean mergeDeathMerchantIfMissing(JsonObject json) {
-        JsonObject defaults = readDefaultVillager();
+        JsonObject defaults = ConfigDefaults.readJson("villager.json");
         if (defaults == null) {
             return false;
         }
@@ -89,28 +84,9 @@ public final class VillagerConfigFiles {
         return changed;
     }
 
-    private static JsonObject readDefaultVillager() {
-        try (InputStream stream = ConfigManager.class.getClassLoader()
-                .getResourceAsStream("assets/craftlevel/defaults/villager.json")) {
-            if (stream == null) {
-                return null;
-            }
-            JsonElement element = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-            return element.isJsonObject() ? element.getAsJsonObject() : null;
-        } catch (Exception e) {
-            CraftLevel.LOGGER.warn("[CraftLevel] Failed to read default villager.json", e);
-            return null;
-        }
-    }
-
     private static void copyDefaultVillager(Path target) throws IOException {
-        try (InputStream stream = ConfigManager.class.getClassLoader()
-                .getResourceAsStream("assets/craftlevel/defaults/villager.json")) {
-            if (stream == null) {
-                Files.writeString(target, "{\"professions\":{},\"trades\":{}}");
-                return;
-            }
-            Files.copy(stream, target, StandardCopyOption.REPLACE_EXISTING);
+        if (!ConfigDefaults.copyIfMissing("villager.json", target) && !Files.exists(target)) {
+            Files.writeString(target, "{\"professions\":{},\"trades\":{}}");
         }
     }
 }

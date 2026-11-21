@@ -1,0 +1,569 @@
+{
+  "sense_of_prey": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    },
+    {
+      "level": 4,
+      "skill_point_cost": 1,
+      "min_player_level": 35
+    },
+    {
+      "level": 5,
+      "skill_point_cost": 1,
+      "min_player_level": 40
+    }
+  ],
+  "ghost_saturation": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "soul_anchor": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    },
+    {
+      "level": 4,
+      "skill_point_cost": 1,
+      "min_player_level": 35
+    },
+    {
+      "level": 5,
+      "skill_point_cost": 1,
+      "min_player_level": 40
+    }
+  ],
+  "spectral_climb": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 15
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    }
+  ],
+  "imbue_master": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    },
+    {
+      "level": 4,
+      "skill_point_cost": 1,
+      "min_player_level": 35
+    },
+    {
+      "level": 5,
+      "skill_point_cost": 1,
+      "min_player_level": 40
+    }
+  ],
+  "vampire_attack": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "spirit_return": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 24
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "carnage": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 34
+    }
+  ],
+  "supernova": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 25
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 32
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 40
+    }
+  ],
+  "protective_shockwave": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 24
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "soul_render": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 26
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 32
+    }
+  ],
+  "light_speed": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    }
+  ],
+  "darkness_light": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 15
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "miner_frenzy": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 24
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "last_chance": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 35
+    }
+  ],
+  "reinforced_bones": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 12
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    }
+  ],
+  "mind_fury": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    }
+  ],
+  "nether_elevation": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 34
+    }
+  ],
+  "nether_rush": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 34
+    }
+  ],
+  "prospector": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 16
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 24
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 32
+    }
+  ],
+  "frozen_mind": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 26
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 32
+    }
+  ],
+  "frozen_rush": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 34
+    }
+  ],
+  "ender_backpack": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 15
+    }
+  ],
+  "vampire_blood": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "quick_survive": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    }
+  ],
+  "blood_rush": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 24
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ],
+  "strength_recovery": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 16
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    }
+  ],
+  "portable_crafting": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 10
+    }
+  ],
+  "goodnight": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 12
+    }
+  ],
+  "recall": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 16
+    }
+  ],
+  "sky_walker": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    }
+  ],
+  "inferno_bolt": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 20
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 26
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 32
+    },
+    {
+      "level": 4,
+      "skill_point_cost": 1,
+      "min_player_level": 38
+    },
+    {
+      "level": 5,
+      "skill_point_cost": 1,
+      "min_player_level": 45
+    }
+  ],
+  "soul_lance": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 35
+    }
+  ],
+  "blink_step": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 18
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    }
+  ],
+  "crippling_aura": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 16
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 3,
+      "skill_point_cost": 1,
+      "min_player_level": 28
+    },
+    {
+      "level": 4,
+      "skill_point_cost": 1,
+      "min_player_level": 34
+    },
+    {
+      "level": 5,
+      "skill_point_cost": 1,
+      "min_player_level": 40
+    }
+  ],
+  "terror_pulse": [
+    {
+      "level": 1,
+      "skill_point_cost": 1,
+      "min_player_level": 22
+    },
+    {
+      "level": 2,
+      "skill_point_cost": 1,
+      "min_player_level": 30
+    }
+  ]
+}

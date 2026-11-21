@@ -1,0 +1,8 @@
+{
+  "max_souls": 3,
+  "time_restore": 1200,
+  "lost_emeralds_type": "percentage",
+  "lost_emeralds_quantity": 10,
+  "lost_items": "random",
+  "gravestone": true
+}
